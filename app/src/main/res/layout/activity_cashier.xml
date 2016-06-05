@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="1dp"
+    android:paddingLeft="1dp"
+    android:paddingRight="1dp"
+    android:paddingTop="1dp"
+    tools:context="com.example.yuriy.trapeza.Cashier">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp"
+        android:background="#d24407"
+        android:scrollbars="none">
+
+        <GridLayout
+            android:id="@+id/grid_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:background="#dc9191"
+            android:columnCount="4"
+            android:minWidth="768dp">
+
+            <Button
+                android:id="@+id/button6"
+                style="@style/category_button"
+                android:text="New Button" />
+
+            <Button
+                android:id="@+id/button"
+                style="@style/category_button"
+                android:text="New Button" />
+
+            <Button
+                android:id="@+id/button2"
+                style="@style/category_button"
+                android:text="New Button" />
+
+        </GridLayout>
+    </ScrollView>
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="1dp"
+        android:layout_toRightOf="@+id/scrollView"
+        android:background="#ab9595"
+        android:columnCount="2"
+        android:layout_alignBottom="@+id/scrollView"
+        android:layout_alignParentTop="true">
+
+        <Button
+            android:layout_columnSpan="2"
+            android:layout_gravity="fill"
+            android:text="+" />
+
+        <ListView
+            android:id="@+id/item_list"
+            android:layout_columnSpan="2"
+            android:layout_gravity="fill"
+            android:layout_rowWeight="1"
+            android:background="#ab7000"
+            android:layout_height="400dp"
+            android:text="+" >
+
+        </ListView>
+
+        <Button
+            android:id="@+id/discount_button"
+            android:layout_height="100dp"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:layout_rowSpan="2"
+            android:text="%" />
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_height="100dp"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:layout_rowSpan="2"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/pay_button"
+            android:layout_height="100dp"
+            android:layout_columnSpan="2"
+            android:layout_gravity="fill"
+            android:layout_rowSpan="2"
+            android:text="PAY" />
+    </GridLayout>
+
+</RelativeLayout>

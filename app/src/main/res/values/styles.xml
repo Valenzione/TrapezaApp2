@@ -1,0 +1,49 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="catButtonStyle">@style/category_button</item>
+        <item name="itemButtonStyle">@style/item_button</item>
+        <item name="backButtonStyle">@style/back_button</item>
+    </style>
+
+
+    <style name="category_button" parent="@android:style/Widget.Button">
+        <item name="android:onClick">onCategoryButtonClicked</item>
+        <item name="android:clickable">true</item>
+        <item name="android:height">192dp</item>
+        <item name="android:width">192dp</item>
+        <item name="android:textAlignment">gravity</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:radius">100dp</item>
+    </style>
+    <style name="item_button" parent="@android:style/Widget.Button">
+        <item name="android:onClick">onItemButtonClicked</item>
+        <item name="android:clickable">true</item>
+        <item name="android:height">192dp</item>
+        <item name="android:width">192dp</item>
+        <item name="android:textAlignment">gravity</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+    <style name="back_button" parent="@android:style/Widget.Button">
+        <item name="android:onClick">onBackButtonCLicked</item>
+        <item name="android:clickable">true</item>
+        <item name="android:height">192dp</item>
+        <item name="android:width">192dp</item>
+        <item name="android:textAlignment">gravity</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+</resources>
+
+
