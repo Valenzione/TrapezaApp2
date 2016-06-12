@@ -5,12 +5,13 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class payCheckItemView extends LinearLayout {
 
-    private Button mAddButton, mRemoveButton, mDeleteButton;
+    private ImageButton mAddButton, mRemoveButton, mDeleteButton;
     private TextView mItemName;
     private EditText mItemNumber;
 
@@ -47,26 +48,5 @@ public class payCheckItemView extends LinearLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        mAddButton = (Button) this
-                .findViewById(R.id.pay_check_item_add);
-        mAddButton
-                .setBackgroundResource(android.R.drawable.ic_menu_add);
-
-
-        mRemoveButton = (Button)this
-                .findViewById(R.id.pay_check_item_remove);
-        mRemoveButton
-                .setBackgroundResource(android.R.drawable.btn_minus);
-
-        mDeleteButton = (Button)this
-                .findViewById(R.id.pay_check_item_delete);
-        mDeleteButton
-                .setBackgroundResource(android.R.drawable.ic_notification_clear_all);
-
-        mItemName = (TextView) this.findViewById(R.id.pay_check_item_name);
-        mItemName.setText("NewItem");
-
-        mItemNumber =(EditText) this.findViewById(R.id.pay_check_item_number);
-        mItemNumber.setText("1");
     }
 }

@@ -1,61 +1,78 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:weightSum="1"
+    android:background="@color/item_background">
 
     <ImageButton
         android:id="@+id/pay_check_item_delete"
         android:layout_width="wrap_content"
-        android:layout_height="49dp"
-        android:src="@android:drawable/btn_dialog"
-        android:background="@null"
-        android:layout_weight="0.03" />
+        android:layout_height="wrap_content"
+        android:onClick="onClickDeleteItem"
+        android:background="@android:drawable/btn_dialog"
+        android:layout_gravity="center" />
 
     <TextView
         android:id="@+id/pay_check_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="fill"
-        android:layout_weight="2"
-        android:text="Keka" />
+        android:text="Keka"
+        android:minWidth="250dp"
+        android:maxWidth="300dp"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:background="@null" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="12 \u20BD"
-        android:id="@+id/textView2"
-        android:layout_weight="0.03" />
+        android:id="@+id/pay_check_item_price"
+        android:gravity="center"
+        android:maxWidth="200dp"
+        android:background="@null"
+        android:layout_gravity="center"/>
 
     <ImageButton
         android:id="@+id/pay_check_item_remove"
         android:layout_width="wrap_content"
-        android:layout_height="49dp"
-        android:src="@drawable/ic_remove"
-        android:background="@null"
-        android:layout_weight="0.03" />
+        android:layout_height="wrap_content"
+        android:onClick="onClickRemovePayCheckItem"
+        android:background="@drawable/ic_remove"
+        android:layout_gravity="center" />
 
     <EditText
         android:id="@+id/pay_check_item_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/pay_check_item_remove"
+        android:minWidth="28dp"
+        android:maxWidth="150dp"
+        android:gravity="right"
         android:inputType="number"
-        android:layout_weight="0.03" />
+        android:layout_gravity="center"/>
 
     <ImageButton
         android:id="@+id/pay_check_item_add"
         android:layout_width="wrap_content"
-        android:layout_height="49dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_toLeftOf="@+id/pay_check_item_number"
-        android:src="@drawable/ic_add"
-        android:background="@null"
-        android:layout_weight="0.03" />
+        android:onClick="onClickAddPayCheckItem"
+        android:background="@drawable/ic_add"
+        android:layout_gravity="center" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="12 \u20BD"
-        android:id="@+id/textView"
-        android:layout_weight="0.03" />
+        android:id="@+id/pay_check_item_total_price"
+        android:gravity="right"
+        android:paddingEnd="5dp"
+        android:minWidth="32dp"
+        android:maxWidth="150dp"
+        android:background="@null"
+        android:layout_gravity="center"/>
 </LinearLayout>

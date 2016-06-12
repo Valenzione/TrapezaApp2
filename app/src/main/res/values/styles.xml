@@ -10,32 +10,23 @@
         <item name="catButtonStyle">@style/category_button</item>
         <item name="itemButtonStyle">@style/item_button</item>
         <item name="backButtonStyle">@style/back_button</item>
+        <item name="android:background">@color/backround_color</item>
     </style>
 
 
-    <style name="category_button" parent="@android:style/Widget.Button">
+    <style name="category_button" parent="grid_layout_item">
         <item name="android:onClick">onCategoryButtonClicked</item>
-        <item name="android:clickable">true</item>
-        <item name="android:height">192dp</item>
-        <item name="android:width">192dp</item>
-        <item name="android:textAlignment">gravity</item>
-        <item name="android:gravity">center</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:radius">100dp</item>
     </style>
-    <style name="item_button" parent="@android:style/Widget.Button">
+
+    <style name="item_button" parent="grid_layout_item">
         <item name="android:onClick">onItemButtonClicked</item>
-        <item name="android:clickable">true</item>
-        <item name="android:height">192dp</item>
-        <item name="android:width">192dp</item>
-        <item name="android:textAlignment">gravity</item>
-        <item name="android:gravity">center</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
     </style>
-    <style name="back_button" parent="@android:style/Widget.Button">
+
+    <style name="back_button" parent="grid_layout_item">
         <item name="android:onClick">onBackButtonCLicked</item>
+    </style>
+
+    <style name="grid_layout_item" parent="android:style/Widget.Material.Button">
         <item name="android:clickable">true</item>
         <item name="android:height">192dp</item>
         <item name="android:width">192dp</item>
@@ -44,6 +35,10 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
 
 

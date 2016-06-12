@@ -14,32 +14,23 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginTop="0dp"
-        android:background="#d24407"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:focusableInTouchMode="false"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentStart="false"
+        android:background="#ccffffff">
 
         <GridLayout
             android:id="@+id/grid_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:background="#dc9191"
             android:columnCount="4"
-            android:minWidth="768dp">
-
-            <Button
-                android:id="@+id/button6"
-                style="@style/category_button"
-                android:text="New Button" />
-
-            <Button
-                android:id="@+id/button"
-                style="@style/category_button"
-                android:text="New Button" />
-
-            <Button
-                android:id="@+id/button2"
-                style="@style/category_button"
-                android:text="New Button" />
+            android:minWidth="768dp"
+            android:background="@null"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingRight="5dp">
 
         </GridLayout>
     </ScrollView>
@@ -49,50 +40,79 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="1dp"
         android:layout_toRightOf="@+id/scrollView"
-        android:background="#ab9595"
         android:columnCount="2"
         android:layout_alignBottom="@+id/scrollView"
-        android:layout_alignParentTop="true">
-
-        <Button
-            android:layout_columnSpan="2"
-            android:layout_gravity="fill"
-            android:text="+" />
+        android:layout_alignParentTop="true"
+        android:background="#ccffffff">
 
         <ListView
             android:id="@+id/item_list"
             android:layout_columnSpan="2"
             android:layout_gravity="fill"
-            android:layout_rowWeight="1"
-            android:background="#ab7000"
+            android:layout_rowWeight="2"
             android:layout_height="400dp"
-            android:text="+" >
+            android:text="+"
+            android:smoothScrollbar="true"
+            android:background="@null">
 
         </ListView>
 
-        <Button
-            android:id="@+id/discount_button"
-            android:layout_height="100dp"
-            android:layout_columnWeight="1"
-            android:layout_gravity="fill"
-            android:layout_rowSpan="2"
-            android:text="%" />
-
-        <Button
-            android:id="@+id/cancel_button"
-            android:layout_height="100dp"
-            android:layout_columnWeight="1"
-            android:layout_gravity="fill"
-            android:layout_rowSpan="2"
-            android:text="Cancel" />
-
-        <Button
-            android:id="@+id/pay_button"
-            android:layout_height="100dp"
+        <TextView
+            android:id="@+id/totalPrice"
+            android:layout_height="wrap_content"
             android:layout_columnSpan="2"
             android:layout_gravity="fill"
             android:layout_rowSpan="2"
-            android:text="PAY" />
+            android:text="0"
+            android:layout_rowWeight="0.8"
+            android:layout_width="wrap_content"
+            android:paddingEnd="5dp"
+            android:gravity="right"
+            android:paddingRight="5dp"
+            android:background="@null" />
+
+        <Button
+            android:id="@+id/discount_button"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:layout_rowSpan="2"
+            android:text="%"
+            android:layout_rowWeight="0.2"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/abc_primary_text_material_dark" />
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:layout_rowSpan="2"
+            android:text="Cancel"
+            android:onClick="onClickCancelOrder"
+            android:layout_rowWeight="0.2"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/abc_primary_text_material_dark" />
+
+        <Button
+            android:id="@+id/pay_button"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:layout_gravity="fill"
+            android:layout_rowSpan="2"
+            android:text="PAY"
+            android:layout_rowWeight="0.8"
+            android:layout_marginBottom="10dp"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/abc_primary_text_material_dark"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp" />
     </GridLayout>
 
 </RelativeLayout>
