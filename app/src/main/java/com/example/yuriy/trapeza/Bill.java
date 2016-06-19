@@ -97,25 +97,25 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         BillEntry e = mEntires.get(position);
         holder.mName.setText(e.getDish().getName());
         holder.mDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeEntry(position);
+                removeEntry(holder.getAdapterPosition());
             }
         });
         holder.mDecrement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                decrementQuantity(position);
+                decrementQuantity(holder.getAdapterPosition());
             }
         });
         holder.mIncrement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                incrementQuantity(position);
+                incrementQuantity(holder.getAdapterPosition());
             }
         });
         holder.mPrice.setText(e.getDish().getPrice() + " руб.");
@@ -127,7 +127,6 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> {
     public int getItemCount() {
         return mEntires.size();
     }
-
 
 
 }
