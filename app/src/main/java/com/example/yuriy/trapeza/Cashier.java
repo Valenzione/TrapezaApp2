@@ -38,6 +38,41 @@ public class Cashier extends Activity {
                 Log.i(TAG, "bill changed");
                 mTotalPrice.setText(mBill.getTotalPrice() + " руб.");
             }
+
+            @Override
+            public void onItemRangeChanged(int positionStart, int itemCount) {
+                super.onItemRangeChanged(positionStart, itemCount);
+                Log.i(TAG, "Range changed " + positionStart + ", itemCount " + itemCount);
+                onChanged();
+            }
+
+            @Override
+            public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
+                super.onItemRangeChanged(positionStart, itemCount, payload);
+                Log.i(TAG, "Range changed with payload " + positionStart + ", itemCount " + itemCount);
+                onChanged();
+            }
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                Log.i(TAG, "Range inserted " + positionStart + ", itemCount " + itemCount);
+                onChanged();
+            }
+
+            @Override
+            public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+                super.onItemRangeMoved(fromPosition, toPosition, itemCount);
+                Log.i(TAG, "Range moved " + fromPosition + " to " + toPosition + ", itemCount " + itemCount);
+                onChanged();
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                Log.i(TAG, "Range removed " + positionStart + ", itemCount " + itemCount);
+                onChanged();
+            }
         });
 
         // определяем список и присваиваем ему адаптер
@@ -91,8 +126,8 @@ public class Cashier extends Activity {
 
     private void prepareItemGrid() {
         GridLayout gridLayout = (GridLayout) findViewById(R.id.grid_layout);
-        if (((GridLayout) gridLayout).getChildCount() > 0)
-            ((GridLayout) gridLayout).removeAllViews();
+        if (gridLayout.getChildCount() > 0)
+            gridLayout.removeAllViews();
         addBackButton(gridLayout);
         populateCategoryItems(gridLayout, 0);
     }
@@ -108,8 +143,8 @@ public class Cashier extends Activity {
 
     private void prepareCategoryGrid() {
         GridLayout gridLayout = (GridLayout) findViewById(R.id.grid_layout);
-        if (((GridLayout) gridLayout).getChildCount() > 0)
-            ((GridLayout) gridLayout).removeAllViews();
+        if (gridLayout.getChildCount() > 0)
+            gridLayout.removeAllViews();
         populateCategories(gridLayout);
         addCategory("Test Category");
     }
@@ -117,8 +152,8 @@ public class Cashier extends Activity {
     private void populateCategoryItems(GridLayout gl, int categoryId) {
         //TODO get items from this category and populate
         String[] names = {"Картошка", "Сало"};
-        for (int i = 0; i < names.length; i++) {
-            addItem(names[i], gl);
+        for (String name : names) {
+            addItem(name, gl);
         }
     }
 
