@@ -1,118 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="horizontal"
     android:paddingBottom="1dp"
     android:paddingLeft="1dp"
     android:paddingRight="1dp"
     android:paddingTop="1dp"
     tools:context="com.example.yuriy.trapeza.Cashier">
 
+
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginTop="0dp"
-        android:scrollbars="none"
-        android:focusableInTouchMode="false"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentStart="false"
-        android:background="#ccffffff">
+        android:layout_weight="4"
+        android:background="#ccffffff"
+        android:focusableInTouchMode="false">
 
         <GridLayout
             android:id="@+id/grid_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
             android:columnCount="4"
-            android:minWidth="768dp"
-            android:background="@null"
             android:paddingLeft="5dp"
-            android:paddingTop="5dp"
-            android:paddingRight="5dp">
+            android:paddingRight="5dp"
+            android:paddingTop="5dp">
 
         </GridLayout>
     </ScrollView>
 
-    <GridLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/right_layout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="1dp"
-        android:layout_toRightOf="@+id/scrollView"
+        android:layout_weight="3"
+        android:background="#ccffffff"
         android:columnCount="2"
-        android:layout_alignBottom="@+id/scrollView"
-        android:layout_alignParentTop="true"
-        android:background="#ccffffff">
+        android:orientation="vertical">
 
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/item_list"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
             android:layout_columnSpan="2"
             android:layout_gravity="fill"
-            android:layout_rowWeight="2"
-            android:layout_height="400dp"
-            android:text="+"
+            android:layout_weight="1"
+            android:background="@null"
             android:smoothScrollbar="true"
-            android:background="@null">
+            android:text="+">
 
-        </ListView>
+        </android.support.v7.widget.RecyclerView>
 
         <TextView
             android:id="@+id/totalPrice"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="2"
-            android:layout_gravity="fill"
-            android:layout_rowSpan="2"
-            android:text="0"
-            android:layout_rowWeight="0.8"
             android:layout_width="wrap_content"
-            android:paddingEnd="5dp"
-            android:gravity="right"
-            android:paddingRight="5dp"
-            android:background="@null" />
-
-        <Button
-            android:id="@+id/discount_button"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_gravity="fill"
-            android:layout_rowSpan="2"
-            android:text="%"
-            android:layout_rowWeight="0.2"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
-            android:background="@color/colorPrimaryDark"
-            android:textColor="@color/abc_primary_text_material_dark" />
-
-        <Button
-            android:id="@+id/cancel_button"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_gravity="fill"
-            android:layout_rowSpan="2"
-            android:text="Cancel"
-            android:onClick="onClickCancelOrder"
-            android:layout_rowWeight="0.2"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
-            android:background="@color/colorPrimaryDark"
-            android:textColor="@color/abc_primary_text_material_dark" />
-
-        <Button
-            android:id="@+id/pay_button"
             android:layout_height="wrap_content"
             android:layout_columnSpan="2"
             android:layout_gravity="fill"
             android:layout_rowSpan="2"
-            android:text="PAY"
             android:layout_rowWeight="0.8"
-            android:layout_marginBottom="10dp"
-            android:background="@color/colorPrimaryDark"
-            android:textColor="@color/abc_primary_text_material_dark"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp" />
-    </GridLayout>
+            android:background="@null"
+            android:gravity="right"
+            android:paddingEnd="5dp"
+            android:paddingRight="5dp"
+            android:text="0" />
 
-</RelativeLayout>
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/discount_button"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_rowSpan="2"
+                android:layout_rowWeight="0.2"
+                android:background="@color/colorPrimaryDark"
+                android:text="%"
+                android:textColor="@color/abc_primary_text_material_dark" />
+
+            <Button
+                android:id="@+id/cancel_button"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_rowSpan="2"
+                android:layout_rowWeight="0.2"
+                android:background="@color/colorPrimaryDark"
+                android:onClick="onClickCancelOrder"
+                android:text="Cancel"
+                android:textColor="@color/abc_primary_text_material_dark" />
+
+            <Button
+                android:id="@+id/pay_button"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:layout_gravity="fill"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_rowSpan="2"
+                android:layout_rowWeight="0.8"
+                android:background="@color/colorPrimaryDark"
+                android:text="PAY"
+                android:textColor="@color/abc_primary_text_material_dark" />
+        </GridLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

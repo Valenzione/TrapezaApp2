@@ -1,27 +1,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="64dp"
     android:orientation="horizontal"
-    android:weightSum="1"
     android:background="@color/item_background">
 
     <ImageButton
-        android:id="@+id/pay_check_item_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/bill_entry_delete"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:onClick="onClickDeleteItem"
         android:background="@android:drawable/btn_dialog"
         android:layout_gravity="center" />
 
     <TextView
-        android:id="@+id/pay_check_item_name"
+        android:id="@+id/bill_entry_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="fill"
         android:text="Keka"
-        android:minWidth="250dp"
-        android:maxWidth="300dp"
-        android:layout_weight="1"
         android:layout_gravity="center"
         android:background="@null" />
 
@@ -29,25 +25,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="12 \u20BD"
-        android:id="@+id/pay_check_item_price"
+        android:id="@+id/bill_entry_price"
         android:gravity="center"
         android:maxWidth="200dp"
         android:background="@null"
         android:layout_gravity="center"/>
 
     <ImageButton
-        android:id="@+id/pay_check_item_remove"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/bill_entry_decrement"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:onClick="onClickRemovePayCheckItem"
         android:background="@drawable/ic_remove"
         android:layout_gravity="center" />
 
     <EditText
-        android:id="@+id/pay_check_item_number"
+        android:id="@+id/bill_entry_quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/pay_check_item_remove"
+        android:layout_toLeftOf="@+id/bill_entry_decrement"
         android:minWidth="28dp"
         android:maxWidth="150dp"
         android:gravity="right"
@@ -55,11 +51,11 @@
         android:layout_gravity="center"/>
 
     <ImageButton
-        android:id="@+id/pay_check_item_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/bill_entry_increment"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentRight="true"
-        android:layout_toLeftOf="@+id/pay_check_item_number"
+        android:layout_toLeftOf="@+id/bill_entry_quantity"
         android:onClick="onClickAddPayCheckItem"
         android:background="@drawable/ic_add"
         android:layout_gravity="center" />
@@ -68,11 +64,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="12 \u20BD"
-        android:id="@+id/pay_check_item_total_price"
+        android:id="@+id/bill_entry_total_price"
         android:gravity="right"
         android:paddingEnd="5dp"
         android:minWidth="32dp"
         android:maxWidth="150dp"
         android:background="@null"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:paddingRight="5dp" />
 </LinearLayout>

@@ -1,65 +1,54 @@
 package com.example.yuriy.trapeza;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.AttributeSet;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridLayout;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 public class Cashier extends Activity {
 
-    String[] names = {"Иван", "keka"};
-    // имена атрибутов для Map
+    public static final String TAG = "Cashier";
 
-    final String ATTRIBUTE_NAME_NAME = "name";
-    final String ATTRIBUTE_NAME_NUMBER = "number";
-    final String ATTRIBUTE_NAME_PRICE = "price";
-    final String ATTRIBUTE_NAME_TOTAL_PRICE = "tprice";
-    SimpleAdapter sAdapter;
-    ArrayList<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
+    Bill mBill;
+
+    @Bind(R.id.totalPrice)
+    TextView mTotalPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cashier);
 
+        ButterKnife.bind(this);
 
-        // массив имен атрибутов, из которых будут читаться данные
-        String[] from = {ATTRIBUTE_NAME_NAME, ATTRIBUTE_NAME_NUMBER, ATTRIBUTE_NAME_PRICE, ATTRIBUTE_NAME_TOTAL_PRICE};
-        // массив ID View-компонентов, в которые будут вставлять данные
-        int[] to = {R.id.pay_check_item_name, R.id.pay_check_item_number, R.id.pay_check_item_price, R.id.pay_check_item_total_price};
+        mBill = new Bill();
 
-        // создаем адаптер
-        sAdapter = new SimpleAdapter(this, data, R.layout.pay_check_item_view,
-                from, to);
+        mBill.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                Log.i(TAG, "bill changed");
+                mTotalPrice.setText(mBill.getTotalPrice() + " руб.");
+            }
+        });
 
         // определяем список и присваиваем ему адаптер
-        ListView lvSimple = (ListView) findViewById(R.id.item_list);
-        lvSimple.setAdapter(sAdapter);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.item_list);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(mBill);
 
-        addItemToPayCheck("Картошка по гречески, с луком и чесноком, сдобренная маслом и травами", 25);
-        for (int i=0;i<=10;i++){
+        mBill.addEntry(new Dish("dish dish", 12));
+
+        for (int i = 0; i <= 10; i++) {
             addCategory(String.valueOf("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK"));
         }
     }
@@ -74,8 +63,9 @@ public class Cashier extends Activity {
     }
 
     public void onItemButtonClicked(View v) {
-        addItemToPayCheck(((Button) v).getText().toString(), 26);
-
+        Button b = (Button) v;
+        mBill.addEntry(new Dish(b.getText().toString(), 12));
+        Log.i(TAG, "Want to add " + b.getText().toString());
     }
 
     private void addAbstractItem(String name, int ButtonStyle) {
@@ -91,30 +81,13 @@ public class Cashier extends Activity {
     }
 
     private void addCategory(String name) {
-        addAbstractItem(name,  R.attr.catButtonStyle);
+        addAbstractItem(name, R.attr.catButtonStyle);
     }
 
     private void addItem(String name, GridLayout gridLayout) {
         addAbstractItem(name, R.attr.itemButtonStyle);
     }
 
-    private void addItemToPayCheck(String name, int price) {
-
-        int number = 1;
-        Map<String, Object> m;
-        m = new HashMap<String, Object>();
-        m.put(ATTRIBUTE_NAME_NAME, name);
-        m.put(ATTRIBUTE_NAME_NUMBER, number);
-        m.put(ATTRIBUTE_NAME_PRICE, String.valueOf(price));
-        m.put(ATTRIBUTE_NAME_TOTAL_PRICE, price * number);
-        data.add(m);
-
-        TextView totalPrice = (TextView) findViewById(R.id.totalPrice);
-        int total=Integer.parseInt(totalPrice.getText().toString());
-        totalPrice.setText(String.valueOf(total+price));
-
-        sAdapter.notifyDataSetChanged();
-    }
 
     private void prepareItemGrid() {
         GridLayout gridLayout = (GridLayout) findViewById(R.id.grid_layout);
@@ -141,75 +114,6 @@ public class Cashier extends Activity {
         addCategory("Test Category");
     }
 
-    public void onClickDeleteItem(View v) {
-        View parentRow = (View) v.getParent();
-        ListView listView = (ListView) parentRow.getParent();
-        final int position = listView.getPositionForView(parentRow);
-
-        Map<String, Object> m = data.get(position);
-        int price = Integer.parseInt(m.get(ATTRIBUTE_NAME_PRICE).toString());
-        int number = Integer.parseInt(m.get(ATTRIBUTE_NAME_NUMBER).toString());
-        TextView totalPrice = (TextView) findViewById(R.id.totalPrice);
-        int total=Integer.parseInt(totalPrice.getText().toString());
-        if(number>1){totalPrice.setText(String.valueOf(total-price*(number)));}
-
-
-        data.remove(position);
-        sAdapter.notifyDataSetChanged();
-    }
-
-    public void onClickAddPayCheckItem(View v) {
-        View parentRow = (View) v.getParent();
-        ListView lv = (ListView) findViewById(R.id.item_list);
-        EditText ed = (EditText) parentRow.findViewById(R.id.pay_check_item_number);
-        int number = Integer.parseInt(String.valueOf(ed.getText()));
-        int position = lv.getPositionForView(parentRow);
-
-
-        Map<String, Object> m = data.get(position);
-        m.remove(ATTRIBUTE_NAME_NUMBER);
-        m.remove(ATTRIBUTE_NAME_TOTAL_PRICE);
-        int price = Integer.parseInt(m.get(ATTRIBUTE_NAME_PRICE).toString());
-        m.put(ATTRIBUTE_NAME_NUMBER, ++number);
-        m.put(ATTRIBUTE_NAME_TOTAL_PRICE, number * price);
-
-
-        TextView totalPrice = (TextView) findViewById(R.id.totalPrice);
-        int total=Integer.parseInt(totalPrice.getText().toString());
-        totalPrice.setText(String.valueOf(total+price));
-
-        sAdapter.notifyDataSetChanged();
-
-    }
-
-    public void onClickRemovePayCheckItem(View v) {
-        View parentRow = (View) v.getParent();
-        ListView lv = (ListView) findViewById(R.id.item_list);
-        EditText ed = (EditText) parentRow.findViewById(R.id.pay_check_item_number);
-        int number = Integer.parseInt(String.valueOf(ed.getText()));
-        int position = lv.getPositionForView(parentRow);
-        Map<String, Object> m = data.get(position);
-        int price = Integer.parseInt(m.get(ATTRIBUTE_NAME_PRICE).toString());
-        TextView totalPrice = (TextView) findViewById(R.id.totalPrice);
-        int total=Integer.parseInt(totalPrice.getText().toString());
-        totalPrice.setText(String.valueOf(total-price));
-        if ((number - 1) == 0) {
-            onClickDeleteItem(v);
-        } else {
-
-            m.remove(ATTRIBUTE_NAME_NUMBER);
-            m.remove(ATTRIBUTE_NAME_TOTAL_PRICE);
-
-            m.put(ATTRIBUTE_NAME_NUMBER, --number);
-            m.put(ATTRIBUTE_NAME_TOTAL_PRICE, number * price);
-
-            sAdapter.notifyDataSetChanged();
-            ;
-        }
-
-    }
-
-
     private void populateCategoryItems(GridLayout gl, int categoryId) {
         //TODO get items from this category and populate
         String[] names = {"Картошка", "Сало"};
@@ -224,11 +128,7 @@ public class Cashier extends Activity {
 
 
     public void onClickCancelOrder(View view) {
-        data.clear();
-        sAdapter.notifyDataSetChanged();
-        TextView totalPrice =(TextView) findViewById(R.id.totalPrice);
-        int total=Integer.parseInt(totalPrice.getText().toString());
-        totalPrice.setText(String.valueOf(0));
-
+        mBill.clear();
+        mTotalPrice.setText(mBill.getTotalPrice() + "");
     }
 }

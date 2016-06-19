@@ -10,7 +10,6 @@
         <item name="catButtonStyle">@style/category_button</item>
         <item name="itemButtonStyle">@style/item_button</item>
         <item name="backButtonStyle">@style/back_button</item>
-        <item name="android:background">@color/backround_color</item>
     </style>
 
 

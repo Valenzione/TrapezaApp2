@@ -3,7 +3,6 @@ package com.example.yuriy.trapeza;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -41,7 +40,7 @@ public class payCheckItemView extends LinearLayout {
     private void initializeViews(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.pay_check_item_view, this);
+        inflater.inflate(R.layout.bill_entry, this);
     }
 
     @Override
