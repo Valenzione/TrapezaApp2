@@ -103,19 +103,31 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> {
         holder.mDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeEntry(holder.getAdapterPosition());
+                int p = holder.getAdapterPosition();
+                if (p == RecyclerView.NO_POSITION) {
+                    return;
+                }
+                removeEntry(p);
             }
         });
         holder.mDecrement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                decrementQuantity(holder.getAdapterPosition());
+                int p = holder.getAdapterPosition();
+                if (p == RecyclerView.NO_POSITION) {
+                    return;
+                }
+                decrementQuantity(p);
             }
         });
         holder.mIncrement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                incrementQuantity(holder.getAdapterPosition());
+                int p = holder.getAdapterPosition();
+                if (p == RecyclerView.NO_POSITION) {
+                    return;
+                }
+                incrementQuantity(p);
             }
         });
         holder.mPrice.setText(e.getDish().getPrice() + " руб.");
