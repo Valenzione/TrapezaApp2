@@ -29,7 +29,8 @@
         android:gravity="center"
         android:maxWidth="200dp"
         android:background="@null"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:layout_weight="1" />
 
     <ImageButton
         android:id="@+id/bill_entry_decrement"

@@ -14,9 +14,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class Cashier extends Activity {
+public class CashierActivity extends Activity {
 
-    public static final String TAG = "Cashier";
+    public static final String TAG = "CashierActivity";
 
     Bill mBill;
 
@@ -81,46 +81,59 @@ public class Cashier extends Activity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mBill);
 
-        mBill.addEntry(new Dish("dish dish", 12));
+        mBill.addEntry(new Dish("dish dish", 8));
 
-        for (int i = 0; i <= 10; i++) {
-            addCategory(String.valueOf("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK"));
+        for (int i = 0; i <= 11; i++) {
+            addCategory(new Category(String.valueOf(i)));
         }
     }
 
-    public void onBackButtonCLicked(View v) {
-        prepareCategoryGrid();
-    }
 
-    public void onCategoryButtonClicked(View v) {
-        prepareItemGrid();
-
-    }
-
-    public void onItemButtonClicked(View v) {
-        Button b = (Button) v;
-        mBill.addEntry(new Dish(b.getText().toString(), 12));
-        Log.i(TAG, "Want to add " + b.getText().toString());
-    }
-
-    private void addAbstractItem(String name, int ButtonStyle) {
+    private void addAbstractItem(String name, int ButtonStyle, View.OnClickListener listener) {
         GridLayout gridLayout = (GridLayout) findViewById(R.id.grid_layout);
         GridLayout.LayoutParams param = new GridLayout.LayoutParams();
         int viewCount = gridLayout.getChildCount();
         param.columnSpec = GridLayout.spec(viewCount % 4);
         param.rowSpec = GridLayout.spec(viewCount / 4);
-        Button example = new Button(this, null, ButtonStyle);
-        example.setText(name);
-        example.setLayoutParams(param);
-        gridLayout.addView(example);
+        Button b = new Button(this, null, ButtonStyle);
+        b.setOnClickListener(listener);
+        b.setText(name);
+        b.setLayoutParams(param);
+        gridLayout.addView(b);
     }
 
-    private void addCategory(String name) {
-        addAbstractItem(name, R.attr.catButtonStyle);
+    private void addCategory(Category c) {
+        View.OnClickListener categoryListener =new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                prepareItemGrid();
+            }
+        };
+        addAbstractItem(c.getName(), R.attr.catButtonStyle,categoryListener);
     }
 
-    private void addItem(String name, GridLayout gridLayout) {
-        addAbstractItem(name, R.attr.itemButtonStyle);
+    private void addBackButton(){
+        View.OnClickListener backListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prepareCategoryGrid();
+
+            }
+
+        };
+        addAbstractItem("<-",R.attr.backButtonStyle,backListener);
+    }
+
+    private void addDish(final Dish d) {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mBill.addEntry(d);
+            }
+
+        };
+        addAbstractItem(d.getName(), R.attr.dishButtonStyle, listener);
     }
 
 
@@ -128,37 +141,33 @@ public class Cashier extends Activity {
         GridLayout gridLayout = (GridLayout) findViewById(R.id.grid_layout);
         if (gridLayout.getChildCount() > 0)
             gridLayout.removeAllViews();
-        addBackButton(gridLayout);
+        addBackButton();
         populateCategoryItems(gridLayout, 0);
     }
 
-    private void addBackButton(GridLayout gridLayout) {
-        GridLayout.LayoutParams param = new GridLayout.LayoutParams();
-        int ButtonStyle = R.attr.backButtonStyle;
-        Button example = new Button(this, null, ButtonStyle);
-        example.setText("<-");
-        example.setLayoutParams(param);
-        gridLayout.addView(example);
-    }
 
     private void prepareCategoryGrid() {
         GridLayout gridLayout = (GridLayout) findViewById(R.id.grid_layout);
         if (gridLayout.getChildCount() > 0)
             gridLayout.removeAllViews();
         populateCategories(gridLayout);
-        addCategory("Test Category");
     }
 
     private void populateCategoryItems(GridLayout gl, int categoryId) {
         //TODO get items from this category and populate
         String[] names = {"Картошка", "Сало"};
         for (String name : names) {
-            addItem(name, gl);
+            addDish(new Dish(name,45));
         }
+
+
     }
 
     private void populateCategories(GridLayout gl) {
         //TODO get categories
+        for (int i = 0; i <= 10; i++) {
+            addCategory(new Category("Olala"));
+        }
     }
 
 
