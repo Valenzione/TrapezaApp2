@@ -18,9 +18,9 @@ public class FragmentList extends ListFragment {
 
     static {
         myMap = new HashMap<String, Integer>();
-        myMap.put("Category", R.layout.category_detail);
-        myMap.put("Statistics", R.layout.statistics_detail);
-        myMap.put("Dishes", R.layout.dishes_detail);
+        myMap.put("Category", R.layout.category_fragment);
+        myMap.put("Statistics", R.layout.statistics_fragment);
+        myMap.put("Dishes", R.layout.dishes_fragment);
     }
 
     @Override

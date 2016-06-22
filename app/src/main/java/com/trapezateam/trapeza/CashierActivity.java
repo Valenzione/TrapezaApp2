@@ -6,8 +6,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -19,6 +21,10 @@ public class CashierActivity extends Activity {
     public static final String TAG = "CashierActivity";
 
     Bill mBill;
+
+    String[] data = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"};
+    GridView gvMenu;
+    ArrayAdapter<String> adapterMenu;
 
     @Bind(R.id.totalPrice)
     TextView mTotalPrice;
@@ -83,12 +89,13 @@ public class CashierActivity extends Activity {
 
         mBill.addEntry(new Dish("dish dish", 8));
 
-        for (int i = 0; i <= 11; i++) {
-            addCategory(new Category(String.valueOf(i)));
-        }
+        adapterMenu = new ArrayAdapter<String>(this, R.layout.square_button, R.id.squareButton, data);
+        gvMenu = (GridView) findViewById(R.id.gvMenu);
+        gvMenu.setAdapter(adapterMenu);
+
     }
 
-
+/*
     private void addAbstractItem(String name, int ButtonStyle, View.OnClickListener listener) {
         GridLayout gridLayout = (GridLayout) findViewById(R.id.grid_layout);
         GridLayout.LayoutParams param = new GridLayout.LayoutParams();
@@ -154,7 +161,7 @@ public class CashierActivity extends Activity {
     }
 
     private void populateCategoryItems(GridLayout gl, int categoryId) {
-        //TODO get items from this category and populate
+        //TODO get items from this square_button and populate
         String[] names = {"Картошка", "Сало"};
         for (String name : names) {
             addDish(new Dish(name,45));
@@ -169,7 +176,7 @@ public class CashierActivity extends Activity {
             addCategory(new Category("Olala"));
         }
     }
-
+*/
 
     public void onClickCancelOrder(View view) {
         mBill.clear();
