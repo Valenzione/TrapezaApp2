@@ -1,4 +1,4 @@
-package com.example.yuriy.trapeza;
+package com.trapezateam.trapeza;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -8,23 +8,23 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class payCheckItemView extends LinearLayout {
+public class PayCheckItemView extends LinearLayout {
 
     private ImageButton mAddButton, mRemoveButton, mDeleteButton;
     private TextView mItemName;
     private EditText mItemNumber;
 
-    public payCheckItemView(Context context) {
+    public PayCheckItemView(Context context) {
         super(context);
         initializeViews(context);
     }
 
-    public payCheckItemView(Context context, AttributeSet attrs) {
+    public PayCheckItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initializeViews(context);
     }
 
-    public payCheckItemView(Context context,
+    public PayCheckItemView(Context context,
                             AttributeSet attrs,
                             int defStyle) {
         super(context, attrs, defStyle);

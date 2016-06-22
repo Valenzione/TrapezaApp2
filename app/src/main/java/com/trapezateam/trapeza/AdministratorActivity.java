@@ -1,4 +1,4 @@
-package com.example.yuriy.trapeza;
+package com.trapezateam.trapeza;
 
 import android.app.Fragment;
 import android.app.FragmentManager;

@@ -8,7 +8,7 @@
     android:paddingLeft="1dp"
     android:paddingRight="5dp"
     android:paddingTop="1dp"
-    tools:context=".CashierActivity">
+    tools:context="com.trapezateam.trapeza.CashierActivity">
 
 
     <ScrollView

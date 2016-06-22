@@ -1,4 +1,4 @@
-package com.example.yuriy.trapeza;
+package com.trapezateam.trapeza;
 
 import android.net.Uri;
 

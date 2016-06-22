@@ -1,4 +1,4 @@
-package com.example.yuriy.trapeza;
+package com.trapezateam.trapeza;
 
 import android.app.Activity;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package com.example.yuriy.trapeza;
+package com.trapezateam.trapeza;
 
 /**
  * Created by Yuriy on 6/21/2016.

@@ -1,4 +1,4 @@
-package com.example.yuriy.trapeza;
+package com.trapezateam.trapeza;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
