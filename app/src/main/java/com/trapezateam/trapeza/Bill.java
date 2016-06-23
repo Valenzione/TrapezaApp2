@@ -1,5 +1,7 @@
 package com.trapezateam.trapeza;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +20,33 @@ import butterknife.ButterKnife;
 /**
  * Created by ilgiz on 6/18/16.
  */
-public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> {
+public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parcelable {
+
+    protected Bill(Parcel in) {
+        in.readList(mEntires, null);
+    }
+
+    public static final Creator<Bill> CREATOR = new Creator<Bill>() {
+        @Override
+        public Bill createFromParcel(Parcel in) {
+            return new Bill(in);
+        }
+
+        @Override
+        public Bill[] newArray(int size) {
+            return new Bill[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeList(mEntires);
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -53,10 +81,11 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> {
         boolean contains = false;
         BillEntry billEntry = null;
         for (BillEntry b : mEntires) {
-            if (b.getDish().getName()==entry.getName()) {
+            if (b.getDish().getName() == entry.getName()) {
                 contains = true;
-                billEntry=b;
-            };
+                billEntry = b;
+            }
+            ;
         }
         if (contains) {
             incrementQuantity(mEntires.indexOf(billEntry));
@@ -154,5 +183,13 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> {
         return mEntires.size();
     }
 
-
+    @Override
+    public String toString() {
+        String out = "";
+        for (BillEntry e : mEntires) {
+            out += e.getDish().getName().toString() + " " + e.getPrice() + "\n";
+        }
+        return out;
+    }
 }
+

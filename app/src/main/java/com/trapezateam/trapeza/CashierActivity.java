@@ -24,8 +24,10 @@ public class CashierActivity extends Activity {
 
     Bill mBill;
 
-    private List<String> mCategoryData = new ArrayList<String>();
-    private List<String> mDishData=new ArrayList<String>();;
+    private boolean mInCategoryMenu;
+    private ArrayList<String> mCategoryData = new ArrayList<String>();
+    private ArrayList<String> mDishData = new ArrayList<String>();
+    ;
     private GridView mGvMenu;
     private ArrayAdapter<String> mCategoryAdapterMenu;
     private ArrayAdapter<String> mDishAdapterMenu;
@@ -44,7 +46,7 @@ public class CashierActivity extends Activity {
         mDishData.add("Back");
         mDishData.add("alphabet");
         mDishData.add("Google");
-
+        mInCategoryMenu=true;
         mBill.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
@@ -109,6 +111,7 @@ public class CashierActivity extends Activity {
     public void onClickAddToBill(View v) {
         if (mDishData.indexOf(((TextView) v).getText()) == 0) {
             mGvMenu.setAdapter(mCategoryAdapterMenu);
+            mInCategoryMenu = true;
         } else {
             mBill.addEntry(new Dish(((TextView) v).getText().toString(), 12));
         }
@@ -117,6 +120,7 @@ public class CashierActivity extends Activity {
     public void onClickShowDish(View v) {
         //TODO change dish data on category
         mGvMenu.setAdapter(mDishAdapterMenu);
+        mInCategoryMenu = false;
     }
 
 
@@ -124,4 +128,41 @@ public class CashierActivity extends Activity {
         mBill.clear();
         mTotalPrice.setText(mBill.getTotalPrice() + "");
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("bill", mBill);
+        outState.putStringArrayList("categoryData", mCategoryData);
+        outState.putStringArrayList("dishData", mDishData);
+        outState.putBoolean("inCategory", mInCategoryMenu);
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        mBill = savedInstanceState.getParcelable("bill");
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.item_list);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(mBill);
+
+
+        mInCategoryMenu = savedInstanceState.getBoolean("inCategory");
+        mTotalPrice.setText(String.valueOf(mBill.getTotalPrice())+" руб");
+
+        if (mInCategoryMenu) {
+            mCategoryData = savedInstanceState.getStringArrayList("categoryData");
+            mCategoryAdapterMenu = new ArrayAdapter<String>(this, R.layout.category_button, R.id.squareButton, mCategoryData);
+            mGvMenu.setAdapter(mCategoryAdapterMenu);
+        } else {
+            mDishData = savedInstanceState.getStringArrayList("dishData");
+            mDishAdapterMenu = new ArrayAdapter<String>(this, R.layout.dish_button, R.id.squareButton, mDishData);
+            mGvMenu.setAdapter(mDishAdapterMenu);
+        }
+
+    }
+
 }
