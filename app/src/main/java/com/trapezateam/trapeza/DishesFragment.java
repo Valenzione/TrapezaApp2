@@ -30,7 +30,7 @@ public class DishesFragment extends Fragment {
       public void onViewCreated(View view, Bundle savedInstanceState) {
           // TODO Auto-generated method stub
           super.onViewCreated(view, savedInstanceState);
-          adapterDishes = new ArrayAdapter<String>(getActivity(), R.layout.square_button,R.id.squareButton, data);
+          adapterDishes = new ArrayAdapter<String>(getActivity(), R.layout.category_button,R.id.squareButton, data);
           gvDishes = (GridView) getView().findViewById(R.id.gvDishes);
           gvDishes.setAdapter(adapterDishes);
 

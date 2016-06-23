@@ -6,11 +6,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -22,10 +24,11 @@ public class CashierActivity extends Activity {
 
     Bill mBill;
 
-    String[] data = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"};
-    GridView gvMenu;
-    ArrayAdapter<String> adapterMenu;
-
+    private List<String> mCategoryData = new ArrayList<String>();
+    private List<String> mDishData=new ArrayList<String>();;
+    private GridView mGvMenu;
+    private ArrayAdapter<String> mCategoryAdapterMenu;
+    private ArrayAdapter<String> mDishAdapterMenu;
     @Bind(R.id.totalPrice)
     TextView mTotalPrice;
 
@@ -33,10 +36,14 @@ public class CashierActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cashier);
-
         ButterKnife.bind(this);
-
         mBill = new Bill();
+
+        mCategoryData.add("a");
+        mCategoryData.add("b");
+        mDishData.add("Back");
+        mDishData.add("alphabet");
+        mDishData.add("Google");
 
         mBill.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -89,94 +96,29 @@ public class CashierActivity extends Activity {
 
         mBill.addEntry(new Dish("dish dish", 8));
 
-        adapterMenu = new ArrayAdapter<String>(this, R.layout.square_button, R.id.squareButton, data);
-        gvMenu = (GridView) findViewById(R.id.gvMenu);
-        gvMenu.setAdapter(adapterMenu);
+        mCategoryAdapterMenu = new ArrayAdapter<String>(this, R.layout.category_button, R.id.squareButton, mCategoryData);
+        mDishAdapterMenu = new ArrayAdapter<String>(this, R.layout.dish_button, R.id.squareButton, mDishData);
+        mGvMenu = (GridView) findViewById(R.id.gvMenu);
+        mGvMenu.setAdapter(mCategoryAdapterMenu);
+
+
+        Log.d(TAG, "Done");
 
     }
 
-/*
-    private void addAbstractItem(String name, int ButtonStyle, View.OnClickListener listener) {
-        GridLayout gridLayout = (GridLayout) findViewById(R.id.grid_layout);
-        GridLayout.LayoutParams param = new GridLayout.LayoutParams();
-        int viewCount = gridLayout.getChildCount();
-        param.columnSpec = GridLayout.spec(viewCount % 4);
-        param.rowSpec = GridLayout.spec(viewCount / 4);
-        Button b = new Button(this, null, ButtonStyle);
-        b.setOnClickListener(listener);
-        b.setText(name);
-        b.setLayoutParams(param);
-        gridLayout.addView(b);
-    }
-
-    private void addCategory(Category c) {
-        View.OnClickListener categoryListener =new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                prepareItemGrid();
-            }
-        };
-        addAbstractItem(c.getName(), R.attr.catButtonStyle,categoryListener);
-    }
-
-    private void addBackButton(){
-        View.OnClickListener backListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                prepareCategoryGrid();
-
-            }
-
-        };
-        addAbstractItem("<-",R.attr.backButtonStyle,backListener);
-    }
-
-    private void addDish(final Dish d) {
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                mBill.addEntry(d);
-            }
-
-        };
-        addAbstractItem(d.getName(), R.attr.dishButtonStyle, listener);
-    }
-
-
-    private void prepareItemGrid() {
-        GridLayout gridLayout = (GridLayout) findViewById(R.id.grid_layout);
-        if (gridLayout.getChildCount() > 0)
-            gridLayout.removeAllViews();
-        addBackButton();
-        populateCategoryItems(gridLayout, 0);
-    }
-
-
-    private void prepareCategoryGrid() {
-        GridLayout gridLayout = (GridLayout) findViewById(R.id.grid_layout);
-        if (gridLayout.getChildCount() > 0)
-            gridLayout.removeAllViews();
-        populateCategories(gridLayout);
-    }
-
-    private void populateCategoryItems(GridLayout gl, int categoryId) {
-        //TODO get items from this square_button and populate
-        String[] names = {"Картошка", "Сало"};
-        for (String name : names) {
-            addDish(new Dish(name,45));
-        }
-
-
-    }
-
-    private void populateCategories(GridLayout gl) {
-        //TODO get categories
-        for (int i = 0; i <= 10; i++) {
-            addCategory(new Category("Olala"));
+    public void onClickAddToBill(View v) {
+        if (mDishData.indexOf(((TextView) v).getText()) == 0) {
+            mGvMenu.setAdapter(mCategoryAdapterMenu);
+        } else {
+            mBill.addEntry(new Dish(((TextView) v).getText().toString(), 12));
         }
     }
-*/
+
+    public void onClickShowDish(View v) {
+        //TODO change dish data on category
+        mGvMenu.setAdapter(mDishAdapterMenu);
+    }
+
 
     public void onClickCancelOrder(View view) {
         mBill.clear();

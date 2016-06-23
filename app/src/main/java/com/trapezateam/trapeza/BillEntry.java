@@ -3,7 +3,9 @@ package com.trapezateam.trapeza;
 /**
  * Created by ilgiz on 6/18/16.
  */
-public class BillEntry {
+public class BillEntry  {
+
+
 
     private Dish mDish;
     private int mQuantity;
@@ -40,7 +42,6 @@ public class BillEntry {
     public int getQuantity() {
         return mQuantity;
     }
-
 
 
 }

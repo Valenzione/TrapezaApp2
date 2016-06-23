@@ -32,7 +32,7 @@ public class CategoryFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onViewCreated(view, savedInstanceState);
-        adapterCategories = new ArrayAdapter<String>(getActivity(), R.layout.square_button,R.id.squareButton, data);
+        adapterCategories = new ArrayAdapter<String>(getActivity(), R.layout.category_button,R.id.squareButton, data);
         gvCategories = (GridView) getView().findViewById(R.id.gvCategories);
         gvCategories.setAdapter(adapterCategories);
 

@@ -1,6 +1,7 @@
 package com.trapezateam.trapeza;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,8 +50,21 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> {
     }
 
     public void addEntry(Dish entry) {
-        mEntires.add(new BillEntry(entry, 1));
-        notifyItemInserted(getItemCount() - 1);
+        boolean contains = false;
+        BillEntry billEntry = null;
+        for (BillEntry b : mEntires) {
+            if (b.getDish().getName()==entry.getName()) {
+                contains = true;
+                billEntry=b;
+            };
+        }
+        if (contains) {
+            incrementQuantity(mEntires.indexOf(billEntry));
+            Log.d("CashierAc", "AlreadyThere");
+        } else {
+            mEntires.add(new BillEntry(entry, 1));
+            notifyItemInserted(getItemCount() - 1);
+        }
     }
 
     public void removeEntry(int position) {
