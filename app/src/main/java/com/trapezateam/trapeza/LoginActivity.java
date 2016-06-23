@@ -21,6 +21,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
@@ -33,13 +36,13 @@ public class LoginActivity extends AppCompatActivity {
     Button mLoginButton;
     @Bind(R.id.link_signup)
     TextView mSignupLink;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        
+
         mLoginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -62,11 +65,12 @@ public class LoginActivity extends AppCompatActivity {
     public void login() {
         Log.d(TAG, "Login");
 
-//        if (!validate()) {
-//            onLoginFailed();
-//            return;
-//        }
+   /*     if (!validate()) {
 
+            onLoginFailed();
+            return;
+        }
+*/
         mLoginButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
@@ -81,12 +85,13 @@ public class LoginActivity extends AppCompatActivity {
         TrapezaApi api = TrapezaRestClient.getApiInstance();
 
         Call<AuthenticationResponse> call = api.authenticate(email, password);
+        progressDialog.dismiss();
         call.enqueue(new Callback<AuthenticationResponse>() {
             @Override
             public void onResponse(Call<AuthenticationResponse> call,
                                    Response<AuthenticationResponse> response) {
                 AuthenticationResponse body = response.body();
-                if(!body.isSuccess()) {
+                if (!body.isSuccess()) {
                     Toast.makeText(LoginActivity.this, body.getMessage(), Toast.LENGTH_SHORT).show();
                     onLoginFailed();
                 }
@@ -137,6 +142,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         mLoginButton.setEnabled(true);
+        Log.d(TAG,"Login succesful");
         finish();
     }
 
@@ -154,6 +160,9 @@ public class LoginActivity extends AppCompatActivity {
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             mEmailText.setError("enter a valid email address");
+            YoYo.with(Techniques.Shake)
+                    .duration(500)
+                    .playOn(findViewById(R.id.input_email));
             valid = false;
         } else {
             mEmailText.setError(null);
@@ -161,6 +170,9 @@ public class LoginActivity extends AppCompatActivity {
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
             mPasswordText.setError("between 4 and 10 alphanumeric characters");
+            YoYo.with(Techniques.Shake)
+                    .duration(500)
+                    .playOn(findViewById(R.id.input_password));
             valid = false;
         } else {
             mPasswordText.setError(null);

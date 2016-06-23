@@ -14,14 +14,7 @@ import java.util.Map;
 
 public class FragmentList extends ListFragment {
 
-    private static final Map<String, Integer> myMap;
 
-    static {
-        myMap = new HashMap<String, Integer>();
-        myMap.put("Category", R.layout.category_fragment);
-        myMap.put("Statistics", R.layout.statistics_fragment);
-        myMap.put("Dishes", R.layout.dishes_fragment);
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

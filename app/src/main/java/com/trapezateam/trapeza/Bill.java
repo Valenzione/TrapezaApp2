@@ -81,11 +81,10 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
         boolean contains = false;
         BillEntry billEntry = null;
         for (BillEntry b : mEntires) {
-            if (b.getDish().getName() == entry.getName()) {
+            if (b.getDish().getName().equals(entry.getName())) {
                 contains = true;
                 billEntry = b;
             }
-            ;
         }
         if (contains) {
             incrementQuantity(mEntires.indexOf(billEntry));

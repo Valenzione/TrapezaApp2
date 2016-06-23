@@ -27,7 +27,6 @@ public class CashierActivity extends Activity {
     private boolean mInCategoryMenu;
     private ArrayList<String> mCategoryData = new ArrayList<String>();
     private ArrayList<String> mDishData = new ArrayList<String>();
-    ;
     private GridView mGvMenu;
     private ArrayAdapter<String> mCategoryAdapterMenu;
     private ArrayAdapter<String> mDishAdapterMenu;
@@ -46,7 +45,7 @@ public class CashierActivity extends Activity {
         mDishData.add("Back");
         mDishData.add("alphabet");
         mDishData.add("Google");
-        mInCategoryMenu=true;
+        mInCategoryMenu = true;
         mBill.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
@@ -104,8 +103,6 @@ public class CashierActivity extends Activity {
         mGvMenu.setAdapter(mCategoryAdapterMenu);
 
 
-        Log.d(TAG, "Done");
-
     }
 
     public void onClickAddToBill(View v) {
@@ -118,7 +115,7 @@ public class CashierActivity extends Activity {
     }
 
     public void onClickShowDish(View v) {
-        //TODO change dish data on category
+        //TODO change dish data on category. Element at 0 index must be "BACK" button
         mGvMenu.setAdapter(mDishAdapterMenu);
         mInCategoryMenu = false;
     }
@@ -151,7 +148,7 @@ public class CashierActivity extends Activity {
 
 
         mInCategoryMenu = savedInstanceState.getBoolean("inCategory");
-        mTotalPrice.setText(String.valueOf(mBill.getTotalPrice())+" руб");
+        mTotalPrice.setText(String.valueOf(mBill.getTotalPrice()) + " руб");
 
         if (mInCategoryMenu) {
             mCategoryData = savedInstanceState.getStringArrayList("categoryData");
