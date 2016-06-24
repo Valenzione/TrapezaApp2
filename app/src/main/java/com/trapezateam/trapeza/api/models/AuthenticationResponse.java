@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class AuthenticationResponse {
 
-    @SerializedName("succes")
+    @SerializedName("success")
     private boolean mSuccess;
 
     @SerializedName("message")

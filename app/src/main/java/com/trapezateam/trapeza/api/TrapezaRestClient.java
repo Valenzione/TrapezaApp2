@@ -47,7 +47,7 @@ public class TrapezaRestClient {
         getApiInstance().authenticate(login, password).enqueue(callback);
     }
 
-    static void dishesList(Callback<List<DishResponse>> callback) {
+    public static void dishesList(Callback<List<DishResponse>> callback) {
         getApiInstance().dishesList(getToken()).enqueue(callback);
     }
 

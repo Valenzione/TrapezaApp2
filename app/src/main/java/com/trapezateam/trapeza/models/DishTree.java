@@ -1,5 +1,7 @@
 package com.trapezateam.trapeza.models;
 
+import android.util.Log;
+
 import com.trapezateam.trapeza.api.models.DishResponse;
 
 import java.util.ArrayList;
@@ -10,16 +12,22 @@ import java.util.TreeMap;
 /**
  * Created by ilgiz on 6/22/16.
  */
-public class DishGraph {
+public class DishTree {
+
+    public static final String TAG = "DishTree";
 
     private Vertex mRoot;
 
-    class Vertex {
+    public class Vertex {
         Dish mDish;
-        boolean mHasParents;
+        Vertex mParent;
 
-        Dish getDish() {
+        public Dish getDish() {
             return mDish;
+        }
+
+        public Vertex getParent() {
+            return mParent;
         }
 
         @Override
@@ -41,46 +49,47 @@ public class DishGraph {
 
         void addChild(Vertex vertex) {
             mChildren.add(vertex);
-            vertex.setHasParents(true);
+            vertex.setParent(this);
         }
 
         public ArrayList<Vertex> getChildren() {
             return mChildren;
         }
 
-        public void setHasParents(boolean hasParents) {
-            mHasParents = hasParents;
+        public void setParent(Vertex v) {
+            mParent = v;
         }
 
         public boolean hasParents() {
-            return mHasParents;
+            return mParent != null;
+        }
+
+        public boolean isLeaf() {
+            return mChildren.isEmpty();
         }
     }
 
-
-    class Edge {
-        final Vertex mTo;
-
-        Edge(Vertex to) {
-            mTo = to;
-        }
-    }
-
-    Vertex getRoot() {
+    public Vertex getRoot() {
         return mRoot;
     }
 
-    public DishGraph(List<DishResponse> dishesList) {
+    public DishTree(List<DishResponse> dishesList) {
+        Log.d(TAG, "Parsing list " + dishesList);
         mRoot = new Vertex();
         Map<Integer, Vertex> vertices = new TreeMap<>();
         for (DishResponse d : dishesList) {
             vertices.put(d.getId(), new Vertex(new Dish(d)));
         }
-        for(DishResponse d : dishesList) {
+        for (DishResponse d : dishesList) {
+            if (d.getFather() == null) {
+                continue;
+            }
+            Log.d(TAG, "Attaching " + vertices.get(d.getId()).getDish() + " to " +
+                    vertices.get(d.getFather()).getDish());
             vertices.get(d.getFather()).addChild(vertices.get(d.getId()));
         }
-        for(Vertex v : vertices.values()) {
-            if(!v.hasParents()) {
+        for (Vertex v : vertices.values()) {
+            if (!v.hasParents()) {
                 mRoot.addChild(v);
             }
         }

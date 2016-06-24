@@ -26,7 +26,7 @@ public class DishResponse {
     private String mDescription;
 
     @SerializedName("r_father")
-    private int mFather;
+    private Integer mFather;
 
     @SerializedName("r_father_name")
     private String mFatherName;
@@ -80,16 +80,30 @@ public class DishResponse {
         mDescription = description;
     }
 
-    public int getFather() {
+    public Integer getFather() {
         return mFather;
     }
 
-    public void setFather(int father) {
+    public void setFather(Integer father) {
         mFather = father;
     }
 
     public String getFatherName() {
         return mFatherName;
+    }
+
+    @Override
+    public String toString() {
+        return "DishResponse{" +
+                "mId=" + mId +
+                ", mPriceId=" + mPriceId +
+                ", mName='" + mName + '\'' +
+                ", mPrice='" + mPrice + '\'' +
+                ", mPhoto='" + mPhoto + '\'' +
+                ", mDescription='" + mDescription + '\'' +
+                ", mFather=" + mFather +
+                ", mFatherName='" + mFatherName + '\'' +
+                '}';
     }
 
     public void setFatherName(String fatherName) {

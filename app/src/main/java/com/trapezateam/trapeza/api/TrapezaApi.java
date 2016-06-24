@@ -20,6 +20,6 @@ public interface TrapezaApi {
     Call<AuthenticationResponse> authenticate(@Query("login")  String login,
                                               @Query("password") String password);
 
-    @GET("/requests?func=dishes")
+    @GET("/requests?func=dishesList")
     Call<List<DishResponse>> dishesList(@Query("token") String token);
 }

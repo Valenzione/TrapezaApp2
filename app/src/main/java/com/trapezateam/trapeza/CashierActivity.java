@@ -1,6 +1,7 @@
 package com.trapezateam.trapeza;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,13 +10,21 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.trapezateam.trapeza.api.TrapezaRestClient;
+import com.trapezateam.trapeza.api.models.DishResponse;
 import com.trapezateam.trapeza.models.Dish;
+import com.trapezateam.trapeza.models.DishTree;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class CashierActivity extends Activity {
@@ -24,12 +33,9 @@ public class CashierActivity extends Activity {
 
     Bill mBill;
 
-    private boolean mInCategoryMenu;
-    private ArrayList<String> mCategoryData = new ArrayList<>();
-    private ArrayList<String> mDishData = new ArrayList<>();
-    private GridView mGvMenu;
-    private ArrayAdapter<String> mCategoryAdapterMenu;
-    private ArrayAdapter<String> mDishAdapterMenu;
+    private DishTreeAdapter mDishAdapter;
+    private GridView mDishMenu;
+
     @Bind(R.id.totalPrice)
     TextView mTotalPrice;
 
@@ -39,24 +45,6 @@ public class CashierActivity extends Activity {
         setContentView(R.layout.activity_cashier);
         ButterKnife.bind(this);
         mBill = new Bill();
-
-        mCategoryData.add("a");
-        mCategoryData.add("b");
-
-        mDishData.add("Back");
-
-        mDishData.add("alphabet");
-        mDishData.add("Google");
-        mDishData.add("alpha");
-        mDishData.add("1");
-        mDishData.add("3");
-        mDishData.add("4");
-        mDishData.add("2");
-        mDishData.add("Goo44gle");
-        mDishData.add("alph11abet");
-        mDishData.add("Goog33le");
-
-        mInCategoryMenu = true;
 
         mBill.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -101,37 +89,44 @@ public class CashierActivity extends Activity {
             }
         });
 
-        // определяем список и присваиваем ему адаптер
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.item_list);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(mBill);
+        RecyclerView billRecyclerView = (RecyclerView) findViewById(R.id.item_list);
+        RecyclerView.LayoutManager billLayoutManager = new LinearLayoutManager(this);
+        billRecyclerView.setLayoutManager(billLayoutManager);
+        billRecyclerView.setAdapter(mBill);
 
-        mBill.addEntry(new Dish("dish dish", 8));
 
-        mCategoryAdapterMenu = new ArrayAdapter<>(this, R.layout.category_button, R.id.squareButton, mCategoryData);
-        mDishAdapterMenu = new ArrayAdapter<>(this, R.layout.dish_button, R.id.squareButton, mDishData);
-        mGvMenu = (GridView) findViewById(R.id.gvMenu);
-        mGvMenu.setAdapter(mCategoryAdapterMenu);
+        mDishMenu = (GridView) findViewById(R.id.gvMenu);
 
+        requestDishes();
 
     }
 
-    public void onClickAddToBill(View v) {
-        if (mDishData.indexOf(((TextView) v).getText()) == 0) {
-            mGvMenu.setAdapter(mCategoryAdapterMenu);
-            mInCategoryMenu = true;
-        } else {
-            mBill.addEntry(new Dish(((TextView) v).getText().toString(), 12));
-        }
-    }
+    void requestDishes() {
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Getting dishes");
+        dialog.setCancelable(false);
+        dialog.show();
+        TrapezaRestClient.dishesList(new Callback<List<DishResponse>>() {
+            @Override
+            public void onResponse(Call<List<DishResponse>> call,
+                                   Response<List<DishResponse>> response) {
+                Log.d(TAG, "Response received");
+                List<DishResponse> body = response.body();
+                DishTree tree = new DishTree(body);
+                mDishAdapter = new DishTreeAdapter(tree, mBill);
+                mDishMenu.setAdapter(mDishAdapter);
+                dialog.dismiss();
+            }
 
-    public void onClickShowDish(View v) {
-        //TODO change dish data on category. Element at 0 index must be "BACK" button
-        mGvMenu.setAdapter(mDishAdapterMenu);
-        mInCategoryMenu = false;
-    }
+            @Override
+            public void onFailure(Call<List<DishResponse>> call, Throwable t) {
+                Toast.makeText(CashierActivity.this, "Error getting dishes " + t.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
 
+            }
+        });
+    }
 
     public void onClickCancelOrder(View view) {
         mBill.clear();
@@ -142,10 +137,6 @@ public class CashierActivity extends Activity {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable("bill", mBill);
-        outState.putStringArrayList("categoryData", mCategoryData);
-        outState.putStringArrayList("dishData", mDishData);
-        outState.putBoolean("inCategory", mInCategoryMenu);
-
     }
 
     @Override
@@ -159,27 +150,20 @@ public class CashierActivity extends Activity {
         recyclerView.setAdapter(mBill);
 
 
-        mInCategoryMenu = savedInstanceState.getBoolean("inCategory");
         mTotalPrice.setText(mBill.getTotalPrice() + " руб");
 
-        if (mInCategoryMenu) {
-            mCategoryData = savedInstanceState.getStringArrayList("categoryData");
-            mCategoryAdapterMenu = new ArrayAdapter<>(this, R.layout.category_button, R.id.squareButton, mCategoryData);
-            mGvMenu.setAdapter(mCategoryAdapterMenu);
-        } else {
-            mDishData = savedInstanceState.getStringArrayList("dishData");
-            mDishAdapterMenu = new ArrayAdapter<>(this, R.layout.dish_button, R.id.squareButton, mDishData);
-            mGvMenu.setAdapter(mDishAdapterMenu);
-        }
+        // TODO: restore Dishes
+
+//        if (mInCategoryMenu) {
+//            mCategoryData = savedInstanceState.getStringArrayList("categoryData");
+//            mCategoryAdapterMenu = new ArrayAdapter<>(this, R.layout.category_button, R.id.squareButton, mCategoryData);
+//            mDishMenu.setAdapter(mCategoryAdapterMenu);
+//        } else {
+//            mDishData = savedInstanceState.getStringArrayList("dishData");
+//            mDishAdapterMenu = new ArrayAdapter<>(this, R.layout.dish_button, R.id.squareButton, mDishData);
+//            mDishMenu.setAdapter(mDishAdapterMenu);
+//        }
 
     }
 
-    @Override
-    public void onBackPressed() {
-        if (!mInCategoryMenu) {
-            mGvMenu.setAdapter(mCategoryAdapterMenu);
-        } else {
-            super.onBackPressed();
-        }
-    }
 }
