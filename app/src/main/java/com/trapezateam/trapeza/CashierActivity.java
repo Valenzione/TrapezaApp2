@@ -42,10 +42,22 @@ public class CashierActivity extends Activity {
 
         mCategoryData.add("a");
         mCategoryData.add("b");
+
         mDishData.add("Back");
+
         mDishData.add("alphabet");
         mDishData.add("Google");
+        mDishData.add("alpha");
+        mDishData.add("1");
+        mDishData.add("3");
+        mDishData.add("4");
+        mDishData.add("2");
+        mDishData.add("Goo44gle");
+        mDishData.add("alph11abet");
+        mDishData.add("Goog33le");
+
         mInCategoryMenu = true;
+
         mBill.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
