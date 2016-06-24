@@ -36,8 +36,8 @@
 
     <ImageButton
         android:id="@+id/bill_entry_decrement"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:onClick="onClickRemovePayCheckItem"
         android:background="@drawable/ic_remove"
         android:layout_gravity="center" />
@@ -55,8 +55,8 @@
 
     <ImageButton
         android:id="@+id/bill_entry_increment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentRight="true"
         android:layout_toLeftOf="@+id/bill_entry_quantity"
         android:onClick="onClickAddPayCheckItem"

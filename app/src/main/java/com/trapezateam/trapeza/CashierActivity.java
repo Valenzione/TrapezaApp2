@@ -174,4 +174,12 @@ public class CashierActivity extends Activity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (!mInCategoryMenu) {
+            mGvMenu.setAdapter(mCategoryAdapterMenu);
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
