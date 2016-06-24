@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.trapezateam.trapeza.api.TrapezaApi;
 import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.AuthenticationResponse;
 
@@ -65,12 +64,11 @@ public class LoginActivity extends AppCompatActivity {
     public void login() {
         Log.d(TAG, "Login");
 
-   /*     if (!validate()) {
+//        if (!validate()) {
+//            onLoginFailed();
+//            return;
+//        }
 
-            onLoginFailed();
-            return;
-        }
-*/
         mLoginButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
@@ -82,32 +80,24 @@ public class LoginActivity extends AppCompatActivity {
         String email = mEmailText.getText().toString();
         String password = mPasswordText.getText().toString();
 
-        TrapezaApi api = TrapezaRestClient.getApiInstance();
-
-        Call<AuthenticationResponse> call = api.authenticate(email, password);
-        progressDialog.dismiss();
-        call.enqueue(new Callback<AuthenticationResponse>() {
+        TrapezaRestClient.authenticate(email, password, new Callback<AuthenticationResponse>() {
             @Override
             public void onResponse(Call<AuthenticationResponse> call,
                                    Response<AuthenticationResponse> response) {
                 AuthenticationResponse body = response.body();
                 if (!body.isSuccess()) {
-                    Toast.makeText(LoginActivity.this, body.getMessage(), Toast.LENGTH_SHORT).show();
-                    onLoginFailed();
+                    onLoginFailed(body.getMessage());
                 }
-                Toast.makeText(LoginActivity.this, "Token " + response.body().getToken(), Toast.LENGTH_SHORT).show();
-                Log.i(TAG, response.body().toString());
-                onLoginSuccess();
+                Log.d(TAG, body.toString());
+                onLoginSuccess(body.getToken());
             }
 
             @Override
             public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Error " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 t.printStackTrace();
-                onLoginFailed();
+                onLoginFailed("Network error " + t.getMessage());
             }
         });
-
 
 
 //        new android.os.Handler().postDelayed(
@@ -140,15 +130,15 @@ public class LoginActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public void onLoginSuccess() {
+    public void onLoginSuccess(String token) {
         mLoginButton.setEnabled(true);
-        Log.d(TAG,"Login succesful");
-        finish();
+        TrapezaRestClient.setToken(token);
+        Intent intent = new Intent(this, CashierActivity.class);
+        startActivity(intent);
     }
 
-    public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
+    public void onLoginFailed(String message) {
+        Toast.makeText(getBaseContext(), "Login failed: " + message, Toast.LENGTH_LONG).show();
         mLoginButton.setEnabled(true);
     }
 

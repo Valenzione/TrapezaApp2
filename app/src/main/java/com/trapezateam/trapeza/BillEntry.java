@@ -1,5 +1,7 @@
 package com.trapezateam.trapeza;
 
+import com.trapezateam.trapeza.models.Dish;
+
 /**
  * Created by ilgiz on 6/18/16.
  */

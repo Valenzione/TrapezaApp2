@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.trapezateam.trapeza.models.Dish;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -186,7 +188,7 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
     public String toString() {
         String out = "";
         for (BillEntry e : mEntires) {
-            out += e.getDish().getName().toString() + " " + e.getPrice() + "\n";
+            out += e.getDish().getName() + " " + e.getPrice() + "\n";
         }
         return out;
     }

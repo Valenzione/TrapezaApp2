@@ -6,13 +6,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.trapezateam.trapeza.models.Dish;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -25,8 +25,8 @@ public class CashierActivity extends Activity {
     Bill mBill;
 
     private boolean mInCategoryMenu;
-    private ArrayList<String> mCategoryData = new ArrayList<String>();
-    private ArrayList<String> mDishData = new ArrayList<String>();
+    private ArrayList<String> mCategoryData = new ArrayList<>();
+    private ArrayList<String> mDishData = new ArrayList<>();
     private GridView mGvMenu;
     private ArrayAdapter<String> mCategoryAdapterMenu;
     private ArrayAdapter<String> mDishAdapterMenu;
@@ -97,8 +97,8 @@ public class CashierActivity extends Activity {
 
         mBill.addEntry(new Dish("dish dish", 8));
 
-        mCategoryAdapterMenu = new ArrayAdapter<String>(this, R.layout.category_button, R.id.squareButton, mCategoryData);
-        mDishAdapterMenu = new ArrayAdapter<String>(this, R.layout.dish_button, R.id.squareButton, mDishData);
+        mCategoryAdapterMenu = new ArrayAdapter<>(this, R.layout.category_button, R.id.squareButton, mCategoryData);
+        mDishAdapterMenu = new ArrayAdapter<>(this, R.layout.dish_button, R.id.squareButton, mDishData);
         mGvMenu = (GridView) findViewById(R.id.gvMenu);
         mGvMenu.setAdapter(mCategoryAdapterMenu);
 
@@ -148,15 +148,15 @@ public class CashierActivity extends Activity {
 
 
         mInCategoryMenu = savedInstanceState.getBoolean("inCategory");
-        mTotalPrice.setText(String.valueOf(mBill.getTotalPrice()) + " руб");
+        mTotalPrice.setText(mBill.getTotalPrice() + " руб");
 
         if (mInCategoryMenu) {
             mCategoryData = savedInstanceState.getStringArrayList("categoryData");
-            mCategoryAdapterMenu = new ArrayAdapter<String>(this, R.layout.category_button, R.id.squareButton, mCategoryData);
+            mCategoryAdapterMenu = new ArrayAdapter<>(this, R.layout.category_button, R.id.squareButton, mCategoryData);
             mGvMenu.setAdapter(mCategoryAdapterMenu);
         } else {
             mDishData = savedInstanceState.getStringArrayList("dishData");
-            mDishAdapterMenu = new ArrayAdapter<String>(this, R.layout.dish_button, R.id.squareButton, mDishData);
+            mDishAdapterMenu = new ArrayAdapter<>(this, R.layout.dish_button, R.id.squareButton, mDishData);
             mGvMenu.setAdapter(mDishAdapterMenu);
         }
 

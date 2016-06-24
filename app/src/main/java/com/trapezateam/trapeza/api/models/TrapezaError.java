@@ -1,5 +1,7 @@
 package com.trapezateam.trapeza.api.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by ilgiz on 6/22/16.
  */
@@ -11,28 +13,31 @@ public class TrapezaError {
      * error handling
      */
 
-    String code;
-    String message;
+    @SerializedName("code")
+    String mCode;
+
+    @SerializedName("message")
+    String mMessage;
 
     public TrapezaError(String message)
     {
-        this.message = message;
+        mMessage = message;
     }
 
 
     public String getCode() {
-        return code;
+        return mCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCode(String mCode) {
+        this.mCode = mCode;
     }
 
     public String getMessage() {
-        return message;
+        return mMessage;
     }
 
     public void setMessage(String message) {
-        this.message = message;
+        this.mMessage = message;
     }
 }

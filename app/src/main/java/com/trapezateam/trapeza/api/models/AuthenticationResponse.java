@@ -1,57 +1,63 @@
 package com.trapezateam.trapeza.api.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by ilgiz on 6/21/16.
  */
 public class AuthenticationResponse {
 
-    private boolean success;
+    @SerializedName("succes")
+    private boolean mSuccess;
 
-    private String message;
+    @SerializedName("message")
+    private String mMessage;
 
-    private String token;
+    @SerializedName("token")
+    private String mToken;
 
-    private int id;
+    @SerializedName("id")
+    private int mId;
 
     public boolean isSuccess() {
-        return success;
+        return mSuccess;
     }
 
     public void setSuccess(boolean success) {
-        this.success = success;
+        mSuccess = success;
     }
 
     public String getMessage() {
-        return message;
+        return mMessage;
     }
 
     public void setMessage(String message) {
-        this.message = message;
+        mMessage = message;
     }
 
     public String getToken() {
-        return token;
+        return mToken;
     }
 
     public void setToken(String token) {
-        this.token = token;
+        mToken = token;
     }
 
     public int getId() {
-        return id;
+        return mId;
     }
 
     public void setId(int id) {
-        this.id = id;
+        mId = id;
     }
 
     @Override
     public String toString() {
         return "AuthenticationResponse{" +
-                "success=" + success +
-                ", message='" + message + '\'' +
-                ", token='" + token + '\'' +
-                ", id=" + id +
+                "mSuccess=" + mSuccess +
+                ", mMessage='" + mMessage + '\'' +
+                ", mToken='" + mToken + '\'' +
+                ", mId=" + mId +
                 '}';
     }
 }
