@@ -80,16 +80,15 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
     }
 
     public void addEntry(Dish entry) {
-        boolean contains = false;
-        BillEntry billEntry = null;
-        for (BillEntry b : mEntires) {
-            if (b.getDish().getName().equals(entry.getName())) {
-                contains = true;
-                billEntry = b;
+        int index = -1;
+        for (int i = 0; i < mEntires.size(); i++) {
+            if (mEntires.get(i).getDish().equals(entry)) {
+                index = i;
+                break;
             }
         }
-        if (contains) {
-            incrementQuantity(mEntires.indexOf(billEntry));
+        if (index != -1) {
+            incrementQuantity(index);
             Log.d("CashierAc", "AlreadyThere");
         } else {
             mEntires.add(new BillEntry(entry, 1));
@@ -143,7 +142,7 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         BillEntry e = mEntires.get(position);
-        holder.mName.setText(e.getDish().getName());
+        holder.mName.setText(e.getDish().getName() + "(" + e.getDish().getDescription() + ")");
         holder.mDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

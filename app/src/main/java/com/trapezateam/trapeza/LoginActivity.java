@@ -24,6 +24,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
 public class LoginActivity extends AppCompatActivity {
+
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 
@@ -59,6 +60,12 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_SIGNUP);
             }
         });
+
+
+        if(DebugConfig.USE_DEFAULT_TOKEN) {
+            TrapezaRestClient.setToken(DebugConfig.DEFAULT_TOKEN);
+            onLoginSuccess(DebugConfig.DEFAULT_TOKEN);
+        }
     }
 
     public void login() {
@@ -133,6 +140,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onLoginSuccess(String token) {
         mLoginButton.setEnabled(true);
         TrapezaRestClient.setToken(token);
+        Log.i(TAG, "Token " + token);
         Intent intent = new Intent(this, CashierActivity.class);
         startActivity(intent);
     }
