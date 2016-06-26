@@ -32,7 +32,7 @@ public class CategoryFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onViewCreated(view, savedInstanceState);
-        adapterCategories = new ArrayAdapter<String>(getActivity(), R.layout.category_button,R.id.squareButton, data);
+        adapterCategories = new ArrayAdapter<>(getActivity(), R.layout.category_button, R.id.squareButton, data);
         gvCategories = (GridView) getView().findViewById(R.id.gvCategories);
         gvCategories.setAdapter(adapterCategories);
 
@@ -40,44 +40,6 @@ public class CategoryFragment extends Fragment {
     }
 
 
-    /* private View addAbstractItem(String name, int ButtonStyle, View.OnClickListener listener) {
-         GridLayout gridLayout = (GridLayout) getView().findViewById(R.id.category_fragment_layout);
-         GridLayout.LayoutParams param = new GridLayout.LayoutParams();
-         int viewCount = gridLayout.getChildCount();
-         param.columnSpec = GridLayout.spec(viewCount % 5);
-         param.rowSpec = GridLayout.spec(viewCount / 5);
-         Button b = new Button(getActivity(), null, ButtonStyle);
-         b.setOnClickListener(listener);
-         b.setText(name);
-         b.setLayoutParams(param);
-         gridLayout.addView(b);
-         return b;
-     }
-
-     private void addCategory(Category c) {
-         View.OnClickListener categoryListener = new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 //TODO Add method
-             }
-         };
-         View b = addAbstractItem(c.getName(), R.attr.catButtonStyle, categoryListener);
-         registerForContextMenu(b);
-     }
-
-     private void addAddButton() {
-         View.OnClickListener categoryListener = new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 GridLayout gridLayout = (GridLayout) getView().findViewById(R.id.category_fragment_layout);
-                 gridLayout.removeViewAt(gridLayout.getChildCount() - 1);
-                 addCategory(new Category("Kelemadsan"));
-                 addAddButton();
-             }
-         };
-         addAbstractItem("+", R.attr.catButtonStyle, categoryListener);
-     }
- */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {

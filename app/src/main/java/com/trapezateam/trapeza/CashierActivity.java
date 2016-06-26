@@ -7,17 +7,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.DishResponse;
-import com.trapezateam.trapeza.models.Dish;
 import com.trapezateam.trapeza.models.DishTree;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -34,7 +31,7 @@ public class CashierActivity extends Activity {
     Bill mBill;
 
     private DishTreeAdapter mDishAdapter;
-    private GridView mDishMenu;
+    private GridView mMenu;
 
     @Bind(R.id.totalPrice)
     TextView mTotalPrice;
@@ -95,8 +92,7 @@ public class CashierActivity extends Activity {
         billRecyclerView.setAdapter(mBill);
 
 
-        mDishMenu = (GridView) findViewById(R.id.gvMenu);
-
+        mMenu = (GridView) findViewById(R.id.gvMenu);
         requestDishes();
 
     }
@@ -114,7 +110,7 @@ public class CashierActivity extends Activity {
                 List<DishResponse> body = response.body();
                 DishTree tree = new DishTree(body);
                 mDishAdapter = new DishTreeAdapter(tree, mBill);
-                mDishMenu.setAdapter(mDishAdapter);
+                mMenu.setAdapter(mDishAdapter);
                 dialog.dismiss();
             }
 
@@ -157,11 +153,11 @@ public class CashierActivity extends Activity {
 //        if (mInCategoryMenu) {
 //            mCategoryData = savedInstanceState.getStringArrayList("categoryData");
 //            mCategoryAdapterMenu = new ArrayAdapter<>(this, R.layout.category_button, R.id.squareButton, mCategoryData);
-//            mDishMenu.setAdapter(mCategoryAdapterMenu);
+//            mMenu.setAdapter(mCategoryAdapterMenu);
 //        } else {
 //            mDishData = savedInstanceState.getStringArrayList("dishData");
 //            mDishAdapterMenu = new ArrayAdapter<>(this, R.layout.dish_button, R.id.squareButton, mDishData);
-//            mDishMenu.setAdapter(mDishAdapterMenu);
+//            mMenu.setAdapter(mDishAdapterMenu);
 //        }
 
     }

@@ -30,50 +30,13 @@ public class DishesFragment extends Fragment {
       public void onViewCreated(View view, Bundle savedInstanceState) {
           // TODO Auto-generated method stub
           super.onViewCreated(view, savedInstanceState);
-          adapterDishes = new ArrayAdapter<String>(getActivity(), R.layout.category_button,R.id.squareButton, data);
+          adapterDishes = new ArrayAdapter<>(getActivity(), R.layout.dish_button,R.id.squareButton, data);
           gvDishes = (GridView) getView().findViewById(R.id.gvDishes);
           gvDishes.setAdapter(adapterDishes);
 
       }
 
-   /*   private View addAbstractItem(String name, int ButtonStyle, View.OnClickListener listener) {
-          GridLayout gridLayout = (GridLayout) getView().findViewById(R.id.dish_fragment_layout);
-          GridLayout.LayoutParams param = new GridLayout.LayoutParams();
-          int viewCount = gridLayout.getChildCount();
-          param.columnSpec = GridLayout.spec(viewCount % 5);
-          param.rowSpec = GridLayout.spec(viewCount / 5);
-          Button b = new Button(getActivity(), null, ButtonStyle);
-          b.setOnClickListener(listener);
-          b.setText(name);
-          b.setLayoutParams(param);
-          gridLayout.addView(b);
-          return b;
-      }
 
-      private void addDish(Dish d) {
-          View.OnClickListener categoryListener = new View.OnClickListener() {
-              @Override
-              public void onClick(View view) {
-                  //TODO Add method
-              }
-          };
-          View b = addAbstractItem(d.getName(), R.attr.catButtonStyle, categoryListener);
-          registerForContextMenu(b);
-      }
-
-      private void addAddButton() {
-          View.OnClickListener categoryListener = new View.OnClickListener() {
-              @Override
-              public void onClick(View view) {
-                  GridLayout gridLayout = (GridLayout) getView().findViewById(R.id.dish_fragment_layout);
-                  gridLayout.removeViewAt(gridLayout.getChildCount() - 1);
-                  addDish(new Dish("Keleman", 1000));
-                  addAddButton();
-              }
-          };
-          addAbstractItem("+", R.attr.catButtonStyle, categoryListener);
-      }
-  */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context=".CategoryConfigurationFragment"
+    android:weightSum="1"
+    android:baselineAligned="false">
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:weightSum="1"
+        android:background="@color/colorPrimaryLight"
+        android:layout_weight="0.27">
+
+        <ImageView
+            android:layout_width="256dp"
+            android:layout_height="256dp"
+            android:id="@+id/category_image"
+            android:minHeight="48dp"
+            android:minWidth="48dp"
+            android:src="@drawable/logo"
+            android:layout_marginTop="115dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="Название категории"
+            android:ems="10"
+            android:id="@+id/editText"
+            android:layout_weight="0.13"
+            android:layout_below="@+id/category_image"
+            android:layout_alignLeft="@+id/category_image"
+            android:layout_alignStart="@+id/category_image"
+            android:layout_alignRight="@+id/category_image"
+            android:layout_alignEnd="@+id/category_image" />
+
+        <Button
+            android:layout_width="206dp"
+            android:layout_height="wrap_content"
+            android:text="Сохранить изменения"
+            android:id="@+id/button2"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/abc_primary_text_material_dark"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
+    <GridView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/gridView"
+        android:layout_margin="5dp"
+        android:choiceMode="multipleChoice"
+        android:layout_weight="0.71" />
+
+</LinearLayout>

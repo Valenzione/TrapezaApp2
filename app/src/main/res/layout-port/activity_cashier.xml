@@ -37,7 +37,7 @@
                 android:layout_gravity="fill"
                 android:layout_marginLeft="5dp"
                 android:background="@color/colorPrimaryDark"
-                android:onClick="onClickCancelOrder"
+                android:onClick="onCancelClicked"
                 android:text="Отмена"
                 android:textColor="@color/abc_primary_text_material_dark"
                 android:layout_weight="1" />
