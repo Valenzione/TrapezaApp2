@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login() {
-        Log.d(TAG, "Login");
+
 
 //        if (!validate()) {
 //            onLoginFailed();
@@ -86,6 +86,8 @@ public class LoginActivity extends AppCompatActivity {
 
         String email = mEmailText.getText().toString();
         String password = mPasswordText.getText().toString();
+
+        Log.d(TAG, "Login");
 
         TrapezaRestClient.authenticate(email, password, new Callback<AuthenticationResponse>() {
             @Override

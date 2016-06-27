@@ -2,6 +2,7 @@ package com.trapezateam.trapeza.api;
 
 import com.trapezateam.trapeza.api.models.AuthenticationResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
+import com.trapezateam.trapeza.api.models.UserResponse;
 
 import java.util.List;
 
@@ -22,4 +23,14 @@ public interface TrapezaApi {
 
     @GET("/requests?func=dishesList")
     Call<List<DishResponse>> dishesList(@Query("token") String token);
+
+    @GET("/requests?func=userList")
+    Call<List<UserResponse>> usersList(@Query("token") String token);
+
+    @GET("/requests?func=userInfo")
+    Call<UserResponse> userInfo(@Query("token") String token);
+
+    @GET("/requests?func=dishInfo")
+    Call<DishResponse> dishInfo(@Query("token") String token);
+
 }
