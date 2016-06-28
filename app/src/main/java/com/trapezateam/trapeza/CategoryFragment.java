@@ -2,6 +2,8 @@ package com.trapezateam.trapeza;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +25,10 @@ public class CategoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            data = savedInstanceState.getStringArray("categoryData");
+        }
         View view = inflater.inflate(R.layout.category_fragment, container, false);
-
         return view;
     }
 
@@ -46,5 +50,13 @@ public class CategoryFragment extends Fragment {
         menu.add(0, MENU_EDIT, 0, "Edit");
         menu.add(0, MENU_DELETE, 0, "Delete");
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putStringArray("categoryData", data);
+    }
+
+
 }
 

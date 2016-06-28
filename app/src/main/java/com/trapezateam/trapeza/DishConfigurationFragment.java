@@ -76,4 +76,5 @@ public class DishConfigurationFragment extends Fragment {
         cursor.close();
         return picturePath;
     }
+
 }

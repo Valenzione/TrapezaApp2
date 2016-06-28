@@ -21,6 +21,7 @@ public interface TrapezaApi {
     Call<AuthenticationResponse> authenticate(@Query("login")  String login,
                                               @Query("password") String password);
 
+
     @GET("/requests?func=dishesList")
     Call<List<DishResponse>> dishesList(@Query("token") String token);
 
@@ -32,5 +33,10 @@ public interface TrapezaApi {
 
     @GET("/requests?func=dishInfo")
     Call<DishResponse> dishInfo(@Query("token") String token);
+
+    @POST("/api/addDish")
+    Call<AuthenticationResponse> addDish(@Query("name ")  String login,
+                                              @Query("photo") String password, @Query("description") String description,
+                                         @Query("price") int price);
 
 }

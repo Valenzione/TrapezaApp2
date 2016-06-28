@@ -15,26 +15,28 @@ public class DishesFragment extends Fragment {
 
     String[] data = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"};
 
-    GridView gvDishes;
+    GridView gvDishes = (GridView) getView().findViewById(R.id.gvDishes);
     ArrayAdapter<String> adapterDishes;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            data = savedInstanceState.getStringArray("dishData");
+        }
         View view = inflater.inflate(R.layout.dishes_fragment, container, false);
         return view;
     }
 
 
-      @Override
-      public void onViewCreated(View view, Bundle savedInstanceState) {
-          // TODO Auto-generated method stub
-          super.onViewCreated(view, savedInstanceState);
-          adapterDishes = new ArrayAdapter<>(getActivity(), R.layout.dish_button,R.id.squareButton, data);
-          gvDishes = (GridView) getView().findViewById(R.id.gvDishes);
-          gvDishes.setAdapter(adapterDishes);
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onViewCreated(view, savedInstanceState);
+        adapterDishes = new ArrayAdapter<>(getActivity(), R.layout.dish_button, R.id.squareButton, data);
+        gvDishes.setAdapter(adapterDishes);
 
-      }
+    }
 
 
     @Override
@@ -43,4 +45,11 @@ public class DishesFragment extends Fragment {
         menu.add(0, MENU_EDIT, 0, "Edit");
         menu.add(0, MENU_DELETE, 0, "Delete");
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putStringArray("dishData", data);
+    }
+
 }

@@ -21,7 +21,7 @@ public class AdministratorActivity extends AppCompatActivity {
     private static final int CATEGORY_IDENTIFIER = 0;
     private static final int DISH_IDENTIFIER = 1;
     private static final int STATISTICS_IDENTIFIER = 2;
-    private static final String TAG = "AdministratorActivity" ;
+    private static final String TAG = "AdministratorActivity";
     Drawer.Result drawerResult;
 
     @Override
@@ -36,7 +36,7 @@ public class AdministratorActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id, IDrawerItem drawerItem) {
                 Fragment replacementFragment;
-                    try {
+                try {
                     int identifier = drawerItem.getIdentifier();
                     switch (identifier) {
                         case STATISTICS_IDENTIFIER:
@@ -56,9 +56,9 @@ public class AdministratorActivity extends AppCompatActivity {
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.dummy_fragment, replacementFragment);
                     fragmentTransaction.commit();
-                }catch (NullPointerException nEx){
-                        Log.d(TAG, nEx.getStackTrace().toString());
-                    }
+                } catch (NullPointerException nEx) {
+                    Log.d(TAG, nEx.getStackTrace().toString());
+                }
             }
         };
         drawerResult = new Drawer()
@@ -73,7 +73,6 @@ public class AdministratorActivity extends AppCompatActivity {
 
                 )
                 .withOnDrawerItemClickListener(drawerListener).build();
-
 
 
         FragmentManager fragmentManager = getFragmentManager();
@@ -101,18 +100,7 @@ public class AdministratorActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
 
-
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-    }
 
     @Override
     public void onBackPressed() {
