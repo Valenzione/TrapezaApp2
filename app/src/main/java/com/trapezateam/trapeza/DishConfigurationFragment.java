@@ -83,33 +83,34 @@ public class DishConfigurationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (validate()) {
-                    saveDish(mDishName.getText().toString(), String.valueOf(mDishDescription.getText()), Integer.parseInt(mDishPrice.getText().toString()), 2, null);
+                    Dish dish = new Dish(mDishName.getText().toString(), String.valueOf(mDishDescription.getText()), Integer.parseInt(mDishPrice.getText().toString()));
+                    saveDish(dish, 1);
                 }
             }
         });
     }
 
 
-    void saveDish(String name, String description, int price, int father, Image photo) {
+    void saveDish(final Dish dish, int father) {
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Saving dish");
         dialog.setCancelable(false);
         dialog.show();
-        TrapezaRestClient.addDish(name, description, price, father, photo, new Callback<List<SavedDishResponse>>() {
+        TrapezaRestClient.addDish(dish, father, new Callback<List<SavedDishResponse>>() {
             @Override
             public void onResponse(Call<List<SavedDishResponse>> call,
                                    Response<List<SavedDishResponse>> response) {
                 if (response.body().get(0).getStatus() == 0) {
                     Log.d(TAG, "Dish Does Not Added");
                 } else {
-                    Log.d(TAG, "Dish Added");
+                    Log.d(TAG, "Dish Added: " + dish.toString());
                 }
                 dialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<List<SavedDishResponse>> call, Throwable t) {
-                Toast.makeText(getActivity(), "Error getting dishes " + t.getMessage(),
+                Toast.makeText(getActivity(), "Error saving dishes " + t.getMessage(),
                         Toast.LENGTH_LONG).show();
                 t.printStackTrace();
                 dialog.dismiss();

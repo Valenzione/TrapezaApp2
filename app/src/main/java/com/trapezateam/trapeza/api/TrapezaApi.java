@@ -20,6 +20,12 @@ import retrofit2.http.Query;
  */
 public interface TrapezaApi {
 
+//    @POST("/reqauests?func=addUser")
+//    Call<AuthenticationResponse> addUser(@Query("name") String name,
+//                                         @Query("surname") String surname,
+//                                         @Query("company") int companyId,
+//                                         @Query("role") int role);
+
     @POST("/api/authenticate")
     Call<AuthenticationResponse> authenticate(@Query("login") String login,
                                               @Query("password") String password);
@@ -38,13 +44,9 @@ public interface TrapezaApi {
     Call<DishResponse> dishInfo(@Query("token") String token);
 
     @POST("/requests?func=addDish")
-    Call<List<SavedDishResponse>> addDish(@Query("name ") String name,
+    Call<List<SavedDishResponse>> addDish(@Query("name") String name,
                                           @Query("photo") Image photo, @Query("description") String description,
                                           @Query("price") int price, @Query("father") int father, @Query("token") String token);
 
-    @POST("/requests?func=addDish")
-    Call<Integer> addCategory(@Query("name ") String name,
-                              @Query("photo") Image photo, @Query("description") String description,
-                              @Query("price") int price, @Query("father") int father, @Query("token") String token);
 
 }
