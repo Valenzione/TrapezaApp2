@@ -2,6 +2,7 @@ package com.trapezateam.trapeza;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,18 +17,35 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.trapezateam.trapeza.api.TrapezaRestClient;
+import com.trapezateam.trapeza.api.models.SavedDishResponse;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DishConfigurationFragment extends Fragment {
 
+    private static final String TAG = "DishesConfFragment";
     private static int IMAGE_PICKER_SELECT = 1;
 
     ImageView mDishImage;
+    Button mSaveDishButton;
+    EditText mDishName, mDishDescription;
+    EditText mDishPrice;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,6 +66,54 @@ public class DishConfigurationFragment extends Fragment {
                         Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(i, IMAGE_PICKER_SELECT);
+            }
+        });
+
+        mSaveDishButton = (Button) getView().findViewById(R.id.save_dish_button);
+        mDishName = (EditText) getView().findViewById(R.id.dish_name);
+        mDishDescription = (EditText) getView().findViewById(R.id.dish_description);
+        mDishPrice = (EditText) getView().findViewById(R.id.dish_price);
+
+        if (getArguments() != null) {
+            mDishName.setText(getArguments().getString("name"));
+        }
+
+
+        mSaveDishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (validate()) {
+                    saveDish(mDishName.getText().toString(), String.valueOf(mDishDescription.getText()), Integer.parseInt(mDishPrice.getText().toString()), 2, null);
+                }
+            }
+        });
+    }
+
+
+    void saveDish(String name, String description, int price, int father, Image photo) {
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Saving dish");
+        dialog.setCancelable(false);
+        dialog.show();
+        TrapezaRestClient.addDish(name, description, price, father, photo, new Callback<List<SavedDishResponse>>() {
+            @Override
+            public void onResponse(Call<List<SavedDishResponse>> call,
+                                   Response<List<SavedDishResponse>> response) {
+                if (response.body().get(0).getStatus() == 0) {
+                    Log.d(TAG, "Dish Does Not Added");
+                } else {
+                    Log.d(TAG, "Dish Added");
+                }
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<List<SavedDishResponse>> call, Throwable t) {
+                Toast.makeText(getActivity(), "Error getting dishes " + t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+                t.printStackTrace();
+                dialog.dismiss();
+
             }
         });
     }
@@ -75,6 +141,36 @@ public class DishConfigurationFragment extends Fragment {
         String picturePath = cursor.getString(columnIndex);
         cursor.close();
         return picturePath;
+    }
+
+    public boolean validate() {
+        boolean valid = true;
+
+        String name = mDishName.getText().toString();
+        String description = mDishDescription.getText().toString();
+        String price = mDishPrice.getText().toString();
+
+        if (name.isEmpty()) {
+            mDishName.setError("Введите имя!");
+            YoYo.with(Techniques.Shake)
+                    .duration(500)
+                    .playOn(mDishName);
+            valid = false;
+        } else {
+            mDishName.setError(null);
+        }
+
+        if (price.isEmpty()) {
+            mDishPrice.setError("Введите цену!");
+            YoYo.with(Techniques.Shake)
+                    .duration(500)
+                    .playOn(mDishPrice);
+            valid = false;
+        } else {
+            mDishPrice.setError(null);
+        }
+
+        return valid;
     }
 
 }

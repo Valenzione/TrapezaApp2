@@ -33,7 +33,7 @@
             android:inputType="textPersonName"
             android:hint="Название категории"
             android:ems="10"
-            android:id="@+id/editText"
+            android:id="@+id/category_name"
             android:layout_weight="0.13"
             android:layout_below="@+id/category_image"
             android:layout_alignLeft="@+id/category_image"

@@ -14,17 +14,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class CategoryConfigurationFragment extends Fragment {
 
     private static int IMAGE_PICKER_SELECT = 1;
+
     ImageView mCategoryImage;
+    EditText mCategoryName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.category_configuration_fragment, container, false);
+
         return view;
     }
 
@@ -32,7 +37,6 @@ public class CategoryConfigurationFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
         mCategoryImage = (ImageView) getView().findViewById(R.id.category_image);
-
         mCategoryImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,6 +46,12 @@ public class CategoryConfigurationFragment extends Fragment {
                 startActivityForResult(i, IMAGE_PICKER_SELECT);
             }
         });
+
+        mCategoryName = (EditText) getView().findViewById(R.id.category_name);
+        if (getArguments() != null) {
+            mCategoryName.setText(getArguments().getString("name"));
+        }
+
     }
 
 

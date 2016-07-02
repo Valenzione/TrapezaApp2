@@ -30,29 +30,43 @@
             android:layout_marginLeft="41dp"
             android:layout_marginStart="41dp" />
 
-        <EditText
-            android:layout_width="256dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/dish_name"
-            android:hint="Название блюда"
-            android:layout_marginLeft="125dp"
-            android:layout_marginStart="125dp"
-            android:layout_alignTop="@+id/dish_image"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_toRightOf="@+id/dish_image"
             android:layout_toEndOf="@+id/dish_image"
-            android:layout_marginTop="108dp" />
+            android:layout_alignBottom="@+id/dish_image"
+            android:layout_alignTop="@+id/dish_image">
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/dish_description"
-            android:hint="Описание блюда"
-            android:layout_below="@+id/dish_name"
-            android:layout_alignLeft="@+id/dish_name"
-            android:layout_alignStart="@+id/dish_name"
-            android:layout_marginTop="72dp"
-            android:layout_alignRight="@+id/dish_name"
-            android:layout_alignEnd="@+id/dish_name" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dish_name"
+                android:hint="Название блюда"
+                android:layout_marginBottom="10dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dish_description"
+                android:hint="Описание блюда"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberSigned"
+                android:ems="10"
+                android:id="@+id/dish_price"
+                android:hint="Цена блюда"
+                android:layout_marginTop="10dp" />
+        </LinearLayout>
 
     </RelativeLayout>
 

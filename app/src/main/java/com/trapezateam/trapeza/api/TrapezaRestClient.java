@@ -1,7 +1,11 @@
 package com.trapezateam.trapeza.api;
 
+import android.media.Image;
+
 import com.trapezateam.trapeza.api.models.AuthenticationResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
+import com.trapezateam.trapeza.api.models.SavedDishResponse;
+import com.trapezateam.trapeza.api.models.UserResponse;
 
 import java.util.List;
 
@@ -36,14 +40,14 @@ public class TrapezaRestClient {
     }
 
     public static String getToken() {
-        if(mToken == null) {
+        if (mToken == null) {
             throw new IllegalStateException("Token is not set yet");
         }
         return mToken;
     }
 
     public static void authenticate(String login, String password,
-                      Callback<AuthenticationResponse> callback) {
+                                    Callback<AuthenticationResponse> callback) {
         getApiInstance().authenticate(login, password).enqueue(callback);
     }
 
@@ -51,6 +55,13 @@ public class TrapezaRestClient {
         getApiInstance().dishesList(getToken()).enqueue(callback);
     }
 
+    public static void addDish(String name, String description, int price, int father, Image photo, Callback<List<SavedDishResponse>> callback) {
+        getApiInstance().addDish(name, photo, description, price, father, getToken()).enqueue(callback);
+    }
+
+    public static void userInfo(int id, Callback<List<UserResponse>> callback) {
+        getApiInstance().userInfo(getToken(), id).enqueue(callback);
+    }
 
 
 }

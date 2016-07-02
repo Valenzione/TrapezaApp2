@@ -12,7 +12,9 @@ import android.widget.AdapterView;
 
 import com.mikepenz.iconics.typeface.FontAwesome;
 import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 public class AdministratorActivity extends AppCompatActivity {
@@ -22,6 +24,8 @@ public class AdministratorActivity extends AppCompatActivity {
     private static final int DISH_IDENTIFIER = 1;
     private static final int STATISTICS_IDENTIFIER = 2;
     private static final String TAG = "AdministratorActivity";
+    private static final int ADD_DISH_IDENTIFIER = 3;
+    private static final int ADD_CATEGORY_IDENTIFIER = 4;
     Drawer.Result drawerResult;
 
     @Override
@@ -36,7 +40,7 @@ public class AdministratorActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id, IDrawerItem drawerItem) {
                 Fragment replacementFragment;
-                try {
+                if (drawerItem != null) {
                     int identifier = drawerItem.getIdentifier();
                     switch (identifier) {
                         case STATISTICS_IDENTIFIER:
@@ -48,6 +52,12 @@ public class AdministratorActivity extends AppCompatActivity {
                         case CATEGORY_IDENTIFIER:
                             replacementFragment = new CategoryFragment();
                             break;
+                        case ADD_CATEGORY_IDENTIFIER:
+                            replacementFragment = new CategoryConfigurationFragment();
+                            break;
+                        case ADD_DISH_IDENTIFIER:
+                            replacementFragment = new DishConfigurationFragment();
+                            break;
                         default:
                             replacementFragment = new CategoryFragment();
                             break;
@@ -56,8 +66,6 @@ public class AdministratorActivity extends AppCompatActivity {
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.dummy_fragment, replacementFragment);
                     fragmentTransaction.commit();
-                } catch (NullPointerException nEx) {
-                    Log.d(TAG, nEx.getStackTrace().toString());
                 }
             }
         };
@@ -69,7 +77,10 @@ public class AdministratorActivity extends AppCompatActivity {
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(R.string.drawer_item_category_congiguration).withIcon(FontAwesome.Icon.faw_tasks).withIdentifier(CATEGORY_IDENTIFIER),
                         new PrimaryDrawerItem().withName(R.string.drawer_item_dish_configration).withIcon(FontAwesome.Icon.faw_coffee).withIdentifier(DISH_IDENTIFIER),
-                        new PrimaryDrawerItem().withName(R.string.drawer_item_statistics).withIcon(FontAwesome.Icon.faw_area_chart).withIdentifier(STATISTICS_IDENTIFIER)
+                        new PrimaryDrawerItem().withName(R.string.drawer_item_statistics).withIcon(FontAwesome.Icon.faw_area_chart).withIdentifier(STATISTICS_IDENTIFIER),
+                        new DividerDrawerItem(),
+                        new SecondaryDrawerItem().withName("Добавить блюдо").withIcon(FontAwesome.Icon.faw_plus).withIdentifier(ADD_DISH_IDENTIFIER),
+                        new SecondaryDrawerItem().withName("Добавить категорию").withIcon(FontAwesome.Icon.faw_plus).withIdentifier(ADD_CATEGORY_IDENTIFIER)
 
                 )
                 .withOnDrawerItemClickListener(drawerListener).build();
@@ -85,7 +96,11 @@ public class AdministratorActivity extends AppCompatActivity {
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.dummy_fragment, new CategoryConfigurationFragment());
+        CategoryConfigurationFragment newFragment = new CategoryConfigurationFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("name", ((SquareButton) v).getText().toString()); //TODO get other category info (dish pool and image)
+        newFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.dummy_fragment, newFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
@@ -94,12 +109,15 @@ public class AdministratorActivity extends AppCompatActivity {
     public void onDishButtonClicked(View v) {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.dummy_fragment, new DishConfigurationFragment());
+        DishConfigurationFragment newFragment = new DishConfigurationFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("name", ((SquareButton) v).getText().toString()); //TODO get other dish info (category and price)
+        newFragment.setArguments(bundle);
+        Log.d(TAG, bundle.getString("name")+"Clickedy");
+        fragmentTransaction.replace(R.id.dummy_fragment, newFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-
-
 
 
     @Override

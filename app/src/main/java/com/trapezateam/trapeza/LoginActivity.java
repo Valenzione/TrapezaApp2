@@ -22,6 +22,9 @@ import retrofit2.Response;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.trapezateam.trapeza.api.models.UserResponse;
+
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -62,9 +65,9 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-        if(DebugConfig.USE_DEFAULT_TOKEN) {
+        if (DebugConfig.USE_DEFAULT_TOKEN) {
             TrapezaRestClient.setToken(DebugConfig.DEFAULT_TOKEN);
-            onLoginSuccess(DebugConfig.DEFAULT_TOKEN);
+            onLoginSuccess(DebugConfig.DEFAULT_TOKEN,0);
         }
     }
 
@@ -98,26 +101,19 @@ public class LoginActivity extends AppCompatActivity {
                     onLoginFailed(body.getMessage());
                 }
                 Log.d(TAG, body.toString());
-                onLoginSuccess(body.getToken());
+                progressDialog.dismiss();
+                onLoginSuccess(body.getToken(), body.getId());
+
             }
 
             @Override
             public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
                 t.printStackTrace();
                 onLoginFailed("Network error " + t.getMessage());
+                progressDialog.dismiss();
             }
         });
 
-
-//        new android.os.Handler().postDelayed(
-//                new Runnable() {
-//                    public void run() {
-//                        // On complete call either onLoginSuccess or onLoginFailed
-//                        onLoginSuccess();
-//                        // onLoginFailed();
-//                        progressDialog.dismiss();
-//                    }
-//                }, 3000);
     }
 
 
@@ -137,14 +133,41 @@ public class LoginActivity extends AppCompatActivity {
     public void onBackPressed() {
         // Disable going back to the MainActivity
         moveTaskToBack(true);
+
     }
 
-    public void onLoginSuccess(String token) {
+    private void startCorrectActivity(int role) {
+        Intent intent = null;
+        switch (role) {
+            case 0:
+                intent = new Intent(this, CashierActivity.class);
+                break;
+            case 1:
+                intent = new Intent(this, AdministratorActivity.class);
+                break;
+        }
+
+        startActivity(intent);
+    }
+
+    public void onLoginSuccess(String token, int userId) {
+        int role = 0;
         mLoginButton.setEnabled(true);
         TrapezaRestClient.setToken(token);
         Log.i(TAG, "Token " + token);
-        Intent intent = new Intent(this, CashierActivity.class);
-        startActivity(intent);
+        TrapezaRestClient.userInfo(userId, new Callback<List<UserResponse>>() {
+            @Override
+            public void onResponse(Call<List<UserResponse>> call, Response<List<UserResponse>> response) {
+                Log.i(TAG, "Response");
+                startCorrectActivity(response.body().get(0).getRole());
+            }
+
+            @Override
+            public void onFailure(Call<List<UserResponse>> call, Throwable t) {
+                Log.i(TAG, "Oh shit "+t.getMessage());
+            }
+
+        });
     }
 
     public void onLoginFailed(String message) {

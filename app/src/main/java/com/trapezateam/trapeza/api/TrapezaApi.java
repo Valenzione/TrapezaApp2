@@ -1,7 +1,10 @@
 package com.trapezateam.trapeza.api;
 
+import android.media.Image;
+
 import com.trapezateam.trapeza.api.models.AuthenticationResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
+import com.trapezateam.trapeza.api.models.SavedDishResponse;
 import com.trapezateam.trapeza.api.models.UserResponse;
 
 import java.util.List;
@@ -18,7 +21,7 @@ import retrofit2.http.Query;
 public interface TrapezaApi {
 
     @POST("/api/authenticate")
-    Call<AuthenticationResponse> authenticate(@Query("login")  String login,
+    Call<AuthenticationResponse> authenticate(@Query("login") String login,
                                               @Query("password") String password);
 
 
@@ -29,14 +32,19 @@ public interface TrapezaApi {
     Call<List<UserResponse>> usersList(@Query("token") String token);
 
     @GET("/requests?func=userInfo")
-    Call<UserResponse> userInfo(@Query("token") String token);
+    Call<List<UserResponse>> userInfo(@Query("token") String token, @Query("user") int id);
 
     @GET("/requests?func=dishInfo")
     Call<DishResponse> dishInfo(@Query("token") String token);
 
-    @POST("/api/addDish")
-    Call<AuthenticationResponse> addDish(@Query("name ")  String login,
-                                              @Query("photo") String password, @Query("description") String description,
-                                         @Query("price") int price);
+    @POST("/requests?func=addDish")
+    Call<List<SavedDishResponse>> addDish(@Query("name ") String name,
+                                          @Query("photo") Image photo, @Query("description") String description,
+                                          @Query("price") int price, @Query("father") int father, @Query("token") String token);
+
+    @POST("/requests?func=addDish")
+    Call<Integer> addCategory(@Query("name ") String name,
+                              @Query("photo") Image photo, @Query("description") String description,
+                              @Query("price") int price, @Query("father") int father, @Query("token") String token);
 
 }
