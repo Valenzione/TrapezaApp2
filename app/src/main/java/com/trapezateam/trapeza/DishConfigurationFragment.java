@@ -161,6 +161,7 @@ public class DishConfigurationFragment extends Fragment {
             mDishName.setError(null);
         }
 
+
         if (price.isEmpty()) {
             mDishPrice.setError("Введите цену!");
             YoYo.with(Techniques.Shake)
