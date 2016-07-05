@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context="com.trapezateam.trapeza.CashierActivity">
+
+
+    <GridView
+        android:id="@+id/gvMenu"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:choiceMode="singleChoice"
+        android:numColumns="4" />
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/item_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="fill"
+            android:layout_weight="1"
+            android:background="@null"
+            android:fadeScrollbars="false"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarSize="10dp"
+            android:scrollbarThumbVertical="@drawable/custom_scroll_style"
+            android:scrollbars="vertical"
+            android:smoothScrollbar="true"
+            android:text="+"
+            android:layout_marginLeft="5dp">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/totalPrice"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginRight="5dp"
+            android:gravity="fill_vertical|end"
+            android:text="@string/total_price"
+            android:textColor="@color/primary_text"
+            android:background="@android:color/transparent"
+            android:layout_marginLeft="5dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/discount_button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="fill"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="1dp"
+                android:layout_weight="1"
+                android:background="@color/primary_dark"
+                android:text="Скидка"
+                android:textColor="@color/abc_primary_text_material_dark" />
+
+            <Button
+                android:id="@+id/cancel_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@color/primary_dark"
+                android:onClick="onClickCancelOrder"
+                android:text="Отмена"
+                android:textColor="@color/abc_primary_text_material_dark" />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/pay_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/primary_dark"
+            android:text="Оплата"
+            android:textColor="@color/abc_primary_text_material_dark" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

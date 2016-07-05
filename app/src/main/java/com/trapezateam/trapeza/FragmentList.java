@@ -9,9 +9,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class FragmentList extends ListFragment {
 
 
@@ -40,10 +37,10 @@ public class FragmentList extends ListFragment {
                 replacementFragment = new DishesFragment();
                 break;
             case "Categories":
-                replacementFragment = new CategoryFragment();
+                replacementFragment = new MenuFragment();
                 break;
             default:
-                replacementFragment = new CategoryFragment();
+                replacementFragment = new MenuFragment();
                 break;
         }
         FragmentManager fragmentManager = getFragmentManager();

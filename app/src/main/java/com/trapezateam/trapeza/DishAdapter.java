@@ -1,10 +1,13 @@
 package com.trapezateam.trapeza;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.trapezateam.trapeza.api.models.DishResponse;
 import com.trapezateam.trapeza.models.Dish;
@@ -68,13 +71,26 @@ public class DishAdapter extends BaseAdapter {
                 }
             });
         } else {
-            button.setText((Dish) getItem(position));
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mBill.addEntry(button.getDish());
-                }
-            });
+
+            if (mBill != null) {
+                button.setText((Dish) getItem(position));
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mBill.addEntry(button.getDish());
+                    }
+                });
+            } else {
+                button.setText((Dish) getItem(position));
+
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+
+            }
         }
         return button;
     }
