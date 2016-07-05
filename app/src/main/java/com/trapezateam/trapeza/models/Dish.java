@@ -1,22 +1,20 @@
 package com.trapezateam.trapeza.models;
 
-import android.content.Intent;
-import android.media.Image;
-import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.trapezateam.trapeza.api.models.DishResponse;
 
 /**
  * Created by ilgiz on 6/18/16.
  */
-public class Dish {
+public class Dish implements Parcelable {
 
     private String mName;
     private int mId;
     private String mPhoto;
-    String mDescription;
+    private String mDescription;
     private int mPrice;
-    private Image mImage;
 
     public Dish(String name, int price, int id) {
         mName = name;
@@ -38,6 +36,15 @@ public class Dish {
         mPrice = Integer.parseInt(response.getPrice());
         mDescription = response.getDescription();
     }
+
+    protected Dish(Parcel in) {
+        mName = in.readString();
+        mId = in.readInt();
+        mPhoto = in.readString();
+        mDescription = in.readString();
+        mPrice = in.readInt();
+    }
+
 
     public int getPrice() {
         return mPrice;
@@ -65,13 +72,13 @@ public class Dish {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null) {
+        if (obj == null) {
             return false;
         }
-        if(obj == this) {
+        if (obj == this) {
             return true;
         }
-        if(!(obj instanceof Dish)) {
+        if (!(obj instanceof Dish)) {
             return false;
         }
         Dish d = (Dish) obj;
@@ -89,7 +96,29 @@ public class Dish {
                 '}';
     }
 
-    public Image getImage() {
-        return mImage;
+    @Override
+    public int describeContents() {
+        return 0;
     }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(mName);
+        parcel.writeInt(mId);
+        parcel.writeString(mPhoto);
+        parcel.writeString(mDescription);
+        parcel.writeInt(mPrice);
+    }
+
+    public static final Creator<Dish> CREATOR = new Creator<Dish>() {
+        @Override
+        public Dish createFromParcel(Parcel in) {
+            return new Dish(in);
+        }
+
+        @Override
+        public Dish[] newArray(int size) {
+            return new Dish[size];
+        }
+    };
 }
