@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="184dp"
         android:weightSum="1"
-        android:background="@color/colorPrimaryLight"
+        android:background="@color/primary_light"
         android:paddingStart="0dp"
         android:layout_weight="0.16">
 
@@ -51,7 +51,7 @@
             android:layout_height="match_parent"
             android:text="Сохранить изменения"
             android:id="@+id/button2"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/primary_dark"
             android:textColor="@color/abc_primary_text_material_dark"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.2"

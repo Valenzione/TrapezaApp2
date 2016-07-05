@@ -1,82 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:fitsSystemWindows="true"
-    android:background="@android:color/holo_blue_dark">
+    android:id="@+id/login_scrollview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_blue_dark"
+    android:fitsSystemWindows="true">
 
     <RelativeLayout
-        android:orientation="vertical"
+        android:id="@+id/login_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="56dp"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp">
+        android:orientation="vertical"
+        android:paddingEnd="24dp"
+        android:paddingStart="24dp"
+        android:paddingTop="56dp">
 
-        <ImageView android:src="@drawable/logo"
+        <ImageView
+            android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="72dp"
-            android:layout_marginBottom="24dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="440dp"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="56dp"
-            android:id="@+id/imageView" />
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="47dp"
+            android:src="@drawable/logo" />
 
         <!--  Email Label -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="160dp"
-            android:layout_marginBottom="8dp"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="24dp"
-            android:layout_alignParentTop="true">
-            <EditText android:id="@+id/input_email"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="160dp">
+
+            <EditText
+                android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:hint="Email" />
+                android:hint="@string/email_hint"
+                android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
 
         <!--  Password Label -->
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="236dp"
-            android:layout_marginBottom="8dp"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="24dp"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:id="@+id/view">
-            <EditText android:id="@+id/input_password"
+
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="236dp">
+
+            <EditText
+                android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:hint="Password"/>
+                android:hint="@string/password_hint"
+                android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_login"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:text="Login"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_below="@+id/view"
-            android:layout_centerHorizontal="true" />
+            android:padding="12dp"
+            android:text="@string/login_button" />
 
-        <TextView android:id="@+id/link_signup"
+        <TextView
+            android:id="@+id/link_signup"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:text="No account yet? Create one"
-            android:gravity="center"
-            android:textSize="16dip"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="24dp"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="400dp" />
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="400dp"
+            android:gravity="center"
+            android:text="@string/signup_welcome"
+            android:textSize="16sp" />
 
     </RelativeLayout>
 </ScrollView>

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/holo_red_dark"
+    android:background="@android:color/background_light"
     android:id="@+id/category_fragment_layout">
 
 
@@ -11,7 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/gvCategories"
-            android:numColumns="4"
+            android:numColumns="3"
             android:choiceMode="singleChoice" />
 
 </RelativeLayout>

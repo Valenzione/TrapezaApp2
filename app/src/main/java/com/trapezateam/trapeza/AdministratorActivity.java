@@ -98,7 +98,7 @@ public class AdministratorActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         CategoryConfigurationFragment newFragment = new CategoryConfigurationFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("name", ((SquareButton) v).getText().toString()); //TODO get other category info (dish pool and image)
+        //  bundle.putString("name", ((SquareButton) v).getText().toString()); //TODO get other category info (dish pool and image)
         newFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.dummy_fragment, newFragment);
         fragmentTransaction.addToBackStack(null);
@@ -106,18 +106,18 @@ public class AdministratorActivity extends AppCompatActivity {
 
     }
 
-    public void onDishButtonClicked(View v) {
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        DishConfigurationFragment newFragment = new DishConfigurationFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("name", ((SquareButton) v).getText().toString()); //TODO get other dish info (category and price)
-        newFragment.setArguments(bundle);
-        Log.d(TAG, bundle.getString("name")+"Clickedy");
-        fragmentTransaction.replace(R.id.dummy_fragment, newFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
+//    public void onDishButtonClicked(View v) {
+//        FragmentManager fragmentManager = getFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        DishConfigurationFragment newFragment = new DishConfigurationFragment();
+//        Bundle bundle = new Bundle();
+//        bundle.putString("name", String.valueOf(((DishButton) v).getDish().getName())); //TODO get other dish info (category and price)
+//        newFragment.setArguments(bundle);
+//        Log.d(TAG, bundle.getString("name") + "Clickedy");
+//        fragmentTransaction.replace(R.id.dummy_fragment, newFragment);
+//        fragmentTransaction.addToBackStack(null);
+//        fragmentTransaction.commit();
+//    }
 
 
     @Override
@@ -128,4 +128,6 @@ public class AdministratorActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
+
 }

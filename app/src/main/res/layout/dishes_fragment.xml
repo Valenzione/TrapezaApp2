@@ -3,13 +3,13 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/primary"
     android:id="@+id/dish_fragment_layout">
 
     <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/gvDishes"
-        android:numColumns="4"
+        android:numColumns="3"
         android:choiceMode="singleChoice" />
 </LinearLayout>

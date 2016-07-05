@@ -13,7 +13,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:weightSum="1"
-        android:background="@color/colorPrimaryLight"
+        android:background="@color/primary_light"
         android:layout_weight="0.27">
 
         <ImageView
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:text="Сохранить изменения"
             android:id="@+id/button2"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/primary_dark"
             android:textColor="@color/abc_primary_text_material_dark"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"

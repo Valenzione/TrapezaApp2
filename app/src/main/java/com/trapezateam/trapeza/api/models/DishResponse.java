@@ -25,10 +25,10 @@ public class DishResponse {
     @SerializedName("r_description")
     private String mDescription;
 
-    @SerializedName("r_father")
+    @SerializedName("r_category_id")
     private Integer mFather;
 
-    @SerializedName("r_father_name")
+    @SerializedName("r_category_name")
     private String mFatherName;
 
 

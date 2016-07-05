@@ -14,9 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.trapezateam.trapeza.api.TrapezaRestClient;
+import com.trapezateam.trapeza.api.models.CategoryResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
-import com.trapezateam.trapeza.models.DishTree;
+import com.trapezateam.trapeza.models.HashMapMenu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -32,8 +34,13 @@ public class CashierActivity extends Activity {
 
     Bill mBill;
 
-    private DishTreeAdapter mDishAdapter;
+    private DishAdapter mDishAdapter;
+    private CategoryAdapter mCategoryAdapter;
     private GridView mMenu;
+
+    private static List<DishResponse> dishResponseList;
+    private static List<CategoryResponse> categoryResponseList;
+    private static HashMapMenu menuTree;
 
     @Bind(R.id.totalPrice)
     TextView mTotalPrice;
@@ -45,14 +52,17 @@ public class CashierActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_cashier);
+
+
         ButterKnife.bind(this);
         mBill = new Bill();
-
         mBill.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
-                Log.i(TAG, "bill changed");
-                mTotalPrice.setText(mBill.getTotalPrice() + " руб.");
+                Log.i(TAG, "bill changed to " + mBill.getTotalPrice());
+                String priceText = String.valueOf(mBill.getTotalPrice()) + " руб";
+                mTotalPrice.setText(priceText);
+
             }
 
             @Override
@@ -95,43 +105,62 @@ public class CashierActivity extends Activity {
         RecyclerView.LayoutManager billLayoutManager = new LinearLayoutManager(this);
         billRecyclerView.setLayoutManager(billLayoutManager);
         billRecyclerView.setAdapter(mBill);
-
-
         mMenu = (GridView) findViewById(R.id.gvMenu);
-        requestDishes();
+        requestMenu();
+        //requestDishes();
+
 
     }
 
-    void requestDishes() {
+    void requestMenu() {
         final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("Getting dishes");
         dialog.setCancelable(false);
         dialog.show();
-        TrapezaRestClient.dishesList(new Callback<List<DishResponse>>() {
+        TrapezaRestClient.categoriesList(new Callback<List<CategoryResponse>>() {
             @Override
-            public void onResponse(Call<List<DishResponse>> call,
-                                   Response<List<DishResponse>> response) {
-                Log.d(TAG, "Response received");
-                List<DishResponse> body = response.body();
-                DishTree tree = new DishTree(body);
-                mDishAdapter = new DishTreeAdapter(tree, mBill);
-                mMenu.setAdapter(mDishAdapter);
+            public void onResponse(Call<List<CategoryResponse>> call,
+                                   Response<List<CategoryResponse>> response) {
+                Log.d(TAG, "Category Response received");
+                categoryResponseList = new ArrayList<>(response.body());
+
+                dialog.setMessage("Getting dishes");
+                TrapezaRestClient.dishesList(new Callback<List<DishResponse>>() {
+                    @Override
+                    public void onResponse(Call<List<DishResponse>> call,
+                                           Response<List<DishResponse>> response) {
+                        Log.d(TAG, "Dish Response received");
+                        dishResponseList = new ArrayList<>(response.body());
+                        menuTree = new HashMapMenu(dishResponseList, categoryResponseList);
+                        mCategoryAdapter = new CategoryAdapter(menuTree, mMenu, mBill);
+                        mMenu.setAdapter(mCategoryAdapter);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<DishResponse>> call, Throwable t) {
+                        Toast.makeText(CashierActivity.this, "Error getting dishes " + t.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                        t.printStackTrace();
+                    }
+                });
+
                 dialog.dismiss();
             }
 
             @Override
-            public void onFailure(Call<List<DishResponse>> call, Throwable t) {
-                Toast.makeText(CashierActivity.this, "Error getting dishes " + t.getMessage(),
+            public void onFailure(Call<List<CategoryResponse>> call, Throwable t) {
+                Toast.makeText(CashierActivity.this, "Error getting categories " + t.getMessage(),
                         Toast.LENGTH_SHORT).show();
                 t.printStackTrace();
-
             }
         });
     }
 
+
     public void onClickCancelOrder(View view) {
         mBill.clear();
-        mTotalPrice.setText(mBill.getTotalPrice() + "");
+        mTotalPrice.setText(mBill.getTotalPrice() + " руб");
     }
 
     @Override
@@ -150,20 +179,9 @@ public class CashierActivity extends Activity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mBill);
 
+        String priceText = String.valueOf(mBill.getTotalPrice()) + " руб";
+        mTotalPrice.setText(priceText);
 
-        mTotalPrice.setText(mBill.getTotalPrice() + " руб");
-
-        // TODO: restore Dishes
-
-//        if (mInCategoryMenu) {
-//            mCategoryData = savedInstanceState.getStringArrayList("categoryData");
-//            mCategoryAdapterMenu = new ArrayAdapter<>(this, R.layout.category_button, R.id.squareButton, mCategoryData);
-//            mMenu.setAdapter(mCategoryAdapterMenu);
-//        } else {
-//            mDishData = savedInstanceState.getStringArrayList("dishData");
-//            mDishAdapterMenu = new ArrayAdapter<>(this, R.layout.dish_button, R.id.squareButton, mDishData);
-//            mMenu.setAdapter(mDishAdapterMenu);
-//        }
 
     }
 

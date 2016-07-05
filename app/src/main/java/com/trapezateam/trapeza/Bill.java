@@ -142,7 +142,7 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         BillEntry e = mEntires.get(position);
-        holder.mName.setText(e.getDish().getName() + "(" + e.getDish().getDescription() + ")");
+        holder.mName.setText(e.getDish().getName() + System.getProperty("line.separator") + e.getDish().getDescription());
         holder.mDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

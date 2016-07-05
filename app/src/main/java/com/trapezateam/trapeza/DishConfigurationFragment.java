@@ -28,6 +28,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.SavedDishResponse;
+import com.trapezateam.trapeza.models.Dish;
 
 import java.util.List;
 

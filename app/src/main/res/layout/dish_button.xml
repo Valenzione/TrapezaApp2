@@ -1,9 +1,5 @@
-<com.trapezateam.trapeza.SquareButton android:layout_weight="1"
+<com.trapezateam.trapeza.CategoryButton xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/squareButton"
-    android:layout_margin="5dp"
-    android:onClick="onDishButtonClicked"
-    layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    android:layout_height="match_parent">
 
+</com.trapezateam.trapeza.CategoryButton>

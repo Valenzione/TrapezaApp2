@@ -30,5 +30,10 @@
     <string name="drawer_item_category_congiguration">Управление категориями</string>
     <string name="drawer_item_dish_configration">Управление блюдами</string>
     <string name="drawer_item_statistics">Статистика</string>
+    <string name="email_hint">Email</string>
+    <string name="signup_welcome">No account yet? Create one</string>
+    <string name="login_button">Login</string>
+    <string name="password_hint">Password</string>
+    <string name="total_price">Итоговая цена</string>
 
 </resources>

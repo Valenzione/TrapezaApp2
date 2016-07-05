@@ -53,11 +53,11 @@ public class DishTreeAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         if (view == null) {
             Context context = viewGroup.getContext();
-            view = LayoutInflater.from(context).inflate(R.layout.dish_button, viewGroup, false);
+            view = new DishButton(context);
         }
-        SquareButton button = (SquareButton) view;
+        DishButton button = (DishButton) view;
         if (i == 0) {
-            button.setText("..");
+            button.setText(new Dish("Back", "<-", 24));
             if (mCurrentVertex.hasParents()) {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -74,7 +74,7 @@ public class DishTreeAdapter extends BaseAdapter {
         button.setEnabled(true);
         final DishTree.Vertex v = mCurrentVertex.getChildren().get(i - 1);
         final Dish dish = v.getDish();
-        button.setText("ayy " + dish.getDescription() + " yya" );
+        button.setText(dish);
         if (v.isLeaf()) {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override

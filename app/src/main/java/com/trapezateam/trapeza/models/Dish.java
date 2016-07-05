@@ -1,6 +1,7 @@
 package com.trapezateam.trapeza.models;
 
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 
 import com.trapezateam.trapeza.api.models.DishResponse;
@@ -15,12 +16,20 @@ public class Dish {
     private String mPhoto;
     String mDescription;
     private int mPrice;
+    private Image mImage;
 
     public Dish(String name, int price, int id) {
         mName = name;
         mPrice = price;
         mId = id;
     }
+
+    public Dish(String name, String description, int price) {
+        mName = name;
+        mDescription = description;
+        mPrice = price;
+    }
+
 
     public Dish(DishResponse response) {
         mName = response.getName();
@@ -78,5 +87,9 @@ public class Dish {
                 ", mPhoto='" + mPhoto + '\'' +
                 ", mPrice=" + mPrice +
                 '}';
+    }
+
+    public Image getImage() {
+        return mImage;
     }
 }

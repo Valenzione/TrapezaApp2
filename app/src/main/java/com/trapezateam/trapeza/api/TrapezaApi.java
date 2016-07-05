@@ -3,6 +3,7 @@ package com.trapezateam.trapeza.api;
 import android.media.Image;
 
 import com.trapezateam.trapeza.api.models.AuthenticationResponse;
+import com.trapezateam.trapeza.api.models.CategoryResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
 import com.trapezateam.trapeza.api.models.SavedDishResponse;
 import com.trapezateam.trapeza.api.models.UserResponse;
@@ -33,6 +34,9 @@ public interface TrapezaApi {
 
     @GET("/requests?func=dishesList")
     Call<List<DishResponse>> dishesList(@Query("token") String token);
+
+    @GET("/requests?func=categoriesList")
+    Call<List<CategoryResponse>> categoriesList(@Query("token") String token);
 
     @GET("/requests?func=userList")
     Call<List<UserResponse>> usersList(@Query("token") String token);

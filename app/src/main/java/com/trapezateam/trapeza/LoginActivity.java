@@ -2,12 +2,16 @@ package com.trapezateam.trapeza;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +29,8 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.trapezateam.trapeza.api.models.UserResponse;
 
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.zip.Inflater;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -67,28 +73,30 @@ public class LoginActivity extends AppCompatActivity {
 
         if (DebugConfig.USE_DEFAULT_TOKEN) {
             TrapezaRestClient.setToken(DebugConfig.DEFAULT_TOKEN);
-            onLoginSuccess(DebugConfig.DEFAULT_TOKEN,0);
+            onLoginSuccess(DebugConfig.DEFAULT_TOKEN, 0);
         }
+        mEmailText.setText("cashier");
+        mPasswordText.setText("cashier");
     }
 
     public void login() {
 
 
-//        if (!validate()) {
-//            onLoginFailed();
-//            return;
-//        }
+        if (!validate()) {
+            onLoginFailed("Credentials validation failed");
+            return;
+        }
 
         mLoginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme);
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         progressDialog.show();
 
+
         String email = mEmailText.getText().toString();
-        String password = mPasswordText.getText().toString();
+        final String password = mPasswordText.getText().toString();
 
         Log.d(TAG, "Login");
 
@@ -99,18 +107,25 @@ public class LoginActivity extends AppCompatActivity {
                 AuthenticationResponse body = response.body();
                 if (!body.isSuccess()) {
                     onLoginFailed(body.getMessage());
+                } else {
+                    onLoginSuccess(body.getToken(), body.getId());
                 }
-                Log.d(TAG, body.toString());
                 progressDialog.dismiss();
-                onLoginSuccess(body.getToken(), body.getId());
-
             }
 
             @Override
             public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
                 t.printStackTrace();
+
+                android.os.Handler h = new android.os.Handler();
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }, 1500);
+
                 onLoginFailed("Network error " + t.getMessage());
-                progressDialog.dismiss();
             }
         });
 
@@ -162,7 +177,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<UserResponse>> call, Throwable t) {
-                Log.i(TAG, "Oh shit "+t.getMessage());
+                Log.i(TAG, "Oh shit " + t.getMessage());
             }
 
         });
@@ -179,7 +194,18 @@ public class LoginActivity extends AppCompatActivity {
         String email = mEmailText.getText().toString();
         String password = mPasswordText.getText().toString();
 
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        //TODO replace with appropriate logic to validate emails ater release
+//        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+//            mEmailText.setError("enter a valid email address");
+//            YoYo.with(Techniques.Shake)
+//                    .duration(500)
+//                    .playOn(findViewById(R.id.input_email));
+//            valid = false;
+//        } else {
+//            mEmailText.setError(null);
+//        }
+
+        if (email.isEmpty()) {
             mEmailText.setError("enter a valid email address");
             YoYo.with(Techniques.Shake)
                     .duration(500)

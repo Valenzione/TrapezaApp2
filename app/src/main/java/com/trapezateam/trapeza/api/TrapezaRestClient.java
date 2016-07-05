@@ -2,7 +2,8 @@ package com.trapezateam.trapeza.api;
 
 import android.media.Image;
 
-import com.trapezateam.trapeza.Dish;
+import com.trapezateam.trapeza.api.models.CategoryResponse;
+import com.trapezateam.trapeza.models.Dish;
 import com.trapezateam.trapeza.api.models.AuthenticationResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
 import com.trapezateam.trapeza.api.models.SavedDishResponse;
@@ -54,6 +55,11 @@ public class TrapezaRestClient {
 
     public static void dishesList(Callback<List<DishResponse>> callback) {
         getApiInstance().dishesList(getToken()).enqueue(callback);
+    }
+
+
+    public static void categoriesList(Callback<List<CategoryResponse>> callback) {
+        getApiInstance().categoriesList(getToken()).enqueue(callback);
     }
 
     public static void addDish(Dish dish, int father, Callback<List<SavedDishResponse>> callback) {
