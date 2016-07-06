@@ -18,6 +18,10 @@ public class Dish {
     private int mPrice;
     private Image mImage;
 
+    public Dish() {
+    }
+
+
     public Dish(String name, int price, int id) {
         mName = name;
         mPrice = price;
@@ -65,13 +69,13 @@ public class Dish {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null) {
+        if (obj == null) {
             return false;
         }
-        if(obj == this) {
+        if (obj == this) {
             return true;
         }
-        if(!(obj instanceof Dish)) {
+        if (!(obj instanceof Dish)) {
             return false;
         }
         Dish d = (Dish) obj;

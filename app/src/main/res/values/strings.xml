@@ -26,7 +26,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
-
     <string name="drawer_item_category_congiguration">Управление категориями</string>
     <string name="drawer_item_dish_configration">Управление блюдами</string>
     <string name="drawer_item_statistics">Статистика</string>

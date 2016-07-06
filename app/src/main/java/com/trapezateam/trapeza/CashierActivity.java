@@ -107,7 +107,6 @@ public class CashierActivity extends Activity {
         billRecyclerView.setAdapter(mBill);
         mMenu = (GridView) findViewById(R.id.gvMenu);
         requestMenu();
-        //requestDishes();
 
 
     }
