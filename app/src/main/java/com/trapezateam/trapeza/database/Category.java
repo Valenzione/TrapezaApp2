@@ -17,6 +17,14 @@ public class Category extends RealmObject {
     private String name;
     private RealmList<Dish> dishes;
 
+    public Category(com.trapezateam.trapeza.models.Category category) {
+        this.categoryId=category.getId();
+        this.name=category.getName();
+    }
+
+    public Category(){
+
+    }
     public String getName() {
         return name;
     }

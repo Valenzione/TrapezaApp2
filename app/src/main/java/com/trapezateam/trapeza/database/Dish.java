@@ -1,7 +1,5 @@
 package com.trapezateam.trapeza.database;
 
-import com.trapezateam.trapeza.models.*;
-
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -13,17 +11,16 @@ public class Dish extends RealmObject {
     private int dishId;
     private String name;
     private String description;
-    private int creatorId;
-    private Category category;
+    private int categoryId;
     private int price;
 
 
-    public int getCreatorId() {
-        return creatorId;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setCreatorId(int creatorId) {
-        this.creatorId = creatorId;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getDescription() {
@@ -50,19 +47,16 @@ public class Dish extends RealmObject {
         this.dishId = dishId;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
     public void setPrice(int price) {
         this.price = price;
     }
 
     public int getPrice() {
         return price;
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + description;
     }
 }

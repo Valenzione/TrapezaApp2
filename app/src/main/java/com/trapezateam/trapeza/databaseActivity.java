@@ -1,27 +1,26 @@
 package com.trapezateam.trapeza;
 
 import android.app.Activity;
-import android.app.Application;
-import android.support.v7.app.AppCompatActivity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
-
+import com.trapezateam.trapeza.database.Category;
 import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.RealmClient;
-import com.trapezateam.trapeza.database.User;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
-import io.realm.exceptions.RealmMigrationNeededException;
+import io.realm.*;
 
-public class databaseActivity extends Activity {
+import io.realm.RealmBaseAdapter;
+
+
+public class DatabaseActivity extends Activity {
 
 
     @Bind(R.id.textView)
@@ -30,6 +29,12 @@ public class databaseActivity extends Activity {
     TextView textView2;
     @Bind(R.id.button)
     Button buttton;
+    @Bind(R.id.listView)
+    ListView listView;
+    @Bind(R.id.listView2)
+    ListView listView2;
+    @Bind(R.id.button3)
+    Button buttton3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,26 +43,31 @@ public class databaseActivity extends Activity {
 
         ButterKnife.bind(this);
 
-
-
-        RealmClient.createCategory("HotDishes");
-        RealmClient.addDish("Hot soup", "Delicious hot soup from Barcelona", 125, 2);
-        RealmClient.addDish("Chili soup", "Delicious chili soup from Chili", 650, 2);
-
-
         buttton.setOnClickListener(new View.OnClickListener()
 
                                    {
                                        @Override
                                        public void onClick(View view) {
-                                           Realm realm = Realm.getDefaultInstance();
-                                           RealmResults<Dish> result = realm.where(Dish.class).findAll();
 
-                                           textView.setText(result.last().getName());
-                                           textView2.setText(result.first().getName());
+                                           RealmClient.updateDatabase();
+
+                                           RealmResults<Dish> dishes = RealmClient.getDishes();
+                                           listView.setAdapter(new SimpleRealmAdapter(getBaseContext(), dishes));
+
+                                           RealmResults<Category> categories = RealmClient.getCategories();
+                                           listView2.setAdapter(new SimpleRealmAdapter(getBaseContext(), categories));
+
                                        }
                                    }
 
         );
+        buttton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Realm realm = Realm.getDefaultInstance();
+                textView.setText(String.valueOf(realm.where(Dish.class).findAll().size()));
+                textView2.setText(String.valueOf(realm.where(Category.class).findAll().size()));
+            }
+        });
     }
 }
