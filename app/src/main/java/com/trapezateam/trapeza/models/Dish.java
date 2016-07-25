@@ -1,19 +1,21 @@
 package com.trapezateam.trapeza.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.content.Intent;
+import android.media.Image;
+import android.net.Uri;
 
 import com.trapezateam.trapeza.api.models.DishResponse;
 
 /**
  * Created by ilgiz on 6/18/16.
  */
-public class Dish implements Parcelable {
+public class Dish {
 
     private String mName;
     private int mId;
+    private int mFatherId;
     private String mPhoto;
-    private String mDescription;
+    String mDescription;
     private int mPrice;
 
     public Dish() {
@@ -39,16 +41,8 @@ public class Dish implements Parcelable {
         mPhoto = response.getPhoto();
         mPrice = Integer.parseInt(response.getPrice());
         mDescription = response.getDescription();
+        mFatherId = response.getFather();
     }
-
-    protected Dish(Parcel in) {
-        mName = in.readString();
-        mId = in.readInt();
-        mPhoto = in.readString();
-        mDescription = in.readString();
-        mPrice = in.readInt();
-    }
-
 
     public int getPrice() {
         return mPrice;
@@ -100,29 +94,15 @@ public class Dish implements Parcelable {
                 '}';
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public int getFatherId() {
+        return mFatherId;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(mName);
-        parcel.writeInt(mId);
-        parcel.writeString(mPhoto);
-        parcel.writeString(mDescription);
-        parcel.writeInt(mPrice);
+    public void setFatherId(int mFatherId) {
+        this.mFatherId = mFatherId;
     }
 
-    public static final Creator<Dish> CREATOR = new Creator<Dish>() {
-        @Override
-        public Dish createFromParcel(Parcel in) {
-            return new Dish(in);
-        }
-
-        @Override
-        public Dish[] newArray(int size) {
-            return new Dish[size];
-        }
-    };
+    public Image getImage() {
+        return null;
+    }
 }

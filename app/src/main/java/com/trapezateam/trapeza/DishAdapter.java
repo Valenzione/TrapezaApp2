@@ -10,6 +10,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.trapezateam.trapeza.api.models.DishResponse;
+import com.trapezateam.trapeza.database.RealmClient;
 import com.trapezateam.trapeza.models.Dish;
 import com.trapezateam.trapeza.models.HashMapMenu;
 
@@ -67,7 +68,8 @@ public class DishAdapter extends BaseAdapter {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mMenu.setAdapter(new CategoryAdapter(hashMapMenu, mMenu, mBill));
+
+                    mMenu.setAdapter(new CategoryAdapter(RealmClient.getCategories(), mMenu, mBill));
                 }
             });
         } else {

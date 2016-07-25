@@ -23,17 +23,21 @@ public class CategoryAdapter extends BaseAdapter {
     GridView mMenu;
     HashMapMenu mMenuTree;
 
-    public CategoryAdapter(List<CategoryResponse> categories) {
-        for (CategoryResponse c : categories) {
+    public CategoryAdapter(List<com.trapezateam.trapeza.database.Category> categories) {
+        for (com.trapezateam.trapeza.database.Category c : categories) {
             mCategoriesList.add(new Category(c));
         }
     }
 
-    public CategoryAdapter(HashMapMenu menuTree, GridView gv, Bill b) {
-        mCategoriesList = menuTree.getCategories();
+    public CategoryAdapter(List<com.trapezateam.trapeza.database.Category> categories, GridView gv, Bill b) {
+
+        mCategoriesList.clear();
+        for (com.trapezateam.trapeza.database.Category c : categories) {
+            mCategoriesList.add(new Category(c));
+        }
         mBill = b;
         mMenu = gv;
-        mMenuTree=menuTree;
+
     }
 
     @Override

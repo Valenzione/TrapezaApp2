@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.CategoryResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
+import com.trapezateam.trapeza.database.RealmClient;
 import com.trapezateam.trapeza.models.HashMapMenu;
 
 import java.util.ArrayList;
@@ -45,7 +46,6 @@ public class MenuFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onViewCreated(view, savedInstanceState);
         mMenu = (GridView) getView().findViewById(R.id.gvCategories);
         requestMenu();
@@ -71,7 +71,7 @@ public class MenuFragment extends Fragment {
                         Log.d(TAG, "Dish Response received");
                         dishResponseList = new ArrayList<>(response.body());
                         menuTree = new HashMapMenu(dishResponseList, categoryResponseList);
-                        mCategoryAdapter = new CategoryConfigurationAdapter(menuTree, mMenu, null);
+                        mCategoryAdapter = new CategoryAdapter(RealmClient.getCategories(), mMenu, null);
                         mMenu.setAdapter(mCategoryAdapter);
 
                     }

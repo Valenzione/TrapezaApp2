@@ -1,6 +1,8 @@
 package com.trapezateam.trapeza.api.models;
 
 import com.google.gson.annotations.SerializedName;
+import com.trapezateam.trapeza.models.Category;
+import com.trapezateam.trapeza.models.Dish;
 
 /**
  * Created by ilgiz on 6/22/16.
@@ -108,5 +110,9 @@ public class DishResponse {
 
     public void setFatherName(String fatherName) {
         mFatherName = fatherName;
+    }
+
+    public Dish getDish() {
+        return new Dish(this);
     }
 }

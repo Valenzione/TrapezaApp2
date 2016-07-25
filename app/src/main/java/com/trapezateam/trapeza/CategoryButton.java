@@ -23,8 +23,8 @@ public class CategoryButton extends Button {
 
     public void setText(Category c) {
         mCategory = c;
-        String dishText = mCategory.getName();
-        this.setText(dishText);
+        String mCategoryName = mCategory.getName();
+        this.setText(mCategoryName);
     }
 
     public CategoryButton(Context context, AttributeSet attrs, int defStyle) {

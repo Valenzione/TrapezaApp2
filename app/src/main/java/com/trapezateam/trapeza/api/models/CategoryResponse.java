@@ -1,6 +1,7 @@
 package com.trapezateam.trapeza.api.models;
 
 import com.google.gson.annotations.SerializedName;
+import com.trapezateam.trapeza.models.Category;
 
 /**
  * Created by Yuriy on 7/4/2016.
@@ -19,6 +20,11 @@ public class CategoryResponse {
 
     public int getId() {
         return mId;
+    }
+
+    public Category getCategory() {
+        Category c = new Category(this);
+        return c;
     }
 
     @Override

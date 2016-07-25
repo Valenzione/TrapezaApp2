@@ -10,7 +10,13 @@ import java.util.ArrayList;
 public class Category {
     private String mName;
     private int mId;
-    private ArrayList<Dish> mDishes;
+    private ArrayList mDishes;
+
+    public Category(com.trapezateam.trapeza.database.Category c) {
+        this.mName=c.getName();
+        this.mId=c.getCategoryId();
+        this.mDishes=new ArrayList(c.getDishes());
+    }
 
     public ArrayList<Dish> getDishes() {
         return mDishes;
