@@ -8,7 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+
+import com.trapezateam.trapeza.database.Category;
+import com.trapezateam.trapeza.models.Dish;
+import com.trapezateam.trapeza.models.DishTree;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
@@ -28,21 +33,22 @@ public class SimpleRealmAdapter extends RealmBaseAdapter implements ListAdapter 
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
-        if (convertView == null) {
-            convertView = inflater.inflate(android.R.layout.simple_list_item_2, parent, false);
-            viewHolder = new ViewHolder();
-            viewHolder.name = (TextView) convertView.findViewById(android.R.id.text1);
-            viewHolder.name.setBackgroundResource(R.color.item_background);
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+    public View getView(int position, View view, ViewGroup viewGroup) {
+        if (view == null) {
+            Context context = viewGroup.getContext();
+            view = new CategoryButton(context);
         }
+        CategoryButton button = (CategoryButton) view;
+        final Category item = (Category) adapterData.get(position);
+        button.setText(item.toString());
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO Change to dishes item.getDishes()
 
-        RealmObject item = (RealmObject) adapterData.get(position);
-        viewHolder.name.setText(item.toString());
-        return convertView;
+            }
+        });
+        return button;
     }
 
 

@@ -184,8 +184,10 @@ public class RealmClient {
         dish.setDishId(nextDishId);
 
         RealmResults<Category> categories = realm.where(Category.class).equalTo("categoryId", categoryId).findAll();
+        categories.load();
         Category c = realm.copyFromRealm(categories.first());
         c.addToDishes(dish);
+
 
         realm.commitTransaction();
     }

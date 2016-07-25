@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.CategoryResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
+import com.trapezateam.trapeza.database.RealmClient;
 import com.trapezateam.trapeza.models.HashMapMenu;
 
 import java.util.ArrayList;
@@ -119,44 +120,14 @@ public class CashierActivity extends Activity {
         dialog.setMessage("Getting dishes");
         dialog.setCancelable(false);
         dialog.show();
-        TrapezaRestClient.categoriesList(new Callback<List<CategoryResponse>>() {
-            @Override
-            public void onResponse(Call<List<CategoryResponse>> call,
-                                   Response<List<CategoryResponse>> response) {
-                Log.d(TAG, "Category Response received");
-                categoryResponseList = new ArrayList<>(response.body());
 
-                dialog.setMessage("Getting dishes");
-                TrapezaRestClient.dishesList(new Callback<List<DishResponse>>() {
-                    @Override
-                    public void onResponse(Call<List<DishResponse>> call,
-                                           Response<List<DishResponse>> response) {
-                        Log.d(TAG, "Dish Response received");
-                        dishResponseList = new ArrayList<>(response.body());
-                        menuTree = new HashMapMenu(dishResponseList, categoryResponseList);
-                        mCategoryAdapter = new CategoryAdapter(menuTree, mMenu, mBill);
-                        mMenu.setAdapter(mCategoryAdapter);
+        RealmClient.updateDatabase();
 
-                    }
+        mMenu.setAdapter(new SimpleRealmAdapter(this, RealmClient.getCategories()));
 
-                    @Override
-                    public void onFailure(Call<List<DishResponse>> call, Throwable t) {
-                        Toast.makeText(CashierActivity.this, "Error getting dishes " + t.getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                        t.printStackTrace();
-                    }
-                });
+        dialog.dismiss();
 
-                dialog.dismiss();
-            }
 
-            @Override
-            public void onFailure(Call<List<CategoryResponse>> call, Throwable t) {
-                Toast.makeText(CashierActivity.this, "Error getting categories " + t.getMessage(),
-                        Toast.LENGTH_SHORT).show();
-                t.printStackTrace();
-            }
-        });
     }
 
 
