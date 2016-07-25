@@ -56,6 +56,18 @@ public class CashierActivity extends Activity {
 
         ButterKnife.bind(this);
         mBill = new Bill();
+
+        registerBillObserver();
+
+        RecyclerView billRecyclerView = (RecyclerView) findViewById(R.id.item_list);
+        RecyclerView.LayoutManager billLayoutManager = new LinearLayoutManager(this);
+        billRecyclerView.setLayoutManager(billLayoutManager);
+        billRecyclerView.setAdapter(mBill);
+        mMenu = (GridView) findViewById(R.id.gvMenu);
+        requestMenu();
+    }
+
+    private void registerBillObserver() {
         mBill.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
@@ -100,15 +112,6 @@ public class CashierActivity extends Activity {
                 onChanged();
             }
         });
-
-        RecyclerView billRecyclerView = (RecyclerView) findViewById(R.id.item_list);
-        RecyclerView.LayoutManager billLayoutManager = new LinearLayoutManager(this);
-        billRecyclerView.setLayoutManager(billLayoutManager);
-        billRecyclerView.setAdapter(mBill);
-        mMenu = (GridView) findViewById(R.id.gvMenu);
-        requestMenu();
-
-
     }
 
     void requestMenu() {

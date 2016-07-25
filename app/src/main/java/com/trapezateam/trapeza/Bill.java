@@ -146,30 +146,21 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
         holder.mDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int p = holder.getAdapterPosition();
-                if (p == RecyclerView.NO_POSITION) {
-                    return;
-                }
+                int p = holder.getLayoutPosition();
                 removeEntry(p);
             }
         });
         holder.mDecrement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int p = holder.getAdapterPosition();
-                if (p == RecyclerView.NO_POSITION) {
-                    return;
-                }
+                int p = holder.getLayoutPosition();
                 decrementQuantity(p);
             }
         });
         holder.mIncrement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int p = holder.getAdapterPosition();
-                if (p == RecyclerView.NO_POSITION) {
-                    return;
-                }
+                int p = holder.getLayoutPosition();
                 incrementQuantity(p);
             }
         });
