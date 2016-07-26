@@ -1,8 +1,5 @@
 package com.trapezateam.trapeza;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,20 +7,13 @@ import android.view.ViewGroup;
 
 import com.trapezateam.trapeza.database.MenuEntry;
 
-import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
 
 /**
  * Created by Yuriy on 7/22/2016.
  */
-public class DishAdapter
-        extends RealmRecyclerViewAdapter<MenuEntry, DishAdapter.ViewHolder> {
-
-    public DishAdapter(@NonNull Context context,
-                       @Nullable OrderedRealmCollection<MenuEntry> data,
-                       boolean autoUpdate) {
-        super(context, data, autoUpdate);
-    }
+public class MenuAdapter
+        extends RealmRecyclerViewAdapter<MenuEntry, MenuAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

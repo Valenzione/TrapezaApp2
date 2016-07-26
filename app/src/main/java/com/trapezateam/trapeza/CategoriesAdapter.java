@@ -7,8 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-import com.trapezateam.trapeza.database.MenuEntry;
+import com.trapezateam.trapeza.database.Dish;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
@@ -16,12 +15,12 @@ import io.realm.RealmRecyclerViewAdapter;
 /**
  * Created by Yuriy on 7/22/2016.
  */
-public class DishAdapter
-        extends RealmRecyclerViewAdapter<MenuEntry, DishAdapter.ViewHolder> {
+public class CategoriesAdapter
+        extends RealmRecyclerViewAdapter<Dish, CategoriesAdapter.ViewHolder> {
 
-    public DishAdapter(@NonNull Context context,
-                       @Nullable OrderedRealmCollection<MenuEntry> data,
-                       boolean autoUpdate) {
+    public CategoriesAdapter(@NonNull Context context,
+                             @Nullable OrderedRealmCollection<Dish> data,
+                             boolean autoUpdate) {
         super(context, data, autoUpdate);
     }
 
