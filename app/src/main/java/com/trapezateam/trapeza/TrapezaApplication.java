@@ -10,6 +10,11 @@ import io.realm.RealmConfiguration;
 public class TrapezaApplication extends Application {
 
     private static Context context;
+    private static int mCompanyId;
+
+    public static void setCompany(int companyId) {
+        TrapezaApplication.mCompanyId = companyId;
+    }
 
     @Override
     public void onCreate() {
@@ -22,4 +27,10 @@ public class TrapezaApplication extends Application {
     public static Context getAppContext() {
         return TrapezaApplication.context;
     }
+
+    public static int getCompany() {
+        return mCompanyId;
+    }
+
+    ;
 }

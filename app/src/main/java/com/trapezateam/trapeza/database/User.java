@@ -48,4 +48,9 @@ public class User extends RealmObject {
     public void setCompanyId(int companyId) {
         this.companyId = companyId;
     }
+
+    public String toString() {
+        String out = this.getName() + System.lineSeparator() + this.getEmail();
+        return out;
+    }
 }

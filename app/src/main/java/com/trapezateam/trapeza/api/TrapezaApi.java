@@ -39,13 +39,13 @@ public interface TrapezaApi {
     Call<List<CategoryResponse>> categoriesList(@Query("token") String token);
 
     @GET("/requests?func=userList")
-    Call<List<UserResponse>> usersList(@Query("token") String token);
+    Call<List<UserResponse>> usersList(@Query("token") String token, @Query("company") int companyId);
 
     @GET("/requests?func=userInfo")
     Call<List<UserResponse>> userInfo(@Query("token") String token, @Query("user") int id);
 
     @GET("/requests?func=dishInfo")
-    Call<DishResponse> dishInfo(@Query("token") String token);
+    Call<DishResponse> dishInfo(@Query("token") String token, @Query("dish") int id);
 
     @POST("/requests?func=addDish")
     Call<List<SavedDishResponse>> addDish(@Query("name") String name,

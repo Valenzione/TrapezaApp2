@@ -62,13 +62,16 @@ public class TrapezaRestClient {
         getApiInstance().categoriesList(getToken()).enqueue(callback);
     }
 
-    public static void addDish(Dish dish, int father, Callback<List<SavedDishResponse>> callback) {
-        getApiInstance().addDish(dish.getName(), null, dish.getDescription(), dish.getPrice(), father, getToken()).enqueue(callback);
+    public static void addDish(Dish dish, Callback<List<SavedDishResponse>> callback) {
+        getApiInstance().addDish(dish.getName(), null, dish.getDescription(), dish.getPrice(), dish.getCategoryId(), getToken()).enqueue(callback);
     }
 
     public static void userInfo(int id, Callback<List<UserResponse>> callback) {
         getApiInstance().userInfo(getToken(), id).enqueue(callback);
     }
 
+    public static void userList(int companyId, Callback<List<UserResponse>> callback){
+        getApiInstance().usersList(getToken(),companyId).enqueue(callback);
+    }
 
 }

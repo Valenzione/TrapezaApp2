@@ -107,11 +107,9 @@ public class CashierActivity extends Activity {
 
     void requestMenu() {
         final ProgressDialog dialog = new ProgressDialog(this);
-        dialog.setMessage("Getting dishes");
+        dialog.setMessage("Getting menu");
         dialog.setCancelable(false);
         dialog.show();
-
-        RealmClient.updateDatabase();
 
         DishAdapter da = new DishAdapter(this, RealmClient.getDishes());
         da.setOnDishClickedListener(new OnDishClickedListener() {
@@ -121,10 +119,7 @@ public class CashierActivity extends Activity {
             }
         });
         CategoriesAdapter ca = new CategoriesAdapter(this, RealmClient.getCategories());
-
-        MenuAdapter ma = new MenuAdapter(da, ca);
-
-        mMenu.setAdapter(ma);
+        mMenu.setAdapter(new MenuAdapter(da, ca));
 
         dialog.dismiss();
 

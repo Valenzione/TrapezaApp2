@@ -12,6 +12,7 @@ import com.trapezateam.trapeza.TrapezaApplication;
 import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.CategoryResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
+import com.trapezateam.trapeza.api.models.UserResponse;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class RealmClient {
     /**
      * TODO add user update
      */
-    public static void updateDatabase() {
+    public static void updateDatabase(int companyId) {
 
         //TODO ensure connection with server to prevent deleting all records and retrivieng nothing
 
@@ -43,6 +44,20 @@ public class RealmClient {
         realm.deleteAll();
         realm.commitTransaction();
 
+        TrapezaRestClient.userList(companyId, new Callback<List<UserResponse>>() {
+            @Override
+            public void onResponse(Call<List<UserResponse>> call, Response<List<UserResponse>> response) {
+                Log.d("DatabaseUpdate", String.valueOf(response.body().size()) + " users to update");
+                for (UserResponse u : response.body()) {
+                    addUser(u);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<UserResponse>> call, Throwable t) {
+                Log.e("DatabaseUpdate", "Error on getting users");
+            }
+        });
         TrapezaRestClient.categoriesList(new Callback<List<CategoryResponse>>() {
             @Override
             public void onResponse(Call<List<CategoryResponse>> call, Response<List<CategoryResponse>> response) {
@@ -75,6 +90,20 @@ public class RealmClient {
         });
 
         Log.d("DatabaseUpdate", "Database update completed " + (new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date())));
+    }
+
+    private static void addUser(UserResponse userResponse) {
+        realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        final User u = realm.createObject(User.class);
+
+        u.setName(userResponse.getSurname() + " " + userResponse.getName());
+        u.setEmail("noEmailInDataBase@for.now");
+        int nextUserId = realm.where(User.class).findAll().size() + 1;
+        u.setId(nextUserId);
+        u.setCompanyId(userResponse.getCompany());
+
+        realm.commitTransaction();
     }
 
 

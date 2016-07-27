@@ -1,6 +1,8 @@
 package com.trapezateam.trapeza;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,28 +12,17 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.trapezateam.trapeza.api.TrapezaRestClient;
-import com.trapezateam.trapeza.api.models.CategoryResponse;
-import com.trapezateam.trapeza.api.models.DishResponse;
+
+import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.RealmClient;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MenuFragment extends Fragment {
 
     private static final String TAG = "MenuFragment";
 
 
-    private DishAdapter mDishAdapter;
     private GridView mMenu;
-
-    private static List<DishResponse> dishResponseList;
-    private static List<CategoryResponse> categoryResponseList;
 
 
     @Override
@@ -50,43 +41,34 @@ public class MenuFragment extends Fragment {
 
     void requestMenu() {
         final ProgressDialog dialog = new ProgressDialog(getActivity());
-        dialog.setMessage("Getting dishes");
+        dialog.setMessage("Getting menu");
         dialog.setCancelable(false);
         dialog.show();
-        TrapezaRestClient.categoriesList(new Callback<List<CategoryResponse>>() {
+
+        DishAdapter da = new DishAdapter(getActivity(), RealmClient.getDishes());
+        da.setOnDishClickedListener(new OnDishClickedListener() {
             @Override
-            public void onResponse(Call<List<CategoryResponse>> call,
-                                   Response<List<CategoryResponse>> response) {
-                Log.d(TAG, "Category Response received");
-                categoryResponseList = new ArrayList<>(response.body());
-
-                dialog.setMessage("Getting dishes");
-                TrapezaRestClient.dishesList(new Callback<List<DishResponse>>() {
-                    @Override
-                    public void onResponse(Call<List<DishResponse>> call,
-                                           Response<List<DishResponse>> response) {
-                        Log.d(TAG, "Dish Response received");
-                        dishResponseList = new ArrayList<>(response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<DishResponse>> call, Throwable t) {
-                        Toast.makeText(getActivity(), "Error getting dishes " + t.getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                        t.printStackTrace();
-                    }
-                });
-
-                dialog.dismiss();
-            }
-
-            @Override
-            public void onFailure(Call<List<CategoryResponse>> call, Throwable t) {
-                Toast.makeText(getActivity(), "Error getting categories " + t.getMessage(),
-                        Toast.LENGTH_SHORT).show();
-                t.printStackTrace();
+            public void onDishClicked(Dish dish) {
+                modifyDish(dish);
             }
         });
+        CategoriesAdapter ca = new CategoriesAdapter(getActivity(), RealmClient.getCategories());
+        mMenu.setAdapter(new MenuAdapter(da, ca));
+
+        dialog.dismiss();
+
+
+    }
+
+    private void modifyDish(Dish dish) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("dish", dish);
+        DishConfigurationFragment configurationFragment = new DishConfigurationFragment();
+        configurationFragment.setArguments(bundle);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.dummy_fragment, configurationFragment);
+        fragmentTransaction.commit();
     }
 
 

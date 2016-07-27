@@ -25,6 +25,7 @@ import retrofit2.Response;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.trapezateam.trapeza.api.models.UserResponse;
+import com.trapezateam.trapeza.database.RealmClient;
 
 import java.util.List;
 
@@ -71,8 +72,8 @@ public class LoginActivity extends AppCompatActivity {
             TrapezaRestClient.setToken(DebugConfig.DEFAULT_TOKEN);
             onLoginSuccess(DebugConfig.DEFAULT_TOKEN, 0);
         }
-        mEmailText.setText("cashier");
-        mPasswordText.setText("cashier");
+        mEmailText.setText("admin");
+        mPasswordText.setText("admin");
     }
 
     public void login() {
@@ -167,7 +168,7 @@ public class LoginActivity extends AppCompatActivity {
         TrapezaRestClient.userInfo(userId, new Callback<List<UserResponse>>() {
             @Override
             public void onResponse(Call<List<UserResponse>> call, Response<List<UserResponse>> response) {
-                Log.i(TAG, "Response");
+                RealmClient.updateDatabase(response.body().get(0).getCompany());
                 startCorrectActivity(response.body().get(0).getRole());
             }
 

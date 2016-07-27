@@ -51,7 +51,8 @@
         android:maxWidth="150dp"
         android:gravity="right"
         android:inputType="number"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:ems="3"/>
 
     <ImageButton
         android:id="@+id/bill_entry_increment"
@@ -70,9 +71,8 @@
         android:id="@+id/bill_entry_total_price"
         android:gravity="right"
         android:paddingEnd="5dp"
-        android:minWidth="64dp"
-        android:maxWidth="150dp"
         android:background="@null"
         android:layout_gravity="center"
-        android:paddingRight="5dp" />
+        android:paddingRight="5dp"
+        android:ems="3"/>
 </LinearLayout>

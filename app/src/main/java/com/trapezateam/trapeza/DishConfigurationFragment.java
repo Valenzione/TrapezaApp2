@@ -46,6 +46,16 @@ public class DishConfigurationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dish_configuration_fragment, container, false);
+        if (getArguments() != null) {
+            Dish dish = (Dish) getArguments().get("dish");
+            EditText mDishName = (EditText) view.findViewById(R.id.dish_name);
+            mDishName.setText(dish.getName());
+            EditText mDishDescription = (EditText) view.findViewById(R.id.dish_description);
+            mDishDescription.setText(dish.getDescription());
+            EditText mDishPrice = (EditText) view.findViewById(R.id.dish_price);
+            mDishPrice.setText(String.valueOf(dish.getPrice()));
+        }
+
         return view;
     }
 
@@ -69,51 +79,49 @@ public class DishConfigurationFragment extends Fragment {
         mDishDescription = (EditText) getView().findViewById(R.id.dish_description);
         mDishPrice = (EditText) getView().findViewById(R.id.dish_price);
 
-        if (getArguments() != null) {
-            mDishName.setText(getArguments().getString("name"));
-        }
-
 
         mSaveDishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (validate()) {
-                    Dish dish = new Dish(mDishName.getText().toString(),
-                            String.valueOf(mDishDescription.getText()),
-                            Integer.parseInt(mDishPrice.getText().toString()));
-                    saveDish(dish, 1);
+                    Log.d(TAG, "Dish saved");
                 }
             }
         });
     }
 
 
-    void saveDish(final Dish dish, int father) {
+    void saveDish(final Dish dish) {
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Saving dish");
         dialog.setCancelable(false);
         dialog.show();
-        TrapezaRestClient.addDish(dish, father, new Callback<List<SavedDishResponse>>() {
-            @Override
-            public void onResponse(Call<List<SavedDishResponse>> call,
-                                   Response<List<SavedDishResponse>> response) {
-                if (response.body().get(0).getStatus() == 0) {
-                    Log.d(TAG, "Dish Does Not Added");
-                } else {
-                    Log.d(TAG, "Dish Added: " + dish.toString());
+        if (getArguments() == null) {
+            TrapezaRestClient.addDish(dish, new Callback<List<SavedDishResponse>>() {
+                @Override
+                public void onResponse(Call<List<SavedDishResponse>> call,
+                                       Response<List<SavedDishResponse>> response) {
+                    if (response.body().get(0).getStatus() == 0) {
+                        Log.d(TAG, "Dish Does Not Added");
+                    } else {
+                        Log.d(TAG, "Dish Added: " + dish.toString());
+                    }
+                    dialog.dismiss();
                 }
-                dialog.dismiss();
-            }
 
-            @Override
-            public void onFailure(Call<List<SavedDishResponse>> call, Throwable t) {
-                Toast.makeText(getActivity(), "Error saving dishes " + t.getMessage(),
-                        Toast.LENGTH_LONG).show();
-                t.printStackTrace();
-                dialog.dismiss();
+                @Override
+                public void onFailure(Call<List<SavedDishResponse>> call, Throwable t) {
+                    Toast.makeText(getActivity(), "Error saving dishes " + t.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                    t.printStackTrace();
+                    dialog.dismiss();
 
-            }
-        });
+                }
+            });
+        } else {
+            //TODO add TrapezaRestClient.modifyDish(Dish);
+        }
+
     }
 
 
@@ -123,8 +131,12 @@ public class DishConfigurationFragment extends Fragment {
             String path = getPathFromCameraData(data, this.getActivity());
             Log.i("PICTURE", "Path: " + path);
             if (path != null) {
-                Bitmap dishPic = BitmapFactory.decodeFile(path);
-                mDishImage.setImageBitmap(dishPic);
+                Bitmap src = BitmapFactory.decodeFile(path);
+                int width = src.getWidth();
+                int height = src.getHeight();
+                int crop = (width - height) / 2;
+                Bitmap cropImg = Bitmap.createBitmap(src, crop, 0, height, height);
+                mDishImage.setImageBitmap(cropImg);
             }
         }
     }
@@ -171,5 +183,6 @@ public class DishConfigurationFragment extends Fragment {
 
         return valid;
     }
+
 
 }
