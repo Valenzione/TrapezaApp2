@@ -20,6 +20,7 @@ public class DishAdapter
 
     private OnDishClickedListener mOnDishClickedListener;
     private MenuAdapter mMenuAdapter;
+    private boolean mShowAddButton;
 
     public DishAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<Dish> data) {
         super(context, data);
@@ -37,26 +38,39 @@ public class DishAdapter
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(mMenuAdapter != null) {
+                    if (mMenuAdapter != null) {
                         mMenuAdapter.onBackClicked();
                     }
                 }
             });
-        } else {
-            final Dish dish = getItem(i - 1);
-            button.setText(dish.getName());
+            return button;
+        }
+
+        if (mShowAddButton && i == getCount() - 1) {
+            button.setText("+");
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mOnDishClickedListener != null) {
-                        mOnDishClickedListener.onDishClicked(dish);
-                    }
-                    if (mMenuAdapter != null) {
-                        mMenuAdapter.onDishClicked(dish);
-                    }
+                    mMenuAdapter.onAddDishClicked();
                 }
             });
+            return button;
         }
+
+        final Dish dish = getItem(i - 1);
+        button.setText(dish.getName());
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mOnDishClickedListener != null) {
+                    mOnDishClickedListener.onDishClicked(dish);
+                }
+                if (mMenuAdapter != null) {
+                    mMenuAdapter.onDishClicked(dish);
+                }
+            }
+        });
+
         return button;
 
     }
@@ -79,6 +93,22 @@ public class DishAdapter
 
     @Override
     public int getCount() {
-        return super.getCount() + 1;
+        int count = super.getCount();
+        count++; // back button
+        if (mShowAddButton) {
+            count++; // add button
+        }
+        return count;
+    }
+
+    public void setShowAddButton(boolean showAddButton) {
+        if (showAddButton != mShowAddButton) {
+            mShowAddButton = showAddButton;
+            notifyDataSetChanged();
+        }
+    }
+
+    public boolean getShowAddButton() {
+        return mShowAddButton;
     }
 }

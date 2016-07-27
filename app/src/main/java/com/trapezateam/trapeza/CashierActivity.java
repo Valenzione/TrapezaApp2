@@ -11,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.trapezateam.trapeza.api.models.CategoryResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
@@ -118,8 +119,23 @@ public class CashierActivity extends Activity {
                 mBill.addEntry(dish);
             }
         });
-        CategoriesAdapter ca = new CategoriesAdapter(this, RealmClient.getCategories());
-        mMenu.setAdapter(new MenuAdapter(da, ca));
+        final CategoryAdapter ca = new CategoryAdapter(this, RealmClient.getCategories());
+        MenuAdapter ma = new MenuAdapter(da, ca);
+        ma.setOnAddDishClickListener(new OnAddDishClickListener() {
+            @Override
+            public void onAddDishClicked(Category category) {
+                Toast.makeText(CashierActivity.this, "I want to add a dish to " + category,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        ma.setOnAddCategoryClickListener(new OnAddCategoryClickListener() {
+            @Override
+            public void onAddCategoryClicked() {
+                Toast.makeText(CashierActivity.this, "I want to add a category",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        mMenu.setAdapter(ma);
 
         dialog.dismiss();
 

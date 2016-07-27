@@ -52,7 +52,7 @@ public class MenuFragment extends Fragment {
                 modifyDish(dish);
             }
         });
-        CategoriesAdapter ca = new CategoriesAdapter(getActivity(), RealmClient.getCategories());
+        CategoryAdapter ca = new CategoryAdapter(getActivity(), RealmClient.getCategories());
         mMenu.setAdapter(new MenuAdapter(da, ca));
 
         dialog.dismiss();

@@ -19,15 +19,16 @@ import io.realm.RealmRecyclerViewAdapter;
 /**
  * Created by Yuriy on 7/22/2016.
  */
-public class CategoriesAdapter
+public class CategoryAdapter
         extends RealmBaseAdapter<Category> {
 
 
     private OnCategoryClickedListener mOnCategoryClickedListener;
     private MenuAdapter mMenuAdapter;
+    private boolean mShowAddButton;
 
-    public CategoriesAdapter(@NonNull Context context,
-                             @Nullable OrderedRealmCollection<Category> data) {
+    public CategoryAdapter(@NonNull Context context,
+                           @Nullable OrderedRealmCollection<Category> data) {
         super(context, data);
     }
 
@@ -38,6 +39,19 @@ public class CategoriesAdapter
         }
 
         SquareButton button = (SquareButton) view;
+
+        if (mShowAddButton && i == getCount() - 1) {
+            button.setText("+");
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mMenuAdapter.onAddDishClicked();
+                }
+            });
+            return button;
+        }
+
+
         button.setText(getItem(i).getName());
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +64,8 @@ public class CategoriesAdapter
                 }
             }
         });
+
+
         return button;
     }
 
@@ -67,5 +83,25 @@ public class CategoriesAdapter
 
     public void removeMenuAdapter() {
         mMenuAdapter = null;
+    }
+
+    @Override
+    public int getCount() {
+        int count = super.getCount();
+        if(mShowAddButton) {
+            count++; // add button
+        }
+        return count;
+    }
+
+    public void setShowAddButton(boolean showAddButton) {
+        if (showAddButton != mShowAddButton) {
+            mShowAddButton = showAddButton;
+            notifyDataSetChanged();
+        }
+    }
+
+    public boolean getShowAddButton() {
+        return mShowAddButton;
     }
 }

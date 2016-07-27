@@ -15,24 +15,30 @@ import io.realm.RealmBaseAdapter;
 public class MenuAdapter extends BaseAdapter {
 
     DishAdapter mDishAdapter;
-    CategoriesAdapter mCategoriesAdapter;
+    CategoryAdapter mCategoryAdapter;
 
     RealmBaseAdapter mCurrentAdapter;
 
+    Category mCurrentCategory;
+
+
+    private OnAddDishClickListener mOnAddDishClickListener;
+    private OnAddCategoryClickListener mOnAddCategoryClickListener;
+
     /**
-     * The first adapter to be used is the <code>CategoriesAdapter</code>
+     * The first adapter to be used is the <code>CategoryAdapter</code>
      *
      * @param dishAdapter
-     * @param categoriesAdapter
+     * @param categoryAdapter
      */
-    public MenuAdapter(DishAdapter dishAdapter, CategoriesAdapter categoriesAdapter) {
+    public MenuAdapter(DishAdapter dishAdapter, CategoryAdapter categoryAdapter) {
         mDishAdapter = dishAdapter;
-        mCategoriesAdapter = categoriesAdapter;
+        mCategoryAdapter = categoryAdapter;
 
         mDishAdapter.setMenuAdapter(this);
-        mCategoriesAdapter.setMenuAdapter(this);
+        mCategoryAdapter.setMenuAdapter(this);
 
-        mCurrentAdapter = mCategoriesAdapter;
+        mCurrentAdapter = mCategoryAdapter;
     }
 
     @Override
@@ -60,6 +66,7 @@ public class MenuAdapter extends BaseAdapter {
     }
 
     void onCategoryClicked(Category category) {
+        mCurrentCategory = category;
         switchToDishesOfCategory(category);
     }
 
@@ -74,7 +81,36 @@ public class MenuAdapter extends BaseAdapter {
     }
 
     void switchToCategories() {
-        mCurrentAdapter = mCategoriesAdapter;
+        mCurrentAdapter = mCategoryAdapter;
         notifyDataSetChanged();
+    }
+
+
+    public void setOnAddDishClickListener(OnAddDishClickListener listener) {
+        mOnAddDishClickListener = listener;
+    }
+
+    public void removeOnAddDishClickListener() {
+        mOnAddDishClickListener = null;
+    }
+
+    public void onAddDishClicked() {
+        if (mOnAddDishClickListener != null) {
+            mOnAddDishClickListener.onAddDishClicked(mCurrentCategory);
+        }
+    }
+
+    public void onAddCategoryClicked() {
+        if (mOnAddCategoryClickListener != null) {
+            mOnAddCategoryClickListener.onAddCategoryClicked();
+        }
+    }
+
+    public void setOnAddCategoryClickListener(OnAddCategoryClickListener listener) {
+        mOnAddCategoryClickListener = listener;
+    }
+
+    public void removeOnAddCategoryClickListener() {
+        mOnAddCategoryClickListener = null;
     }
 }
