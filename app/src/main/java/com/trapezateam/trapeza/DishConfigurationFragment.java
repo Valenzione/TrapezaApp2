@@ -2,6 +2,8 @@ package com.trapezateam.trapeza;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -23,11 +25,14 @@ import android.widget.Toast;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.trapezateam.trapeza.api.TrapezaRestClient;
+import com.trapezateam.trapeza.api.models.ModifiedDishResponse;
 import com.trapezateam.trapeza.api.models.SavedDishResponse;
 import com.trapezateam.trapeza.database.Dish;
+import com.trapezateam.trapeza.database.RealmClient;
 
 import java.util.List;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -84,10 +89,34 @@ public class DishConfigurationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (validate()) {
+                    final Dish dish;
+                    if (getArguments().containsKey("dish")) {
+                        dish = (Dish) getArguments().get("dish");
+                    } else {
+                        dish = new Dish();
+                        int father = (int) getArguments().get("father");
+                        dish.setCategoryId(father);
+                    }
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.beginTransaction();
+                    dish.setDescription(String.valueOf(mDishDescription.getText()));
+                    dish.setName(String.valueOf(mDishName.getText()));
+                    dish.setPrice(Integer.parseInt(String.valueOf(mDishPrice.getText())));
+                    realm.commitTransaction();
+                    saveDish(dish);
                     Log.d(TAG, "Dish saved");
+                    returnToMenu();
                 }
             }
         });
+    }
+
+    private void returnToMenu() {
+        Fragment replacementFragment = new MenuFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.dummy_fragment, replacementFragment);
+        fragmentTransaction.commit();
     }
 
 
@@ -96,7 +125,7 @@ public class DishConfigurationFragment extends Fragment {
         dialog.setMessage("Saving dish");
         dialog.setCancelable(false);
         dialog.show();
-        if (getArguments() == null) {
+        if (getArguments().containsKey("father")) {
             TrapezaRestClient.addDish(dish, new Callback<List<SavedDishResponse>>() {
                 @Override
                 public void onResponse(Call<List<SavedDishResponse>> call,
@@ -111,7 +140,7 @@ public class DishConfigurationFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<List<SavedDishResponse>> call, Throwable t) {
-                    Toast.makeText(getActivity(), "Error saving dishes " + t.getMessage(),
+                    Toast.makeText(getActivity(), "Error saving dish " + t.getMessage(),
                             Toast.LENGTH_LONG).show();
                     t.printStackTrace();
                     dialog.dismiss();
@@ -119,9 +148,28 @@ public class DishConfigurationFragment extends Fragment {
                 }
             });
         } else {
-            //TODO add TrapezaRestClient.modifyDish(Dish);
-        }
+            TrapezaRestClient.modifyDish(dish, new Callback<List<ModifiedDishResponse>>() {
+                @Override
+                public void onResponse(Call<List<ModifiedDishResponse>> call, Response<List<ModifiedDishResponse>> response) {
+                    if (response.body().get(0).getStatus() == 0) {
+                        Log.d(TAG, "Dish Modified");
+                    } else {
+                        Log.d(TAG, "Dish Not Modified");
+                    }
+                    dialog.dismiss();
+                }
 
+                @Override
+                public void onFailure(Call<List<ModifiedDishResponse>> call, Throwable t) {
+                    Toast.makeText(getActivity(), "Error updating dish " + t.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                    t.printStackTrace();
+                    dialog.dismiss();
+                }
+            });
+            //TODO check for price update
+        }
+        RealmClient.updateDatabase(TrapezaApplication.getCompany());
     }
 
 
