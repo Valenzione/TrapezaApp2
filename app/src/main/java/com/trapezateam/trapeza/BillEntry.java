@@ -3,7 +3,7 @@ package com.trapezateam.trapeza;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.trapezateam.trapeza.models.Dish;
+import com.trapezateam.trapeza.database.Dish;
 
 /**
  * Created by ilgiz on 6/18/16.

@@ -14,7 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.trapezateam.trapeza.models.Dish;
+import com.trapezateam.trapeza.database.Dish;
 
 import butterknife.Bind;
 

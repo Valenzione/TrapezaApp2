@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.Button;
 
-import com.trapezateam.trapeza.models.Category;
-import com.trapezateam.trapeza.models.Dish;
+import com.trapezateam.trapeza.database.Category;
+import com.trapezateam.trapeza.database.Dish;
 
 /**
  * Created by Yuriy on 7/5/2016.

@@ -43,8 +43,6 @@ public class RealmClient {
         realm.deleteAll();
         realm.commitTransaction();
 
-        final List<com.trapezateam.trapeza.models.Category> categoriesList = new ArrayList<>();
-        final List<com.trapezateam.trapeza.models.Dish> dishList = new ArrayList<>();
         TrapezaRestClient.categoriesList(new Callback<List<CategoryResponse>>() {
             @Override
             public void onResponse(Call<List<CategoryResponse>> call, Response<List<CategoryResponse>> response) {
@@ -94,35 +92,6 @@ public class RealmClient {
         RealmResults<Category> categories = realm.where(Category.class).equalTo("categoryId", d.getFather()).findAll();
         Category c = realm.copyFromRealm(categories.first());
         c.addToDishes(dish);
-
-        realm.commitTransaction();
-    }
-
-    private static void addDish(com.trapezateam.trapeza.models.Dish d) {
-        realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-
-        Dish dish = realm.createObject(Dish.class);
-        dish.setName(d.getName());
-        dish.setDescription(d.getDescription());
-        dish.setCategoryId(d.getFatherId());
-        dish.setPrice(d.getPrice());
-        dish.setDishId(d.getId());
-
-        RealmResults<Category> categories = realm.where(Category.class).equalTo("categoryId", d.getFatherId()).findAll();
-        Category c = realm.copyFromRealm(categories.first());
-        c.addToDishes(dish);
-
-        realm.commitTransaction();
-    }
-
-    private static void addCategory(com.trapezateam.trapeza.models.Category c) {
-        realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-
-        final Category category = realm.createObject(Category.class);
-        category.setName(c.getName());
-        category.setCategoryId(c.getId());
 
         realm.commitTransaction();
     }

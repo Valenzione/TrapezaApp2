@@ -13,6 +13,9 @@ public class Company extends RealmObject {
     private String companyName;
     private RealmList<User> stuff;
 
+    public Company() {
+    }
+
     public RealmList<User> getStuff() {
         return stuff;
     }

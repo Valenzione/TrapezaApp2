@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -16,24 +15,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.SavedDishResponse;
-import com.trapezateam.trapeza.models.Dish;
+import com.trapezateam.trapeza.database.Dish;
 
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -84,7 +78,9 @@ public class DishConfigurationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (validate()) {
-                    Dish dish = new Dish(mDishName.getText().toString(), String.valueOf(mDishDescription.getText()), Integer.parseInt(mDishPrice.getText().toString()));
+                    Dish dish = new Dish(mDishName.getText().toString(),
+                            String.valueOf(mDishDescription.getText()),
+                            Integer.parseInt(mDishPrice.getText().toString()));
                     saveDish(dish, 1);
                 }
             }

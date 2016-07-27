@@ -1,41 +1,80 @@
 package com.trapezateam.trapeza;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 
+import com.trapezateam.trapeza.database.Category;
+import com.trapezateam.trapeza.database.Dish;
 
-import com.trapezateam.trapeza.database.MenuEntry;
-
-import io.realm.RealmRecyclerViewAdapter;
+import io.realm.RealmBaseAdapter;
 
 /**
  * Created by Yuriy on 7/22/2016.
  */
-public class MenuAdapter
-        extends RealmRecyclerViewAdapter<MenuEntry, MenuAdapter.ViewHolder> {
+public class MenuAdapter extends BaseAdapter {
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = inflater.inflate(R.layout.square_button, parent, false);
-        return new ViewHolder(v);
+    DishAdapter mDishAdapter;
+    CategoriesAdapter mCategoriesAdapter;
+
+    RealmBaseAdapter mCurrentAdapter;
+
+    /**
+     * The first adapter to be used is the <code>CategoriesAdapter</code>
+     *
+     * @param dishAdapter
+     * @param categoriesAdapter
+     */
+    public MenuAdapter(DishAdapter dishAdapter, CategoriesAdapter categoriesAdapter) {
+        mDishAdapter = dishAdapter;
+        mCategoriesAdapter = categoriesAdapter;
+
+        mDishAdapter.setMenuAdapter(this);
+        mCategoriesAdapter.setMenuAdapter(this);
+
+        mCurrentAdapter = mCategoriesAdapter;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        MenuEntry e = getData().get(position);
-        holder.mSquareButton.setText(e.getName());
+    public int getCount() {
+        return mCurrentAdapter.getCount();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
-
-        SquareButton mSquareButton;
-
-        public ViewHolder(View view) {
-            super(view);
-            mSquareButton = (SquareButton) view;
-        }
+    @Override
+    public Object getItem(int i) {
+        return mCurrentAdapter.getItem(i);
     }
 
+    @Override
+    public long getItemId(int i) {
+        return mCurrentAdapter.getItemId(i);
+    }
 
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        return mCurrentAdapter.getView(i, view, viewGroup);
+    }
+
+    void onDishClicked(Dish dish) {
+
+    }
+
+    void onCategoryClicked(Category category) {
+        switchToDishesOfCategory(category);
+    }
+
+    void onBackClicked() {
+        switchToCategories();
+    }
+
+    void switchToDishesOfCategory(Category category) {
+        mDishAdapter.updateData(category.getDishes());
+        mCurrentAdapter = mDishAdapter;
+        notifyDataSetChanged();
+    }
+
+    void switchToCategories() {
+        mCurrentAdapter = mCategoriesAdapter;
+        notifyDataSetChanged();
+    }
 }

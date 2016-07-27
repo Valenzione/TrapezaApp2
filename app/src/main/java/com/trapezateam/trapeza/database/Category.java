@@ -1,10 +1,6 @@
 package com.trapezateam.trapeza.database;
 
-import android.util.Log;
-
-import com.trapezateam.trapeza.models.*;
-
-import java.util.ArrayList;
+import com.trapezateam.trapeza.api.models.CategoryResponse;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -21,13 +17,13 @@ public class Category extends RealmObject {
     private RealmList<Dish> dishes = new RealmList<>();
 
 
-    public Category(com.trapezateam.trapeza.models.Category category) {
-        this.categoryId = category.getId();
-        this.name = category.getName();
-    }
-
     public Category() {
 
+    }
+
+    public Category(CategoryResponse response) {
+        categoryId = response.getId();
+        name = response.getName();
     }
 
     public String getName() {

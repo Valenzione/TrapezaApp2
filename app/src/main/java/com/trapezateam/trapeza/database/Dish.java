@@ -1,5 +1,7 @@
 package com.trapezateam.trapeza.database;
 
+import com.trapezateam.trapeza.api.models.DishResponse;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -13,6 +15,25 @@ public class Dish extends RealmObject {
     private String description;
     private int categoryId;
     private int price;
+
+    public Dish() {
+    }
+
+    public Dish(DishResponse response) {
+        dishId = response.getId();
+        name = response.getName();
+        description = response.getDescription();
+        categoryId = response.getFather();
+        price = Integer.parseInt(response.getPrice());
+    }
+
+
+    public Dish(String name, String description, int price) {
+        // TODO: add category ID
+        this.name = name;
+        this.description = description;
+        this.price = price;
+    }
 
 
     public int getCategoryId() {
@@ -58,5 +79,14 @@ public class Dish extends RealmObject {
     @Override
     public String toString() {
         return name + " " + description;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Dish) {
+            Dish d = (Dish) obj;
+            return d.getDishId() == getDishId();
+        }
+        return super.equals(obj);
     }
 }

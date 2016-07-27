@@ -4,8 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.Button;
 
-import com.trapezateam.trapeza.models.Category;
-import com.trapezateam.trapeza.models.Dish;
+import com.trapezateam.trapeza.database.Category;
 
 public class CategoryButton extends Button {
 

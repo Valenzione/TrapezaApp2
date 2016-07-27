@@ -14,7 +14,6 @@ import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.CategoryResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
 import com.trapezateam.trapeza.database.RealmClient;
-import com.trapezateam.trapeza.models.HashMapMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +28,10 @@ public class MenuFragment extends Fragment {
 
 
     private DishAdapter mDishAdapter;
-    private CategoryAdapter mCategoryAdapter;
     private GridView mMenu;
 
     private static List<DishResponse> dishResponseList;
     private static List<CategoryResponse> categoryResponseList;
-    private static HashMapMenu menuTree;
 
 
     @Override
@@ -70,10 +67,6 @@ public class MenuFragment extends Fragment {
                                            Response<List<DishResponse>> response) {
                         Log.d(TAG, "Dish Response received");
                         dishResponseList = new ArrayList<>(response.body());
-                        menuTree = new HashMapMenu(dishResponseList, categoryResponseList);
-                        mCategoryAdapter = new CategoryAdapter(RealmClient.getCategories(), mMenu, null);
-                        mMenu.setAdapter(mCategoryAdapter);
-
                     }
 
                     @Override

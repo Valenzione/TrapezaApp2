@@ -11,22 +11,18 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.CategoryResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
+import com.trapezateam.trapeza.database.Category;
+import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.RealmClient;
-import com.trapezateam.trapeza.models.HashMapMenu;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.realm.RealmResults;
 
 
 public class CashierActivity extends Activity {
@@ -35,13 +31,7 @@ public class CashierActivity extends Activity {
 
     Bill mBill;
 
-    private DishAdapter mDishAdapter;
-    private CategoryAdapter mCategoryAdapter;
     private GridView mMenu;
-
-    private static List<DishResponse> dishResponseList;
-    private static List<CategoryResponse> categoryResponseList;
-    private static HashMapMenu menuTree;
 
     @Bind(R.id.totalPrice)
     TextView mTotalPrice;
@@ -123,7 +113,18 @@ public class CashierActivity extends Activity {
 
         RealmClient.updateDatabase();
 
-        mMenu.setAdapter(new SimpleRealmAdapter(this, RealmClient.getCategories()));
+        DishAdapter da = new DishAdapter(this, RealmClient.getDishes());
+        da.setOnDishClickedListener(new OnDishClickedListener() {
+            @Override
+            public void onDishClicked(Dish dish) {
+                mBill.addEntry(dish);
+            }
+        });
+        CategoriesAdapter ca = new CategoriesAdapter(this, RealmClient.getCategories());
+
+        MenuAdapter ma = new MenuAdapter(da, ca);
+
+        mMenu.setAdapter(ma);
 
         dialog.dismiss();
 
@@ -147,15 +148,13 @@ public class CashierActivity extends Activity {
         super.onRestoreInstanceState(savedInstanceState);
 
         mBill = savedInstanceState.getParcelable("bill");
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.item_list);
+        RecyclerView billRecyclerView = (RecyclerView) findViewById(R.id.item_list);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(mBill);
+        billRecyclerView.setLayoutManager(layoutManager);
+        billRecyclerView.setAdapter(mBill);
 
         String priceText = String.valueOf(mBill.getTotalPrice()) + " руб";
         mTotalPrice.setText(priceText);
-
-
     }
 
 }

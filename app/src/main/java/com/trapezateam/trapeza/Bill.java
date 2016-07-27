@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.trapezateam.trapeza.models.Dish;
+import com.trapezateam.trapeza.database.Dish;
 
 import java.util.ArrayList;
 import java.util.List;

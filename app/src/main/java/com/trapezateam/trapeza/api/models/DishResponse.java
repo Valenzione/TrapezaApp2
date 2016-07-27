@@ -1,8 +1,7 @@
 package com.trapezateam.trapeza.api.models;
 
 import com.google.gson.annotations.SerializedName;
-import com.trapezateam.trapeza.models.Category;
-import com.trapezateam.trapeza.models.Dish;
+import com.trapezateam.trapeza.database.Dish;
 
 /**
  * Created by ilgiz on 6/22/16.
