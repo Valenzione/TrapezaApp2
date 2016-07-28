@@ -24,12 +24,15 @@
             android:src="@drawable/logo"
             android:layout_weight="0.20"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="30dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_above="@+id/category_name"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="30dp" />
 
         <EditText
             android:layout_width="86dp"
@@ -39,37 +42,29 @@
             android:id="@+id/category_name"
             android:layout_weight="0.08"
             android:layout_gravity="center_vertical"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
+            android:hint="Название категории"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_above="@+id/save_category_button"
+            android:layout_marginBottom="193dp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:hint="Название категории" />
+            android:layout_alignParentStart="true" />
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="Сохранить изменения"
-            android:id="@+id/button2"
             android:background="@color/primary_dark"
             android:textColor="@color/abc_primary_text_material_dark"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.2"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentRight="false"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/category_name"
-            android:layout_alignParentBottom="true" />
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/save_category_button" />
 
     </RelativeLayout>
-
-    <GridView
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:id="@+id/dish_selection_grid"
-        android:layout_weight="3.79"
-        android:layout_margin="5dp"
-        android:choiceMode="multipleChoice"/>
 
 </LinearLayout>

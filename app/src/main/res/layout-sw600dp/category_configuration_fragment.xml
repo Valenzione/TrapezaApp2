@@ -10,11 +10,10 @@
 
     <RelativeLayout
         android:orientation="vertical"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:weightSum="1"
-        android:background="@color/primary_light"
-        android:layout_weight="0.27">
+        android:background="@color/primary_light">
 
         <ImageView
             android:layout_width="256dp"
@@ -36,16 +35,17 @@
             android:id="@+id/category_name"
             android:layout_weight="0.13"
             android:layout_below="@+id/category_image"
-            android:layout_alignLeft="@+id/category_image"
-            android:layout_alignStart="@+id/category_image"
-            android:layout_alignRight="@+id/category_image"
-            android:layout_alignEnd="@+id/category_image" />
+            android:layout_marginTop="60dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginLeft="60dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true" />
 
         <Button
             android:layout_width="206dp"
             android:layout_height="wrap_content"
             android:text="Сохранить изменения"
-            android:id="@+id/button2"
+            android:id="@+id/save_category_button"
             android:background="@color/primary_dark"
             android:textColor="@color/abc_primary_text_material_dark"
             android:layout_alignParentBottom="true"
@@ -55,13 +55,5 @@
             android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
-
-    <GridView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/gridView"
-        android:layout_margin="5dp"
-        android:choiceMode="multipleChoice"
-        android:layout_weight="0.71" />
 
 </LinearLayout>

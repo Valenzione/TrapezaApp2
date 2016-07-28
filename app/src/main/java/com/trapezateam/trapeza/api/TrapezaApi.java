@@ -5,7 +5,9 @@ import android.media.Image;
 import com.trapezateam.trapeza.api.models.AuthenticationResponse;
 import com.trapezateam.trapeza.api.models.CategoryResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
+import com.trapezateam.trapeza.api.models.ModifiedCategoryResponse;
 import com.trapezateam.trapeza.api.models.ModifiedDishResponse;
+import com.trapezateam.trapeza.api.models.SavedCategoryResponse;
 import com.trapezateam.trapeza.api.models.SavedDishResponse;
 import com.trapezateam.trapeza.api.models.UserResponse;
 
@@ -57,4 +59,12 @@ public interface TrapezaApi {
     Call<List<ModifiedDishResponse>> modifyDish(@Query("name") String name,
                                                 @Query("photo") Image photo, @Query("description") String description,
                                                 @Query("dish") int dishId, @Query("father") int father, @Query("token") String token);
+
+    @POST("/requests?func=addCategory")
+    Call<List<SavedCategoryResponse>> addCategory(@Query("name") String name, @Query("token") String token);
+
+    @POST("/requests?func=modifyCategory")
+    Call<List<ModifiedCategoryResponse>> modifyCategory(@Query("id") int id, @Query("name") String name, @Query("token") String token);
+
+
 }

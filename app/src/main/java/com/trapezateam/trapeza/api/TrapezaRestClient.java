@@ -5,9 +5,12 @@ import android.media.Image;
 import com.trapezateam.trapeza.api.models.CategoryResponse;
 import com.trapezateam.trapeza.api.models.AuthenticationResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
+import com.trapezateam.trapeza.api.models.ModifiedCategoryResponse;
 import com.trapezateam.trapeza.api.models.ModifiedDishResponse;
+import com.trapezateam.trapeza.api.models.SavedCategoryResponse;
 import com.trapezateam.trapeza.api.models.SavedDishResponse;
 import com.trapezateam.trapeza.api.models.UserResponse;
+import com.trapezateam.trapeza.database.Category;
 import com.trapezateam.trapeza.database.Dish;
 
 import java.util.List;
@@ -79,4 +82,11 @@ public class TrapezaRestClient {
         getApiInstance().modifyDish(dish.getName(), null, dish.getDescription(), dish.getDishId(), dish.getCategoryId(), getToken()).enqueue(callback);
     }
 
+    public static void addCategory(Category category, Callback<List<SavedCategoryResponse>> callback) {
+        getApiInstance().addCategory(category.getName(),getToken()).enqueue(callback);
+    }
+
+    public static void modifyCategory(Category category, Callback<List<ModifiedCategoryResponse>> callback) {
+        getApiInstance().modifyCategory(category.getCategoryId(), category.getName(),getToken()).enqueue(callback);
+    }
 }

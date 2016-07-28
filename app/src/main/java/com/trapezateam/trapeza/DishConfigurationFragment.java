@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,11 +48,13 @@ public class DishConfigurationFragment extends Fragment {
     EditText mDishName, mDishDescription;
     EditText mDishPrice;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dish_configuration_fragment, container, false);
-        if (getArguments() != null) {
+
+        if (getArguments().containsKey("dish")) {
             Dish dish = (Dish) getArguments().get("dish");
             EditText mDishName = (EditText) view.findViewById(R.id.dish_name);
             mDishName.setText(dish.getName());
@@ -148,10 +151,11 @@ public class DishConfigurationFragment extends Fragment {
                 }
             });
         } else {
+            //TODO check for price update
             TrapezaRestClient.modifyDish(dish, new Callback<List<ModifiedDishResponse>>() {
                 @Override
                 public void onResponse(Call<List<ModifiedDishResponse>> call, Response<List<ModifiedDishResponse>> response) {
-                    if (response.body().get(0).getStatus() == 0) {
+                    if (response.body().get(0).getStatus() == 1) {
                         Log.d(TAG, "Dish Modified");
                     } else {
                         Log.d(TAG, "Dish Not Modified");
@@ -167,7 +171,7 @@ public class DishConfigurationFragment extends Fragment {
                     dialog.dismiss();
                 }
             });
-            //TODO check for price update
+
         }
         RealmClient.updateDatabase(TrapezaApplication.getCompany());
     }

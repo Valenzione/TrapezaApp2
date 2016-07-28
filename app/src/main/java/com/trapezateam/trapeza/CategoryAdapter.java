@@ -45,7 +45,7 @@ public class CategoryAdapter
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mMenuAdapter.onAddDishClicked();
+                    mMenuAdapter.onAddCategoryClicked();
                 }
             });
             return button;
@@ -56,10 +56,10 @@ public class CategoryAdapter
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mOnCategoryClickedListener != null) {
+                if (mOnCategoryClickedListener != null) {
                     mOnCategoryClickedListener.onCategoryClicked(getItem(i));
                 }
-                if(mMenuAdapter != null) {
+                if (mMenuAdapter != null) {
                     mMenuAdapter.onCategoryClicked(getItem(i));
                 }
             }
@@ -88,7 +88,7 @@ public class CategoryAdapter
     @Override
     public int getCount() {
         int count = super.getCount();
-        if(mShowAddButton) {
+        if (mShowAddButton) {
             count++; // add button
         }
         return count;

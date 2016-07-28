@@ -26,6 +26,7 @@ public class AdministratorActivity extends AppCompatActivity {
     private static final int ADD_DISH_IDENTIFIER = 3;
     private static final int ADD_CATEGORY_IDENTIFIER = 4;
     private static final int STAFF_IDENTIFIER = 5;
+    private static final String[] FRAGMENT_TAGS = {"MENU", "DISH", "STATISTICS", "ADD_DISH", "ADD_CATEGORY", "STAFF"};
 
     Drawer.Result drawerResult;
 
@@ -83,7 +84,7 @@ public class AdministratorActivity extends AppCompatActivity {
                 replacementFragment = new DishConfigurationFragment();
                 break;
             case STAFF_IDENTIFIER:
-                replacementFragment= new StaffManagementFragment();
+                replacementFragment = new StaffManagementFragment();
                 break;
             default:
                 replacementFragment = new MenuFragment();
@@ -91,7 +92,7 @@ public class AdministratorActivity extends AppCompatActivity {
         }
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.dummy_fragment, replacementFragment);
+        fragmentTransaction.replace(R.id.dummy_fragment, replacementFragment, FRAGMENT_TAGS[identifier]);
         fragmentTransaction.commit();
     }
 
@@ -104,6 +105,15 @@ public class AdministratorActivity extends AppCompatActivity {
             super.onBackPressed();
         }
 
+        //TODO при нажатии на кнопку Back переходить на меню, а потом на предидущее активити, убрать переход на окно авторизации если открыт фрагмент изменения
+        Fragment dishFragment = getFragmentManager().findFragmentByTag(FRAGMENT_TAGS[ADD_DISH_IDENTIFIER]);
+        if (dishFragment != null && dishFragment.isVisible()) {
+            startFragment(MENU_IDENTIFIER);
+        }
+        Fragment categoryFragment = getFragmentManager().findFragmentByTag(FRAGMENT_TAGS[ADD_CATEGORY_IDENTIFIER]);
+        if (categoryFragment != null && categoryFragment.isVisible()) {
+            startFragment(MENU_IDENTIFIER);
+        }
     }
 
 

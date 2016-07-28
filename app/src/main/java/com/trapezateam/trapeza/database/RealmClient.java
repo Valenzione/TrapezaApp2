@@ -69,7 +69,8 @@ public class RealmClient {
 
             @Override
             public void onFailure(Call<List<CategoryResponse>> call, Throwable t) {
-                Log.e("DatabaseUpdate", "Error on getting categories");
+                t.printStackTrace();
+                Log.e("DatabaseUpdate", "Error on getting categories"+t.toString());
             }
         });
         TrapezaRestClient.dishesList(new Callback<List<DishResponse>>() {
@@ -85,7 +86,8 @@ public class RealmClient {
 
             @Override
             public void onFailure(Call<List<DishResponse>> call, Throwable t) {
-                Log.e("DatabaseUpdate", "Error on getting dishes");
+                t.printStackTrace();
+                Log.e("DatabaseUpdate", "Error on getting dishes "+t.toString());
             }
         });
 
