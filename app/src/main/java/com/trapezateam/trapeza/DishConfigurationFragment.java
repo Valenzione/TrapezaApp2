@@ -38,24 +38,26 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DishConfigurationFragment extends Fragment {
+public class DishConfigurationFragment extends AdministratorActivityFragment {
 
     private static final String TAG = "DishesConfFragment";
     private static int IMAGE_PICKER_SELECT = 1;
+
+    public static final String KEY_DISH = "dish";
+    public static final String KEY_CATEGORY_ID = "father";
 
     ImageView mDishImage;
     Button mSaveDishButton;
     EditText mDishName, mDishDescription;
     EditText mDishPrice;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dish_configuration_fragment, container, false);
 
-        if (getArguments().containsKey("dish")) {
-            Dish dish = (Dish) getArguments().get("dish");
+        if (getArguments().containsKey(KEY_DISH)) {
+            Dish dish = (Dish) getArguments().get(KEY_DISH);
             EditText mDishName = (EditText) view.findViewById(R.id.dish_name);
             mDishName.setText(dish.getName());
             EditText mDishDescription = (EditText) view.findViewById(R.id.dish_description);
@@ -93,11 +95,11 @@ public class DishConfigurationFragment extends Fragment {
             public void onClick(View view) {
                 if (validate()) {
                     final Dish dish;
-                    if (getArguments().containsKey("dish")) {
-                        dish = (Dish) getArguments().get("dish");
+                    if (getArguments().containsKey(KEY_DISH)) {
+                        dish = (Dish) getArguments().get(KEY_DISH);
                     } else {
                         dish = new Dish();
-                        int father = (int) getArguments().get("father");
+                        int father = (int) getArguments().get(KEY_CATEGORY_ID);
                         dish.setCategoryId(father);
                     }
                     Realm realm = Realm.getDefaultInstance();
@@ -115,11 +117,7 @@ public class DishConfigurationFragment extends Fragment {
     }
 
     private void returnToMenu() {
-        Fragment replacementFragment = new MenuFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.dummy_fragment, replacementFragment);
-        fragmentTransaction.commit();
+        getAdministratorActivity().startMenuFragment(true);
     }
 
 
@@ -128,7 +126,7 @@ public class DishConfigurationFragment extends Fragment {
         dialog.setMessage("Saving dish");
         dialog.setCancelable(false);
         dialog.show();
-        if (getArguments().containsKey("father")) {
+        if (getArguments().containsKey(KEY_CATEGORY_ID)) {
             TrapezaRestClient.addDish(dish, new Callback<List<SavedDishResponse>>() {
                 @Override
                 public void onResponse(Call<List<SavedDishResponse>> call,

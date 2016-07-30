@@ -1,29 +1,24 @@
 package com.trapezateam.trapeza;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-import android.widget.Toast;
-
 
 import com.trapezateam.trapeza.database.Category;
 import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.RealmClient;
 
 
-public class MenuFragment extends Fragment {
+public class MenuFragment extends AdministratorActivityFragment {
 
     private static final String TAG = "MenuFragment";
 
 
     private GridView mMenu;
+    private MenuAdapter mMenuAdapter;
 
 
     @Override
@@ -46,52 +41,40 @@ public class MenuFragment extends Fragment {
         dialog.setCancelable(false);
         dialog.show();
 
-        DishAdapter da = new DishAdapter(getActivity(), RealmClient.getDishes());
-        da.setOnDishClickedListener(new OnDishClickedListener() {
+        DishAdapter dishAdapter = new DishAdapter(getActivity(), RealmClient.getDishes());
+        dishAdapter.setOnDishClickedListener(new OnDishClickedListener() {
             @Override
             public void onDishClicked(Dish dish) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("dish", dish);
-                DishConfigurationFragment configurationFragment = new DishConfigurationFragment();
-                configurationFragment.setArguments(bundle);
-                startFragment(configurationFragment, "ADD_DISH");
+                getAdministratorActivity().startDishConfigurationFragment(dish, null, false);
             }
         });
-        da.setShowAddButton(true);
-        CategoryAdapter ca = new CategoryAdapter(getActivity(), RealmClient.getCategories());
-        ca.setShowAddButton(true);
-        MenuAdapter menuAdapter = new MenuAdapter(da, ca);
-        menuAdapter.setOnAddCategoryClickListener(new OnAddCategoryClickListener() {
+        dishAdapter.setShowAddButton(true);
+        CategoryAdapter categoryAdapter = new CategoryAdapter(getActivity(), RealmClient.getCategories());
+        categoryAdapter.setShowAddButton(true);
+        mMenuAdapter = new MenuAdapter(dishAdapter, categoryAdapter);
+        mMenuAdapter.setOnAddCategoryClickListener(new OnAddCategoryClickListener() {
             @Override
             public void onAddCategoryClicked() {
-                startFragment(new CategoryConfigurationFragment(), "ADD_CATEGORY");
+                getAdministratorActivity().startCategoryConfigurationFragment(false);
             }
         });
-        menuAdapter.setOnAddDishClickListener(new OnAddDishClickListener() {
+        mMenuAdapter.setOnAddDishClickListener(new OnAddDishClickListener() {
             @Override
             public void onAddDishClicked(Category category) {
-                DishConfigurationFragment dishConfigurationFragment = new DishConfigurationFragment();
-                Bundle arguments = new Bundle();
-                arguments.putInt("father", category.getCategoryId());
-                dishConfigurationFragment.setArguments(arguments);
-                Log.d("MenuFragment", category.getName());
-                startFragment(dishConfigurationFragment, "ADD_DISH");
+                getAdministratorActivity().startDishConfigurationFragment(null, category.getCategoryId(), false);
             }
         });
-        mMenu.setAdapter(menuAdapter);
+        mMenu.setAdapter(mMenuAdapter);
         dialog.dismiss();
-
-
     }
 
-
-    private void startFragment(Fragment replacementFragment, String tag) {
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.dummy_fragment, replacementFragment, tag);
-        fragmentTransaction.commit();
+    /**
+     * Calls {@link MenuAdapter#goBack()}
+     *
+     * @return <code>true</code> if something happened
+     */
+    boolean onBackPressed() {
+        return mMenuAdapter.goBack();
     }
-
-
 }
 

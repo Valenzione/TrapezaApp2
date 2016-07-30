@@ -34,9 +34,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CategoryConfigurationFragment extends Fragment {
+public class CategoryConfigurationFragment extends AdministratorActivityFragment {
 
-    private static final String TAG = "CategoryConfigyrat";
+    private static final String TAG = "CategoryConfig";
     private static int IMAGE_PICKER_SELECT = 1;
 
     private ImageView mCategoryImage;

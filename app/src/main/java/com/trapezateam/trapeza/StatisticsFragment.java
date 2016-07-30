@@ -19,7 +19,7 @@ import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.RealmClient;
 
 
-public class StatisticsFragment extends Fragment {
+public class StatisticsFragment extends AdministratorActivityFragment {
 
     private static final String TAG = "StatisticsFragment";
 

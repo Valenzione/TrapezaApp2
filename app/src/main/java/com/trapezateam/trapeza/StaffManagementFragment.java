@@ -27,7 +27,7 @@ import io.realm.RealmResults;
 /**
  * Created by Yuriy on 7/27/2016.
  */
-public class StaffManagementFragment extends android.app.Fragment {
+public class StaffManagementFragment extends AdministratorActivityFragment {
 
     ListView mStaffList;
 

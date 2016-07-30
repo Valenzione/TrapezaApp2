@@ -113,4 +113,15 @@ public class MenuAdapter extends BaseAdapter {
     public void removeOnAddCategoryClickListener() {
         mOnAddCategoryClickListener = null;
     }
+
+    /**
+     * @return true if actually went back
+     */
+    public boolean goBack() {
+        if (mCurrentAdapter == mDishAdapter) {
+            switchToCategories();
+            return true;
+        }
+        return false;
+    }
 }

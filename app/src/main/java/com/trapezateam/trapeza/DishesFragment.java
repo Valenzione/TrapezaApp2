@@ -19,7 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DishesFragment extends Fragment {
+public class DishesFragment extends AdministratorActivityFragment {
     private static final String TAG = "DishesFragment";
     final int MENU_EDIT = 4;
     final int MENU_DELETE = 5;

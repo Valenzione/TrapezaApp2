@@ -4,8 +4,10 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -15,6 +17,7 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.trapezateam.trapeza.database.Dish;
 
 public class AdministratorActivity extends AppCompatActivity {
 
@@ -29,6 +32,8 @@ public class AdministratorActivity extends AppCompatActivity {
     private static final String[] FRAGMENT_TAGS = {"MENU", "DISH", "STATISTICS", "ADD_DISH", "ADD_CATEGORY", "STAFF"};
 
     Drawer.Result drawerResult;
+
+    AdministratorActivityFragment mCurrentFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,63 +62,107 @@ public class AdministratorActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id, IDrawerItem drawerItem) {
                         if (drawerItem != null) {
-                            startFragment(drawerItem.getIdentifier());
+                            startFragment(drawerItem.getIdentifier(), true);
                         }
                     }
                 }).build();
 
-        startFragment(MENU_IDENTIFIER);
+        startMenuFragment(true);
     }
 
-    private void startFragment(int identifier) {
-        Fragment replacementFragment;
+    private void startFragment(int identifier, boolean newBackStack) {
         switch (identifier) {
             case STATISTICS_IDENTIFIER:
-                replacementFragment = new StatisticsFragment();
+                startStatisticsFragment(newBackStack);
                 break;
             case DISH_IDENTIFIER:
-                replacementFragment = new DishesFragment();
+                startDishesFragment(newBackStack);
                 break;
             case MENU_IDENTIFIER:
-                replacementFragment = new MenuFragment();
+                startMenuFragment(newBackStack);
                 break;
             case ADD_CATEGORY_IDENTIFIER:
-                replacementFragment = new CategoryConfigurationFragment();
+                startCategoryConfigurationFragment(newBackStack);
                 break;
             case ADD_DISH_IDENTIFIER:
-                replacementFragment = new DishConfigurationFragment();
+                startDishConfigurationFragment(null, null, newBackStack);
                 break;
             case STAFF_IDENTIFIER:
-                replacementFragment = new StaffManagementFragment();
+                startStaffManagementFragment(newBackStack);
                 break;
             default:
-                replacementFragment = new MenuFragment();
+                startMenuFragment(newBackStack);
                 break;
         }
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.dummy_fragment, replacementFragment, FRAGMENT_TAGS[identifier]);
-        fragmentTransaction.commit();
+    }
+
+    public void startStatisticsFragment(boolean newBackStack) {
+        startFragment(new StatisticsFragment(), newBackStack);
+    }
+
+    public void startDishesFragment(boolean newBackStack) {
+        startFragment(new DishesFragment(), newBackStack);
+    }
+
+    public void startMenuFragment(boolean newBackStack) {
+        startFragment(new MenuFragment(), newBackStack);
+    }
+
+    public void startCategoryConfigurationFragment(boolean newBackStack) {
+        startFragment(new CategoryConfigurationFragment(), newBackStack);
+    }
+
+    public void startDishConfigurationFragment(@Nullable Dish dish, @Nullable Integer categoryId, boolean newBackStack) {
+        Bundle arguments = new Bundle();
+        if (dish != null) {
+            arguments.putParcelable(DishConfigurationFragment.KEY_DISH, dish);
+        }
+        if (categoryId != null) {
+            arguments.putInt(DishConfigurationFragment.KEY_CATEGORY_ID, categoryId);
+        }
+        AdministratorActivityFragment fragment = new DishConfigurationFragment();
+        fragment.setArguments(arguments);
+        startFragment(fragment, newBackStack);
+    }
+
+    public void startStaffManagementFragment(boolean newBackStack) {
+        startFragment(new StaffManagementFragment(), newBackStack);
+    }
+
+    private void startFragment(AdministratorActivityFragment fragment, boolean newBackStack) {
+        if (newBackStack) {
+            clearFragmentBackStack();
+        }
+        FragmentTransaction transaction = getFragmentManager().beginTransaction()
+                .replace(R.id.dummy_fragment, fragment);
+        if (!newBackStack) {
+            transaction.addToBackStack(null);
+        }
+        transaction.commit();
+        mCurrentFragment = fragment;
+    }
+
+    private void clearFragmentBackStack() {
+        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
 
     @Override
     public void onBackPressed() {
         if (drawerResult.isDrawerOpen()) {
+            Log.i(TAG, "Drawer is open. Closing it...");
             drawerResult.closeDrawer();
-        } else {
-            super.onBackPressed();
+            return;
         }
 
-        //TODO при нажатии на кнопку Back переходить на меню, а потом на предидущее активити, убрать переход на окно авторизации если открыт фрагмент изменения
-        Fragment dishFragment = getFragmentManager().findFragmentByTag(FRAGMENT_TAGS[ADD_DISH_IDENTIFIER]);
-        if (dishFragment != null && dishFragment.isVisible()) {
-            startFragment(MENU_IDENTIFIER);
+        if(mCurrentFragment.getClass() == MenuFragment.class) {
+            MenuFragment fragment = (MenuFragment) mCurrentFragment;
+            if(fragment.onBackPressed()) {
+                return;
+            }
         }
-        Fragment categoryFragment = getFragmentManager().findFragmentByTag(FRAGMENT_TAGS[ADD_CATEGORY_IDENTIFIER]);
-        if (categoryFragment != null && categoryFragment.isVisible()) {
-            startFragment(MENU_IDENTIFIER);
-        }
+
+        super.onBackPressed();
     }
 
 
