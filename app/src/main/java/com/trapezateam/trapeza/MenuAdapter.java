@@ -61,7 +61,7 @@ public class MenuAdapter extends BaseAdapter {
         return mCurrentAdapter.getView(i, view, viewGroup);
     }
 
-    void onDishClicked(Dish dish) {
+    void onDishClicked(Dish dish, View view) {
 
     }
 
@@ -100,9 +100,9 @@ public class MenuAdapter extends BaseAdapter {
         }
     }
 
-    public void onAddCategoryClicked() {
+    public void onAddCategoryClicked(View view) {
         if (mOnAddCategoryClickListener != null) {
-            mOnAddCategoryClickListener.onAddCategoryClicked();
+            mOnAddCategoryClickListener.onAddCategoryClicked(view);
         }
     }
 

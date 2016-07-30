@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.trapezateam.trapeza.database.Category;
 import com.trapezateam.trapeza.database.Dish;
@@ -42,19 +43,37 @@ public class MenuFragment extends AdministratorActivityFragment {
         dialog.show();
 
         DishAdapter dishAdapter = new DishAdapter(getActivity(), RealmClient.getDishes());
-        dishAdapter.setOnDishClickedListener(new OnDishClickedListener() {
+        dishAdapter.setDishEventsListener(new DishEventsListener() {
             @Override
-            public void onDishClicked(Dish dish) {
+            public void onDishClicked(Dish dish, View view) {
                 getAdministratorActivity().startDishConfigurationFragment(dish, null, false);
+            }
+
+            @Override
+            public boolean onDishLongClicked(Dish dish, View view) {
+                Toast.makeText(getActivity(), "Long click on " + dish, Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
         dishAdapter.setShowAddButton(true);
         CategoryAdapter categoryAdapter = new CategoryAdapter(getActivity(), RealmClient.getCategories());
         categoryAdapter.setShowAddButton(true);
+        categoryAdapter.setCategoryEventsListener(new CategoryEventsListener() {
+            @Override
+            public void onCategoryClicked(Category category, View view) {
+
+            }
+
+            @Override
+            public boolean onCategoryLongClicked(Category category, View view) {
+                Toast.makeText(getActivity(), "Long click on " + category, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
         mMenuAdapter = new MenuAdapter(dishAdapter, categoryAdapter);
         mMenuAdapter.setOnAddCategoryClickListener(new OnAddCategoryClickListener() {
             @Override
-            public void onAddCategoryClicked() {
+            public void onAddCategoryClicked(View view) {
                 getAdministratorActivity().startCategoryConfigurationFragment(false);
             }
         });

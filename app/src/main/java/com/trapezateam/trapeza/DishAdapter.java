@@ -18,7 +18,7 @@ import io.realm.RealmBaseAdapter;
 public class DishAdapter
         extends RealmBaseAdapter<Dish> {
 
-    private OnDishClickedListener mOnDishClickedListener;
+    private DishEventsListener mDishEventsListener;
     private MenuAdapter mMenuAdapter;
     private boolean mShowAddButton;
 
@@ -62,12 +62,21 @@ public class DishAdapter
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mOnDishClickedListener != null) {
-                    mOnDishClickedListener.onDishClicked(dish);
+                if (mDishEventsListener != null) {
+                    mDishEventsListener.onDishClicked(dish, view);
                 }
                 if (mMenuAdapter != null) {
-                    mMenuAdapter.onDishClicked(dish);
+                    mMenuAdapter.onDishClicked(dish, view);
                 }
+            }
+        });
+        button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (mDishEventsListener != null) {
+                    return mDishEventsListener.onDishLongClicked(dish, view);
+                }
+                return false;
             }
         });
 
@@ -75,12 +84,12 @@ public class DishAdapter
 
     }
 
-    public void setOnDishClickedListener(OnDishClickedListener listener) {
-        mOnDishClickedListener = listener;
+    public void setDishEventsListener(DishEventsListener listener) {
+        mDishEventsListener = listener;
     }
 
     public void removeOnDishClickedListener() {
-        mOnDishClickedListener = null;
+        mDishEventsListener = null;
     }
 
     public void setMenuAdapter(MenuAdapter menuAdapter) {

@@ -3,18 +3,14 @@ package com.trapezateam.trapeza;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.trapezateam.trapeza.database.Category;
-import com.trapezateam.trapeza.database.Dish;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
-import io.realm.RealmRecyclerViewAdapter;
 
 /**
  * Created by Yuriy on 7/22/2016.
@@ -23,7 +19,7 @@ public class CategoryAdapter
         extends RealmBaseAdapter<Category> {
 
 
-    private OnCategoryClickedListener mOnCategoryClickedListener;
+    private CategoryEventsListener mCategoryEventsListener;
     private MenuAdapter mMenuAdapter;
     private boolean mShowAddButton;
 
@@ -45,7 +41,7 @@ public class CategoryAdapter
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mMenuAdapter.onAddCategoryClicked();
+                    mMenuAdapter.onAddCategoryClicked(view);
                 }
             });
             return button;
@@ -56,12 +52,21 @@ public class CategoryAdapter
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mOnCategoryClickedListener != null) {
-                    mOnCategoryClickedListener.onCategoryClicked(getItem(i));
+                if (mCategoryEventsListener != null) {
+                    mCategoryEventsListener.onCategoryClicked(getItem(i), view);
                 }
                 if (mMenuAdapter != null) {
                     mMenuAdapter.onCategoryClicked(getItem(i));
                 }
+            }
+        });
+        button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if(mCategoryEventsListener != null) {
+                    return mCategoryEventsListener.onCategoryLongClicked(getItem(i), view);
+                }
+                return false;
             }
         });
 
@@ -69,12 +74,12 @@ public class CategoryAdapter
         return button;
     }
 
-    public void setOnCategoryClickedListener(OnCategoryClickedListener listener) {
-        mOnCategoryClickedListener = listener;
+    public void setCategoryEventsListener(CategoryEventsListener listener) {
+        mCategoryEventsListener = listener;
     }
 
     public void removeOnCategoryClickedListener() {
-        mOnCategoryClickedListener = null;
+        mCategoryEventsListener = null;
     }
 
     public void setMenuAdapter(MenuAdapter menuAdapter) {

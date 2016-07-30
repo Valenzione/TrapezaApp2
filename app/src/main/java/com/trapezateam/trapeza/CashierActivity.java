@@ -11,9 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.Toast;
 
-import com.trapezateam.trapeza.database.Category;
 import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.RealmClient;
 
@@ -108,10 +106,15 @@ public class CashierActivity extends Activity {
         dialog.show();
 
         DishAdapter da = new DishAdapter(this, RealmClient.getDishes());
-        da.setOnDishClickedListener(new OnDishClickedListener() {
+        da.setDishEventsListener(new DishEventsListener() {
             @Override
-            public void onDishClicked(Dish dish) {
+            public void onDishClicked(Dish dish, View view) {
                 mBill.addEntry(dish);
+            }
+
+            @Override
+            public boolean onDishLongClicked(Dish dish, View view) {
+                return false;
             }
         });
         final CategoryAdapter ca = new CategoryAdapter(this, RealmClient.getCategories());

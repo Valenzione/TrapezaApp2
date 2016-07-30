@@ -1,5 +1,7 @@
 package com.trapezateam.trapeza;
 
+import android.view.View;
+
 import com.trapezateam.trapeza.database.Category;
 
 /**
@@ -7,5 +9,9 @@ import com.trapezateam.trapeza.database.Category;
  */
 public interface OnAddCategoryClickListener {
 
-    void onAddCategoryClicked();
+    /**
+     *
+     * @param view the button which was clicked
+     */
+    void onAddCategoryClicked(View view);
 }
