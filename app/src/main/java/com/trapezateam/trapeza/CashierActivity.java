@@ -135,6 +135,7 @@ public class CashierActivity extends Activity {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable("bill", mBill);
+
     }
 
     @Override
@@ -146,6 +147,8 @@ public class CashierActivity extends Activity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         billRecyclerView.setLayoutManager(layoutManager);
         billRecyclerView.setAdapter(mBill);
+
+        registerBillObserver();
 
         String priceText = "Оплата " + String.valueOf(mBill.getTotalPrice()) + " руб";
         mPayButton.setText(priceText);
