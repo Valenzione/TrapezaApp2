@@ -21,7 +21,8 @@
         android:text="Keka"
         android:layout_gravity="center"
         android:background="@null"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:textColor="@color/abc_primary_text_material_light" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -32,7 +33,7 @@
         android:maxWidth="200dp"
         android:background="@null"
         android:layout_gravity="center"
-        />
+        android:textColor="@color/abc_primary_text_material_light" />
 
     <ImageButton
         android:id="@+id/bill_entry_decrement"
@@ -52,7 +53,8 @@
         android:gravity="right"
         android:inputType="number"
         android:layout_gravity="center"
-        android:ems="3"/>
+        android:ems="3"
+        android:textColor="@color/abc_primary_text_material_light" />
 
     <ImageButton
         android:id="@+id/bill_entry_increment"
@@ -74,5 +76,6 @@
         android:background="@null"
         android:layout_gravity="center"
         android:paddingRight="5dp"
-        android:ems="3"/>
+        android:ems="3"
+        android:textColor="@color/abc_primary_text_material_light" />
 </LinearLayout>
