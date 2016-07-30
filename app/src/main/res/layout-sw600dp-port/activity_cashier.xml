@@ -58,14 +58,6 @@
 
         </android.support.v7.widget.RecyclerView>
 
-        <TextView
-            android:id="@+id/totalPrice"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:gravity="fill_vertical|right"
-            android:text="Итоговая цена"
-            android:textColor="@color/primary_text" />
-
         <Button
             android:id="@+id/pay_button"
             android:layout_width="match_parent"

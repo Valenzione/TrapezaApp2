@@ -9,21 +9,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.GridView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.trapezateam.trapeza.api.models.CategoryResponse;
-import com.trapezateam.trapeza.api.models.DishResponse;
 import com.trapezateam.trapeza.database.Category;
 import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.RealmClient;
 
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import io.realm.RealmResults;
 
 
 public class CashierActivity extends Activity {
@@ -34,8 +29,8 @@ public class CashierActivity extends Activity {
 
     private GridView mMenu;
 
-    @Bind(R.id.totalPrice)
-    TextView mTotalPrice;
+    @Bind(R.id.pay_button)
+    Button mPayButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +59,8 @@ public class CashierActivity extends Activity {
             @Override
             public void onChanged() {
                 Log.i(TAG, "bill changed to " + mBill.getTotalPrice());
-                String priceText = String.valueOf(mBill.getTotalPrice()) + " руб";
-                mTotalPrice.setText(priceText);
+                String priceText = "Оплата " + String.valueOf(mBill.getTotalPrice()) + " руб";
+                mPayButton.setText(priceText);
 
             }
 
@@ -121,20 +116,7 @@ public class CashierActivity extends Activity {
         });
         final CategoryAdapter ca = new CategoryAdapter(this, RealmClient.getCategories());
         MenuAdapter ma = new MenuAdapter(da, ca);
-        ma.setOnAddDishClickListener(new OnAddDishClickListener() {
-            @Override
-            public void onAddDishClicked(Category category) {
-                Toast.makeText(CashierActivity.this, "I want to add a dish to " + category,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-        ma.setOnAddCategoryClickListener(new OnAddCategoryClickListener() {
-            @Override
-            public void onAddCategoryClicked() {
-                Toast.makeText(CashierActivity.this, "I want to add a category",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+
         mMenu.setAdapter(ma);
 
         dialog.dismiss();
@@ -145,13 +127,15 @@ public class CashierActivity extends Activity {
 
     public void onClickCancelOrder(View view) {
         mBill.clear();
-        mTotalPrice.setText(mBill.getTotalPrice() + " руб");
+        String priceText = "Оплата " + String.valueOf(mBill.getTotalPrice()) + " руб";
+        mPayButton.setText(priceText);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable("bill", mBill);
+
     }
 
     @Override
@@ -164,8 +148,10 @@ public class CashierActivity extends Activity {
         billRecyclerView.setLayoutManager(layoutManager);
         billRecyclerView.setAdapter(mBill);
 
-        String priceText = String.valueOf(mBill.getTotalPrice()) + " руб";
-        mTotalPrice.setText(priceText);
+        registerBillObserver();
+
+        String priceText = "Оплата " + String.valueOf(mBill.getTotalPrice()) + " руб";
+        mPayButton.setText(priceText);
     }
 
 }

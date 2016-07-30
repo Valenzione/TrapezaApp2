@@ -40,17 +40,6 @@
 
         </android.support.v7.widget.RecyclerView>
 
-        <TextView
-            android:id="@+id/totalPrice"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginRight="5dp"
-            android:gravity="fill_vertical|end"
-            android:text="@string/total_price"
-            android:textColor="@color/primary_text"
-            android:background="@android:color/transparent"
-            android:layout_marginLeft="5dp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
