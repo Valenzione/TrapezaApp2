@@ -33,17 +33,10 @@ public class RealmClient {
     static Realm realm = Realm.getDefaultInstance();
 
 
-    /**
-     * TODO add user update
-     */
     public static void updateDatabase(int companyId) {
-
-        //TODO ensure connection with server to prevent deleting all records and retrivieng nothing
 
         realm.beginTransaction();
         realm.deleteAll();
-        realm.commitTransaction();
-
         TrapezaRestClient.userList(companyId, new Callback<List<UserResponse>>() {
             @Override
             public void onResponse(Call<List<UserResponse>> call, Response<List<UserResponse>> response) {
@@ -55,6 +48,7 @@ public class RealmClient {
 
             @Override
             public void onFailure(Call<List<UserResponse>> call, Throwable t) {
+                realm.cancelTransaction();
                 Log.e("DatabaseUpdate", "Error on getting users");
             }
         });
@@ -90,7 +84,7 @@ public class RealmClient {
                 Log.e("DatabaseUpdate", "Error on getting dishes "+t.toString());
             }
         });
-
+        realm.commitTransaction();
         Log.d("DatabaseUpdate", "Database update completed " + (new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date())));
     }
 

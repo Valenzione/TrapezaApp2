@@ -1,6 +1,8 @@
 package com.trapezateam.trapeza;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,8 +52,23 @@ public class MenuFragment extends AdministratorActivityFragment {
             }
 
             @Override
-            public boolean onDishLongClicked(Dish dish, View view) {
-                Toast.makeText(getActivity(), "Long click on " + dish, Toast.LENGTH_SHORT).show();
+            public boolean onDishLongClicked(final Dish dish, View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setPositiveButton("Изменение", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        getAdministratorActivity().startDishConfigurationFragment(dish, null, false);
+                    }
+                });
+                builder.setNegativeButton("Удаление", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast t = Toast.makeText(getAdministratorActivity(), "Произошло удаление",Toast.LENGTH_SHORT);
+                        t.show();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
                 return true;
             }
         });
@@ -66,7 +83,23 @@ public class MenuFragment extends AdministratorActivityFragment {
 
             @Override
             public boolean onCategoryLongClicked(Category category, View view) {
-                Toast.makeText(getActivity(), "Long click on " + category, Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setPositiveButton("Изменение", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast t = Toast.makeText(getAdministratorActivity(), "Произошло изменение",Toast.LENGTH_SHORT);
+                        t.show();
+                    }
+                });
+                builder.setNegativeButton("Удаление", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast t = Toast.makeText(getAdministratorActivity(), "Произошло удаление",Toast.LENGTH_SHORT);
+                        t.show();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
                 return true;
             }
         });

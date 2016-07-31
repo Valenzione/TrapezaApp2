@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="173dp"
         android:id="@+id/staff_photo"
-        android:background="@drawable/abc_btn_check_to_on_mtrl_015"
+        android:background="@drawable/abc_btn_radio_to_on_mtrl_000"
         android:layout_weight="0.15" />
 
     <TextView
@@ -23,16 +23,23 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/staff_delete_button"
+        android:text="Изменение"
+        android:id="@+id/staff_update_button"
         android:layout_gravity="center"
         android:layout_weight="0" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
+        android:text="Изменение пароля"
         android:id="@+id/staff_modify_button"
         android:layout_weight="0"
+        android:layout_gravity="center" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Удаление"
+        android:id="@+id/staff_delete_button"
         android:layout_gravity="center" />
 </LinearLayout>

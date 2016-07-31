@@ -1,7 +1,9 @@
 package com.trapezateam.trapeza;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.RealmClient;
@@ -40,6 +43,28 @@ public class CashierActivity extends Activity {
 
 
         ButterKnife.bind(this);
+        mPayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(CashierActivity.this);
+                builder.setPositiveButton("Наличный", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast t = Toast.makeText(CashierActivity.this, "Произошла оплата", Toast.LENGTH_SHORT);
+                        t.show();
+                    }
+                });
+                builder.setNegativeButton("Безналичный расчет", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast t = Toast.makeText(CashierActivity.this, "Произошла оплата", Toast.LENGTH_SHORT);
+                        t.show();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        });
         mBill = new Bill();
 
         registerBillObserver();

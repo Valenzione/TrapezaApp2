@@ -122,7 +122,7 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
 
 
     void saveDish(final Dish dish) {
-        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        final ProgressDialog dialog = new ProgressDialog(getAdministratorActivity());
         dialog.setMessage("Saving dish");
         dialog.setCancelable(false);
         dialog.show();
@@ -132,11 +132,13 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
                 public void onResponse(Call<List<SavedDishResponse>> call,
                                        Response<List<SavedDishResponse>> response) {
                     if (response.body().get(0).getStatus() == 0) {
-                        Log.d(TAG, "Dish Does Not Added");
+                        Toast t = Toast.makeText(getAdministratorActivity(),"Произошла ошибка, блюдо не добавлено", Toast.LENGTH_SHORT);
+                        t.show();
                     } else {
-                        Log.d(TAG, "Dish Added: " + dish.toString());
+                        Toast t = Toast.makeText(getAdministratorActivity(),"Блюдо успешно добавлено", Toast.LENGTH_SHORT);
+                        t.show();
                     }
-                    dialog.dismiss();
+
                 }
 
                 @Override
@@ -144,7 +146,7 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
                     Toast.makeText(getActivity(), "Error saving dish " + t.getMessage(),
                             Toast.LENGTH_LONG).show();
                     t.printStackTrace();
-                    dialog.dismiss();
+
 
                 }
             });
@@ -154,24 +156,27 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
                 @Override
                 public void onResponse(Call<List<ModifiedDishResponse>> call, Response<List<ModifiedDishResponse>> response) {
                     if (response.body().get(0).getStatus() == 1) {
-                        Log.d(TAG, "Dish Modified");
+                        Toast t = Toast.makeText(getAdministratorActivity(),"Блюдо успешно обновлено", Toast.LENGTH_SHORT);
+                        t.show();
                     } else {
-                        Log.d(TAG, "Dish Not Modified");
+                        Toast t = Toast.makeText(getAdministratorActivity(),"Произошла ошибка, блюдо не обновлено", Toast.LENGTH_SHORT);
+                        t.show();
                     }
-                    dialog.dismiss();
+
                 }
 
                 @Override
                 public void onFailure(Call<List<ModifiedDishResponse>> call, Throwable t) {
-                    Toast.makeText(getActivity(), "Error updating dish " + t.getMessage(),
+                    Toast.makeText(getAdministratorActivity(), "Error updating dish " + t.getMessage(),
                             Toast.LENGTH_LONG).show();
                     t.printStackTrace();
-                    dialog.dismiss();
+
                 }
             });
 
         }
         RealmClient.updateDatabase(TrapezaApplication.getCompany());
+        dialog.dismiss();
     }
 
 
