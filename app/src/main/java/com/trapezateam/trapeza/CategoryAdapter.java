@@ -44,6 +44,7 @@ public class CategoryAdapter
                     mMenuAdapter.onAddCategoryClicked(view);
                 }
             });
+            button.setOnLongClickListener(null);
             return button;
         }
 

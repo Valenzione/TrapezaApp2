@@ -31,6 +31,4 @@ public class TrapezaApplication extends Application {
     public static int getCompany() {
         return mCompanyId;
     }
-
-    ;
 }

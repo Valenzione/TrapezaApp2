@@ -43,6 +43,7 @@ public class DishAdapter
                     }
                 }
             });
+            button.setOnLongClickListener(null);
             return button;
         }
 
@@ -54,6 +55,7 @@ public class DishAdapter
                     mMenuAdapter.onAddDishClicked();
                 }
             });
+            button.setOnLongClickListener(null);
             return button;
         }
 
