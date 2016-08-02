@@ -111,7 +111,5 @@ public class DishResponse {
         mFatherName = fatherName;
     }
 
-    public Dish getDish() {
-        return new Dish(this);
-    }
+
 }

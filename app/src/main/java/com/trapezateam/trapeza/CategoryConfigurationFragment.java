@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.ModifiedCategoryResponse;
 import com.trapezateam.trapeza.api.models.SavedCategoryResponse;
+import com.trapezateam.trapeza.api.models.StatusResponse;
 import com.trapezateam.trapeza.database.Category;
 import com.trapezateam.trapeza.database.RealmClient;
 
@@ -47,7 +48,6 @@ public class CategoryConfigurationFragment extends AdministratorActivityFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.category_configuration_fragment, container, false);
-
         return view;
     }
 
@@ -81,10 +81,15 @@ public class CategoryConfigurationFragment extends AdministratorActivityFragment
                 category.setName(String.valueOf(mCategoryName.getText()));
                 realm.commitTransaction();
                 saveCategory(category);
+                returnToMenu();
             }
         });
 
 
+    }
+
+    private void returnToMenu() {
+        getAdministratorActivity().startMenuFragment(true);
     }
 
     private void saveCategory(Category category) {
@@ -93,18 +98,20 @@ public class CategoryConfigurationFragment extends AdministratorActivityFragment
         dialog.setCancelable(false);
         dialog.show();
         if (getArguments() != null) {
-            TrapezaRestClient.modifyCategory(category, new Callback<List<ModifiedCategoryResponse>>() {
+            TrapezaRestClient.CategoryMethods.update(category, new Callback<List<StatusResponse>>() {
                 @Override
-                public void onResponse(Call<List<ModifiedCategoryResponse>> call, Response<List<ModifiedCategoryResponse>> response) {
-                    if (response.body().get(0).getStatus() == 1) {
-                        Log.d(TAG, "Category Modified");
+                public void onResponse(Call<List<StatusResponse>> call, Response<List<StatusResponse>> response) {
+                    Toast toast;
+                    if (response.body().get(0).isSucces()) {
+                        toast = Toast.makeText(getAdministratorActivity(), "Категория успешно изменена", Toast.LENGTH_SHORT);
                     } else {
-                        Log.d(TAG, "Category Not Modified");
+                        toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, категория не изменена", Toast.LENGTH_SHORT);
                     }
+                    toast.show();
                 }
 
                 @Override
-                public void onFailure(Call<List<ModifiedCategoryResponse>> call, Throwable t) {
+                public void onFailure(Call<List<StatusResponse>> call, Throwable t) {
                     Toast.makeText(getActivity(), "Error updating category " + t.getMessage(),
                             Toast.LENGTH_LONG).show();
                     t.printStackTrace();
@@ -112,25 +119,27 @@ public class CategoryConfigurationFragment extends AdministratorActivityFragment
                 }
             });
         } else {
-            TrapezaRestClient.addCategory(category, new Callback<List<SavedCategoryResponse>>() {
+            TrapezaRestClient.CategoryMethods.create(category, new Callback<List<StatusResponse>>() {
                 @Override
-                public void onResponse(Call<List<SavedCategoryResponse>> call, Response<List<SavedCategoryResponse>> response) {
-                    if (response.body().get(0).getStatus() == 1) {
-                        Log.d(TAG, "Category Saved");
+                public void onResponse(Call<List<StatusResponse>> call, Response<List<StatusResponse>> response) {
+                    Toast toast;
+                    if (response.body().get(0).isSucces()) {
+                        toast = Toast.makeText(getAdministratorActivity(), "Категория успешно добвлена", Toast.LENGTH_SHORT);
                     } else {
-                        Log.d(TAG, "Category Not Saved");
+                        toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, категория не добвлена", Toast.LENGTH_SHORT);
                     }
+                    toast.show();
                 }
 
                 @Override
-                public void onFailure(Call<List<SavedCategoryResponse>> call, Throwable t) {
+                public void onFailure(Call<List<StatusResponse>> call, Throwable t) {
                     Toast.makeText(getActivity(), "Error saving category " + t.getMessage(),
                             Toast.LENGTH_LONG).show();
                     t.printStackTrace();
                 }
             });
         }
-        RealmClient.updateDatabase(TrapezaApplication.getCompany());
+        RealmClient.updateCategory(category);
         dialog.dismiss();
     }
 

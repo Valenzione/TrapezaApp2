@@ -10,9 +10,24 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.trapezateam.trapeza.adapters.CategoryAdapter;
+import com.trapezateam.trapeza.adapters.CategoryEventsListener;
+import com.trapezateam.trapeza.adapters.DishAdapter;
+import com.trapezateam.trapeza.adapters.DishEventsListener;
+import com.trapezateam.trapeza.adapters.MenuAdapter;
+import com.trapezateam.trapeza.adapters.OnAddCategoryClickListener;
+import com.trapezateam.trapeza.adapters.OnAddDishClickListener;
+import com.trapezateam.trapeza.api.TrapezaRestClient;
+import com.trapezateam.trapeza.api.models.StatusResponse;
 import com.trapezateam.trapeza.database.Category;
 import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.RealmClient;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MenuFragment extends AdministratorActivityFragment {
@@ -63,8 +78,7 @@ public class MenuFragment extends AdministratorActivityFragment {
                 builder.setNegativeButton("Удаление", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast t = Toast.makeText(getAdministratorActivity(), "Произошло удаление",Toast.LENGTH_SHORT);
-                        t.show();
+                        deleteDish(dish);
                     }
                 });
                 AlertDialog alert = builder.create();
@@ -82,20 +96,19 @@ public class MenuFragment extends AdministratorActivityFragment {
             }
 
             @Override
-            public boolean onCategoryLongClicked(Category category, View view) {
+            public boolean onCategoryLongClicked(final Category category, View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setPositiveButton("Изменение", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast t = Toast.makeText(getAdministratorActivity(), "Произошло изменение",Toast.LENGTH_SHORT);
+                        Toast t = Toast.makeText(getAdministratorActivity(), "Произошло изменение", Toast.LENGTH_SHORT);
                         t.show();
                     }
                 });
                 builder.setNegativeButton("Удаление", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast t = Toast.makeText(getAdministratorActivity(), "Произошло удаление",Toast.LENGTH_SHORT);
-                        t.show();
+                        deleteCategory(category);
                     }
                 });
                 AlertDialog alert = builder.create();
@@ -119,6 +132,57 @@ public class MenuFragment extends AdministratorActivityFragment {
         mMenu.setAdapter(mMenuAdapter);
         dialog.dismiss();
     }
+
+    private void deleteCategory(Category category) {
+        TrapezaRestClient.CategoryMethods.delete(category, new Callback<List<StatusResponse>>() {
+            @Override
+            public void onResponse(Call<List<StatusResponse>> call, Response<List<StatusResponse>> response) {
+                Toast toast;
+                if (response.body().get(0).isSucces()) {
+                    toast = Toast.makeText(getAdministratorActivity(), "Категория успешно удалена", Toast.LENGTH_SHORT);
+                } else {
+                    toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, категория не удалена", Toast.LENGTH_SHORT);
+                }
+                toast.show();
+            }
+
+            @Override
+            public void onFailure(Call<List<StatusResponse>> call, Throwable throwable) {
+                Toast.makeText(getActivity(), "Error saving dish " + throwable.getMessage(),
+                        Toast.LENGTH_LONG).show();
+                throwable.printStackTrace();
+            }
+        });
+        RealmClient.deleteCategory(category);
+        mMenuAdapter.notifyDataSetChanged();
+    }
+
+
+    private void deleteDish(Dish dish) {
+        TrapezaRestClient.DishMethods.delete(dish, new Callback<List<StatusResponse>>() {
+            @Override
+            public void onResponse(Call<List<StatusResponse>> call, Response<List<StatusResponse>> response) {
+                Toast toast;
+                if (response.body().get(0).isSucces()) {
+                    toast = Toast.makeText(getAdministratorActivity(), "Блюдо успешно удалено", Toast.LENGTH_SHORT);
+                } else {
+                    toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, блюдо не удалено", Toast.LENGTH_SHORT);
+                }
+                toast.show();
+            }
+
+            @Override
+            public void onFailure(Call<List<StatusResponse>> call, Throwable t) {
+                Toast.makeText(getActivity(), "Error saving dish " + t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+                t.printStackTrace();
+
+            }
+        });
+        RealmClient.deleteDish(dish);
+        mMenuAdapter.notifyDataSetChanged();
+    }
+
 
     /**
      * Calls {@link MenuAdapter#goBack()}

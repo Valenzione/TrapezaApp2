@@ -1,5 +1,7 @@
 package com.trapezateam.trapeza.database;
 
+import com.trapezateam.trapeza.api.models.UserResponse;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -52,5 +54,12 @@ public class User extends RealmObject {
     public String toString() {
         String out = this.getName() + System.lineSeparator() + this.getEmail();
         return out;
+    }
+
+    public void setData(UserResponse userResponse) {
+        id=userResponse.getId();
+        name=userResponse.getSurname()+" "+getName();
+        email=userResponse.getEmail();
+        companyId=getCompanyId();
     }
 }
