@@ -7,18 +7,23 @@ import com.google.gson.annotations.SerializedName;
  */
 public class UserResponse {
 
-    @SerializedName("r_name")
+    @SerializedName("name")
     private String mName;
 
-    @SerializedName("r_surname")
+    @SerializedName("surname")
     private String mSurname;
 
-    @SerializedName("r_role")
+    @SerializedName("role")
     private int mRole;
 
-    @SerializedName("r_company")
+    @SerializedName("company")
     private int mCompany;
 
+    @SerializedName("id")
+    private int mId;
+
+    @SerializedName("email")
+    private String mEmail;
 
     public int getRole() {
         return mRole;
@@ -34,5 +39,13 @@ public class UserResponse {
 
     public String getName() {
         return mName;
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public String getEmail() {
+        return mEmail;
     }
 }

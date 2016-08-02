@@ -21,10 +21,6 @@ public class Category extends RealmObject {
 
     }
 
-    public Category(CategoryResponse response) {
-        categoryId = response.getId();
-        name = response.getName();
-    }
 
     public String getName() {
         return name;
@@ -65,5 +61,10 @@ public class Category extends RealmObject {
     @Override
     public String toString() {
         return name + System.lineSeparator().toString() + String.valueOf(dishes.size());
+    }
+
+    public void setData(CategoryResponse categoryResponse) {
+        categoryId = categoryResponse.getId();
+        name = categoryResponse.getName();
     }
 }

@@ -15,6 +15,10 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.trapezateam.trapeza.adapters.CategoryAdapter;
+import com.trapezateam.trapeza.adapters.DishAdapter;
+import com.trapezateam.trapeza.adapters.DishEventsListener;
+import com.trapezateam.trapeza.adapters.MenuAdapter;
 import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.RealmClient;
 
