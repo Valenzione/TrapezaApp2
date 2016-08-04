@@ -1,7 +1,6 @@
 package com.trapezateam.trapeza;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,12 +17,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.trapezateam.trapeza.api.TrapezaRestClient;
-import com.trapezateam.trapeza.api.models.ModifiedCategoryResponse;
-import com.trapezateam.trapeza.api.models.SavedCategoryResponse;
+import com.trapezateam.trapeza.api.models.SaveCompleteResponse;
 import com.trapezateam.trapeza.api.models.StatusResponse;
 import com.trapezateam.trapeza.database.Category;
 import com.trapezateam.trapeza.database.RealmClient;
@@ -31,6 +28,7 @@ import com.trapezateam.trapeza.database.RealmClient;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,11 +36,14 @@ import retrofit2.Response;
 public class CategoryConfigurationFragment extends AdministratorActivityFragment {
 
     private static final String TAG = "CategoryConfig";
+    public static final String KEY_CATEGORY = "category";
     private static int IMAGE_PICKER_SELECT = 1;
 
     private ImageView mCategoryImage;
     private EditText mCategoryName;
     private Button mSaveCategory;
+
+    private Category editCategory;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,6 +54,7 @@ public class CategoryConfigurationFragment extends AdministratorActivityFragment
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+
 
         mCategoryImage = (ImageView) view.findViewById(R.id.category_image);
         mCategoryImage.setOnClickListener(new View.OnClickListener() {
@@ -70,21 +72,17 @@ public class CategoryConfigurationFragment extends AdministratorActivityFragment
         mSaveCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Realm realm = Realm.getDefaultInstance();
-                realm.beginTransaction();
-                Category category;
-                if (getArguments() != null) {
-                    category = (Category) getArguments().get("category");
-                } else {
-                    category = new Category();
-                }
-                category.setName(String.valueOf(mCategoryName.getText()));
-                realm.commitTransaction();
-                saveCategory(category);
+                saveCategory(String.valueOf(mCategoryName.getText()));
                 returnToMenu();
             }
         });
 
+        if (getArguments() != null) {
+            if (getArguments().containsKey(KEY_CATEGORY)) {
+                editCategory = (Category) getArguments().get(KEY_CATEGORY);
+                mCategoryName.setText(editCategory.getName());
+            }
+        }
 
     }
 
@@ -92,17 +90,18 @@ public class CategoryConfigurationFragment extends AdministratorActivityFragment
         getAdministratorActivity().startMenuFragment(true);
     }
 
-    private void saveCategory(Category category) {
-        final ProgressDialog dialog = new ProgressDialog(getActivity());
-        dialog.setMessage("Saving category");
-        dialog.setCancelable(false);
-        dialog.show();
+    private void saveCategory(String categoryName) {
+        final Category category;
+        final Realm realm = Realm.getDefaultInstance();
         if (getArguments() != null) {
-            TrapezaRestClient.CategoryMethods.update(category, new Callback<List<StatusResponse>>() {
+            realm.beginTransaction();
+            category = (Category) getArguments().get(KEY_CATEGORY);
+            category.setName(categoryName);
+            TrapezaRestClient.CategoryMethods.update(category, new Callback<StatusResponse>() {
                 @Override
-                public void onResponse(Call<List<StatusResponse>> call, Response<List<StatusResponse>> response) {
+                public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
                     Toast toast;
-                    if (response.body().get(0).isSucces()) {
+                    if (response.body().isSuccess()) {
                         toast = Toast.makeText(getAdministratorActivity(), "Категория успешно изменена", Toast.LENGTH_SHORT);
                     } else {
                         toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, категория не изменена", Toast.LENGTH_SHORT);
@@ -111,43 +110,59 @@ public class CategoryConfigurationFragment extends AdministratorActivityFragment
                 }
 
                 @Override
-                public void onFailure(Call<List<StatusResponse>> call, Throwable t) {
-                    Toast.makeText(getActivity(), "Error updating category " + t.getMessage(),
+                public void onFailure(Call<StatusResponse> call, Throwable t) {
+                    Toast.makeText(getAdministratorActivity(), "Error updating category " + t.getMessage(),
                             Toast.LENGTH_LONG).show();
                     t.printStackTrace();
 
                 }
             });
+            realm.commitTransaction();
         } else {
-            TrapezaRestClient.CategoryMethods.create(category, new Callback<List<StatusResponse>>() {
+
+            realm.beginTransaction();
+            category = realm.createObject(Category.class);
+            category.setName(categoryName);
+            realm.commitTransaction();
+
+            TrapezaRestClient.CategoryMethods.create(category, new Callback<SaveCompleteResponse>() {
                 @Override
-                public void onResponse(Call<List<StatusResponse>> call, Response<List<StatusResponse>> response) {
+                public void onResponse(Call<SaveCompleteResponse> call, final Response<SaveCompleteResponse> response) {
                     Toast toast;
-                    if (response.body().get(0).isSucces()) {
-                        toast = Toast.makeText(getAdministratorActivity(), "Категория успешно добвлена", Toast.LENGTH_SHORT);
+                    if (response.body().isSuccess()) {
+                        toast = Toast.makeText(getAdministratorActivity(), "Категория успешно добавлена", Toast.LENGTH_SHORT);
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                RealmResults<Category> categories = realm.where(Category.class).equalTo("categoryId", 0).findAll();
+                                Log.d(TAG, String.valueOf(categories.size()));
+                                categories.first().setCategoryId(response.body().getId());
+                                Log.d(TAG, String.valueOf(categories.size()));
+                            }
+                        });
                     } else {
-                        toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, категория не добвлена", Toast.LENGTH_SHORT);
+                        toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, категория не добавлена", Toast.LENGTH_SHORT);
+
                     }
                     toast.show();
                 }
 
                 @Override
-                public void onFailure(Call<List<StatusResponse>> call, Throwable t) {
-                    Toast.makeText(getActivity(), "Error saving category " + t.getMessage(),
+                public void onFailure(Call<SaveCompleteResponse> call, Throwable t) {
+                    Toast.makeText(getAdministratorActivity(), "Error saving category " + t.getMessage(),
                             Toast.LENGTH_LONG).show();
                     t.printStackTrace();
                 }
             });
+
         }
-        RealmClient.updateCategory(category);
-        dialog.dismiss();
     }
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == IMAGE_PICKER_SELECT
                 && resultCode == Activity.RESULT_OK) {
-            String path = getPathFromCameraData(data, this.getActivity());
+            String path = getPathFromCameraData(data, this.getAdministratorActivity());
             Log.i("PICTURE", "Path: " + path);
             if (path != null) {
                 Bitmap src = BitmapFactory.decodeFile(path);

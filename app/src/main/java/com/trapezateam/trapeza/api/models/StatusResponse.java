@@ -6,10 +6,12 @@ import com.google.gson.annotations.SerializedName;
  * Created by Yuriy on 8/2/2016.
  */
 public class StatusResponse {
-    @SerializedName("status")
-    private boolean mStatus;
+    @SerializedName("success")
+    private boolean mSuccess;
 
-    public boolean isSucces() {
-        return mStatus;
+    public boolean isSuccess() {
+        return mSuccess;
     }
+
+
 }

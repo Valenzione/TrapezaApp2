@@ -1,9 +1,6 @@
 package com.trapezateam.trapeza;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,15 +22,16 @@ import android.widget.Toast;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.trapezateam.trapeza.api.TrapezaRestClient;
-import com.trapezateam.trapeza.api.models.ModifiedDishResponse;
-import com.trapezateam.trapeza.api.models.SavedDishResponse;
+import com.trapezateam.trapeza.api.models.SaveCompleteResponse;
 import com.trapezateam.trapeza.api.models.StatusResponse;
+import com.trapezateam.trapeza.database.Category;
 import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.RealmClient;
 
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -96,6 +93,8 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
             public void onClick(View view) {
                 if (validate()) {
                     final Dish dish;
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.beginTransaction();
                     if (getArguments().containsKey(KEY_DISH)) {
                         dish = (Dish) getArguments().get(KEY_DISH);
                     } else {
@@ -103,10 +102,8 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
                         int father = (int) getArguments().get(KEY_CATEGORY_ID);
                         dish.setCategoryId(father);
                     }
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.beginTransaction();
-                    dish.setDescription(String.valueOf(mDishDescription.getText()));
                     dish.setName(String.valueOf(mDishName.getText()));
+                    dish.setDescription(String.valueOf(mDishDescription.getText()));
                     dish.setPrice(Integer.parseInt(String.valueOf(mDishPrice.getText())));
                     realm.commitTransaction();
                     saveDish(dish);
@@ -128,12 +125,12 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
         dialog.setCancelable(false);
         dialog.show();
         if (getArguments().containsKey(KEY_CATEGORY_ID)) {
-            TrapezaRestClient.DishMethods.create(dish, new Callback<List<StatusResponse>>() {
+            TrapezaRestClient.DishMethods.create(dish, new Callback<SaveCompleteResponse>() {
                 @Override
-                public void onResponse(Call<List<StatusResponse>> call,
-                                       Response<List<StatusResponse>> response) {
+                public void onResponse(Call<SaveCompleteResponse> call,
+                                       Response<SaveCompleteResponse> response) {
                     Toast toast;
-                    if (response.body().get(0).isSucces()) {
+                    if (response.body().isSuccess()) {
                         toast = Toast.makeText(getAdministratorActivity(), "Блюдо успешно добавлено", Toast.LENGTH_SHORT);
                     } else {
                         toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, блюдо не добавлено", Toast.LENGTH_SHORT);
@@ -143,8 +140,8 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
                 }
 
                 @Override
-                public void onFailure(Call<List<StatusResponse>> call, Throwable t) {
-                    Toast.makeText(getActivity(), "Error saving dish " + t.getMessage(),
+                public void onFailure(Call<SaveCompleteResponse> call, Throwable t) {
+                    Toast.makeText(getAdministratorActivity(), "Error saving dish " + t.getMessage(),
                             Toast.LENGTH_LONG).show();
                     t.printStackTrace();
 
@@ -153,11 +150,11 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
             });
         } else {
             //TODO check for price update
-            TrapezaRestClient.DishMethods.update(dish, new Callback<List<StatusResponse>>() {
+            TrapezaRestClient.DishMethods.update(dish, new Callback<StatusResponse>() {
                 @Override
-                public void onResponse(Call<List<StatusResponse>> call, Response<List<StatusResponse>> response) {
+                public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
                     Toast toast;
-                    if (response.body().get(0).isSucces()) {
+                    if (response.body().isSuccess()) {
                         toast = Toast.makeText(getAdministratorActivity(), "Блюдо успешно изменено", Toast.LENGTH_SHORT);
                     } else {
                         toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, блюдо не изменено", Toast.LENGTH_SHORT);
@@ -167,7 +164,7 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
                 }
 
                 @Override
-                public void onFailure(Call<List<StatusResponse>> call, Throwable t) {
+                public void onFailure(Call<StatusResponse> call, Throwable t) {
                     Toast.makeText(getAdministratorActivity(), "Error updating dish " + t.getMessage(),
                             Toast.LENGTH_LONG).show();
                     t.printStackTrace();

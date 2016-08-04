@@ -175,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<UserResponse>> call, Throwable t) {
-                Log.i(TAG, "Oh shit " + t.getMessage());
+                Log.i(TAG, "Error Getting User Info. Error " + t.getMessage());
             }
 
         });

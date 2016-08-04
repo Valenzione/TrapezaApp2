@@ -25,6 +25,9 @@ import com.trapezateam.trapeza.database.RealmClient;
 
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -101,8 +104,7 @@ public class MenuFragment extends AdministratorActivityFragment {
                 builder.setPositiveButton("Изменение", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast t = Toast.makeText(getAdministratorActivity(), "Произошло изменение", Toast.LENGTH_SHORT);
-                        t.show();
+                        getAdministratorActivity().startCategoryConfigurationFragment(category, false);
                     }
                 });
                 builder.setNegativeButton("Удаление", new DialogInterface.OnClickListener() {
@@ -130,16 +132,19 @@ public class MenuFragment extends AdministratorActivityFragment {
             }
         });
         mMenu.setAdapter(mMenuAdapter);
+
         dialog.dismiss();
     }
 
-    private void deleteCategory(Category category) {
-        TrapezaRestClient.CategoryMethods.delete(category, new Callback<List<StatusResponse>>() {
+    private void deleteCategory(final Category category) {
+        TrapezaRestClient.CategoryMethods.delete(category, new Callback<StatusResponse>() {
             @Override
-            public void onResponse(Call<List<StatusResponse>> call, Response<List<StatusResponse>> response) {
+            public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
                 Toast toast;
-                if (response.body().get(0).isSucces()) {
+                if (response.body().isSuccess()) {
                     toast = Toast.makeText(getAdministratorActivity(), "Категория успешно удалена", Toast.LENGTH_SHORT);
+                    RealmClient.deleteCategory(category);
+                    mMenuAdapter.notifyDataSetChanged();
                 } else {
                     toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, категория не удалена", Toast.LENGTH_SHORT);
                 }
@@ -147,24 +152,25 @@ public class MenuFragment extends AdministratorActivityFragment {
             }
 
             @Override
-            public void onFailure(Call<List<StatusResponse>> call, Throwable throwable) {
-                Toast.makeText(getActivity(), "Error saving dish " + throwable.getMessage(),
+            public void onFailure(Call<StatusResponse> call, Throwable throwable) {
+                Toast.makeText(getActivity(), "Error deleting category " + throwable.getMessage(),
                         Toast.LENGTH_LONG).show();
                 throwable.printStackTrace();
             }
         });
-        RealmClient.deleteCategory(category);
-        mMenuAdapter.notifyDataSetChanged();
+
     }
 
 
-    private void deleteDish(Dish dish) {
-        TrapezaRestClient.DishMethods.delete(dish, new Callback<List<StatusResponse>>() {
+    private void deleteDish(final Dish dish) {
+        TrapezaRestClient.DishMethods.delete(dish, new Callback<StatusResponse>() {
             @Override
-            public void onResponse(Call<List<StatusResponse>> call, Response<List<StatusResponse>> response) {
+            public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
                 Toast toast;
-                if (response.body().get(0).isSucces()) {
+                if (response.body().isSuccess()) {
                     toast = Toast.makeText(getAdministratorActivity(), "Блюдо успешно удалено", Toast.LENGTH_SHORT);
+                    RealmClient.deleteDish(dish);
+                    mMenuAdapter.notifyDataSetChanged();
                 } else {
                     toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, блюдо не удалено", Toast.LENGTH_SHORT);
                 }
@@ -172,15 +178,14 @@ public class MenuFragment extends AdministratorActivityFragment {
             }
 
             @Override
-            public void onFailure(Call<List<StatusResponse>> call, Throwable t) {
-                Toast.makeText(getActivity(), "Error saving dish " + t.getMessage(),
+            public void onFailure(Call<StatusResponse> call, Throwable t) {
+                Toast.makeText(getActivity(), "Error deleting dish " + t.getMessage(),
                         Toast.LENGTH_LONG).show();
                 t.printStackTrace();
 
             }
         });
-        RealmClient.deleteDish(dish);
-        mMenuAdapter.notifyDataSetChanged();
+
     }
 
 
