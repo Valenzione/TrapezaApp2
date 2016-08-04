@@ -17,6 +17,7 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.trapezateam.trapeza.database.Category;
 import com.trapezateam.trapeza.database.Dish;
 
 public class AdministratorActivity extends AppCompatActivity {
@@ -156,4 +157,13 @@ public class AdministratorActivity extends AppCompatActivity {
     }
 
 
+    public void startCategoryConfigurationFragment(@Nullable Category category, boolean newBackStack) {
+        Bundle arguments = new Bundle();
+        if (category != null) {
+            arguments.putParcelable(CategoryConfigurationFragment.KEY_CATEGORY, category);
+        }
+        AdministratorActivityFragment fragment = new CategoryConfigurationFragment();
+        fragment.setArguments(arguments);
+        startFragment(fragment, newBackStack);
+    }
 }

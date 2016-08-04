@@ -11,6 +11,7 @@ import com.trapezateam.trapeza.CashierActivity;
 import com.trapezateam.trapeza.TrapezaApplication;
 import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.CategoryResponse;
+import com.trapezateam.trapeza.api.models.CompanyDataResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
 import com.trapezateam.trapeza.api.models.UserResponse;
 
@@ -36,66 +37,30 @@ public class RealmClient {
 
     public static void updateDatabase(int companyId) {
 
-        final ArrayList<UserResponse> userList = new ArrayList<>();
-        final ArrayList<CategoryResponse> categoriesList = new ArrayList<>();
-        final ArrayList<DishResponse> dishesList = new ArrayList<>();
 
-        TrapezaRestClient.UserMethods.getList(companyId, new Callback<List<UserResponse>>() {
-            @Override
-            public void onResponse(Call<List<UserResponse>> call, Response<List<UserResponse>> response) {
-                Log.d("DatabaseUpdate", String.valueOf(response.body().size()) + " users to update");
-                for (UserResponse u : response.body()) {
-                    userList.add(u);
-                }
-            }
 
+        TrapezaRestClient.CompanyMethods.getData(companyId, new Callback<CompanyDataResponse>() {
             @Override
-            public void onFailure(Call<List<UserResponse>> call, Throwable t) {
-                realm.cancelTransaction();
-                Log.e("DatabaseUpdate", "Error on getting users");
-            }
-        });
-        TrapezaRestClient.CategoryMethods.getList(new Callback<List<CategoryResponse>>() {
-            @Override
-            public void onResponse(Call<List<CategoryResponse>> call, Response<List<CategoryResponse>> response) {
-                Log.d("DatabaseUpdate", String.valueOf(response.body().size()) + " categories to update");
-                for (CategoryResponse c : response.body()) {
-                    categoriesList.add(c);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<CategoryResponse>> call, Throwable t) {
-                t.printStackTrace();
-                Log.e("DatabaseUpdate", "Error on getting categories" + t.toString());
-            }
-        });
-        TrapezaRestClient.DishMethods.getList(new Callback<List<DishResponse>>() {
-            @Override
-            public void onResponse(Call<List<DishResponse>> call, Response<List<DishResponse>> response) {
-
-                Log.d("DatabaseUpdate", String.valueOf(response.body().size()) + " dishes to update");
-                for (DishResponse dish : response.body()) {
-                    dishesList.add(dish);
-                }
-
+            public void onResponse(Call<CompanyDataResponse> call, Response<CompanyDataResponse> response) {
+                final CompanyDataResponse companyDataResponse = response.body();
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
+
                         realm.deleteAll();
 
-
-                        for (UserResponse userResponse : userList) {
+                        for (UserResponse userResponse : companyDataResponse.getUsers()) {
                             User user = realm.createObject(User.class);
                             user.setData(userResponse);
 
                         }
-                        for (CategoryResponse categoryResponse : categoriesList) {
+                        for (CategoryResponse categoryResponse : companyDataResponse.getCategories()) {
+                            Log.d(TAG,categoryResponse.toString());
                             Category category = realm.createObject(Category.class);
                             category.setData(categoryResponse);
 
                         }
-                        for (DishResponse dishResponse : dishesList) {
+                        for (DishResponse dishResponse : companyDataResponse.getDishes()) {
                             Dish dish = realm.createObject(Dish.class);
                             dish.setData(dishResponse);
                             RealmResults<Category> categories = realm.where(Category.class).equalTo("categoryId", dish.getCategoryId()).findAll();
@@ -105,16 +70,13 @@ public class RealmClient {
 
                     }
                 });
-
             }
 
             @Override
-            public void onFailure(Call<List<DishResponse>> call, Throwable t) {
-                t.printStackTrace();
-                Log.e("DatabaseUpdate", "Error on getting dishes " + t.toString());
+            public void onFailure(Call<CompanyDataResponse> call, Throwable t) {
+                Log.e(TAG,"ERROR UPDATING DATABASE");
             }
         });
-
 
     }
 
@@ -266,4 +228,6 @@ public class RealmClient {
         category.deleteFromRealm();
         realm.commitTransaction();
     }
+
+
 }
