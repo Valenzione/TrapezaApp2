@@ -37,7 +37,8 @@
             android:layout_alignStart="@+id/dish_image"
             android:layout_alignRight="@+id/dish_image"
             android:layout_alignEnd="@+id/dish_image"
-            android:hint="Название блюда" />
+            android:hint="Название блюда"
+            android:textColor="@color/abc_primary_text_material_light" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -49,7 +50,8 @@
             android:layout_marginTop="49dp"
             android:layout_alignRight="@+id/dish_image"
             android:layout_alignEnd="@+id/dish_image"
-            android:hint="Описание блюда" />
+            android:hint="Описание блюда"
+            android:textColor="@color/abc_primary_text_material_light" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -63,7 +65,8 @@
             android:layout_marginTop="58dp"
             android:layout_alignLeft="@+id/dish_description"
             android:layout_alignStart="@+id/dish_description"
-            android:hint="Цена блюда" />
+            android:hint="Цена блюда"
+            android:textColor="@color/abc_primary_text_material_light" />
 
     </RelativeLayout>
 

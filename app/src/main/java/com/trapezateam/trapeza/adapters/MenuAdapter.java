@@ -1,4 +1,4 @@
-package com.trapezateam.trapeza;
+package com.trapezateam.trapeza.adapters;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +60,7 @@ public class MenuAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         return mCurrentAdapter.getView(i, view, viewGroup);
     }
+
 
     void onDishClicked(Dish dish, View view) {
 

@@ -22,10 +22,7 @@ public class CategoryResponse {
         return mId;
     }
 
-    public Category getCategory() {
-        Category c = new Category(this);
-        return c;
-    }
+
 
     @Override
     public String toString() {

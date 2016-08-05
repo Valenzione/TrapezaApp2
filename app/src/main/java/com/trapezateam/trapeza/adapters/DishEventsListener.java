@@ -1,4 +1,4 @@
-package com.trapezateam.trapeza;
+package com.trapezateam.trapeza.adapters;
 
 import android.view.View;
 

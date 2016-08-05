@@ -1,4 +1,4 @@
-package com.trapezateam.trapeza;
+package com.trapezateam.trapeza.adapters;
 
 import com.trapezateam.trapeza.database.Category;
 

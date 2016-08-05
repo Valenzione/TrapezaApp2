@@ -1,4 +1,4 @@
-package com.trapezateam.trapeza;
+package com.trapezateam.trapeza.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.trapezateam.trapeza.database.Dish;
+import com.trapezateam.trapeza.R;
+import com.trapezateam.trapeza.SquareButton;
+import com.trapezateam.trapeza.database.Category;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
@@ -15,14 +17,16 @@ import io.realm.RealmBaseAdapter;
 /**
  * Created by Yuriy on 7/22/2016.
  */
-public class DishAdapter
-        extends RealmBaseAdapter<Dish> {
+public class CategoryAdapter
+        extends RealmBaseAdapter<Category> {
 
-    private DishEventsListener mDishEventsListener;
+
+    private CategoryEventsListener mCategoryEventsListener;
     private MenuAdapter mMenuAdapter;
     private boolean mShowAddButton;
 
-    public DishAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<Dish> data) {
+    public CategoryAdapter(@NonNull Context context,
+                           @Nullable OrderedRealmCollection<Category> data) {
         super(context, data);
     }
 
@@ -31,67 +35,54 @@ public class DishAdapter
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.square_button, viewGroup, false);
         }
-        SquareButton button = (SquareButton) view;
 
-        if (i == 0) {
-            button.setText("<---");
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mMenuAdapter != null) {
-                        mMenuAdapter.onBackClicked();
-                    }
-                }
-            });
-            button.setOnLongClickListener(null);
-            return button;
-        }
+        SquareButton button = (SquareButton) view;
 
         if (mShowAddButton && i == getCount() - 1) {
             button.setText("+");
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mMenuAdapter.onAddDishClicked();
+                    mMenuAdapter.onAddCategoryClicked(view);
                 }
             });
             button.setOnLongClickListener(null);
             return button;
         }
 
-        final Dish dish = getItem(i - 1);
-        button.setText(dish.getName() + System.lineSeparator() + dish.getPrice());
+
+        button.setText(getItem(i).getName());
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mDishEventsListener != null) {
-                    mDishEventsListener.onDishClicked(dish, view);
+                if (mCategoryEventsListener != null) {
+                    mCategoryEventsListener.onCategoryClicked(getItem(i), view);
                 }
                 if (mMenuAdapter != null) {
-                    mMenuAdapter.onDishClicked(dish, view);
+                    mMenuAdapter.onCategoryClicked(getItem(i));
                 }
             }
         });
         button.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                if (mDishEventsListener != null) {
-                    return mDishEventsListener.onDishLongClicked(dish, view);
+                if(mCategoryEventsListener != null) {
+                    return mCategoryEventsListener.onCategoryLongClicked(getItem(i), view);
                 }
                 return false;
             }
         });
 
+
         return button;
-
     }
 
-    public void setDishEventsListener(DishEventsListener listener) {
-        mDishEventsListener = listener;
+    public void setCategoryEventsListener(CategoryEventsListener listener) {
+        mCategoryEventsListener = listener;
     }
 
-    public void removeOnDishClickedListener() {
-        mDishEventsListener = null;
+    public void removeOnCategoryClickedListener() {
+        mCategoryEventsListener = null;
     }
 
     public void setMenuAdapter(MenuAdapter menuAdapter) {
@@ -105,7 +96,6 @@ public class DishAdapter
     @Override
     public int getCount() {
         int count = super.getCount();
-        count++; // back button
         if (mShowAddButton) {
             count++; // add button
         }

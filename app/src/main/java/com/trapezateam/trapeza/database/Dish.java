@@ -22,7 +22,7 @@ public class Dish extends RealmObject implements Parcelable {
     public Dish() {
     }
 
-    public Dish(DishResponse response) {
+    public void setData(DishResponse response) {
         dishId = response.getId();
         name = response.getName();
         description = response.getDescription();

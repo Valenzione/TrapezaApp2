@@ -166,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
         mLoginButton.setEnabled(true);
         TrapezaRestClient.setToken(token);
         Log.i(TAG, "Token " + token);
-        TrapezaRestClient.userInfo(userId, new Callback<List<UserResponse>>() {
+        TrapezaRestClient.UserMethods.get(userId, new Callback<List<UserResponse>>() {
             @Override
             public void onResponse(Call<List<UserResponse>> call, Response<List<UserResponse>> response) {
                 RealmClient.updateDatabase(response.body().get(0).getCompany());
@@ -175,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<UserResponse>> call, Throwable t) {
-                Log.i(TAG, "Oh shit " + t.getMessage());
+                Log.i(TAG, "Error Getting User Info. Error " + t.getMessage());
             }
 
         });
