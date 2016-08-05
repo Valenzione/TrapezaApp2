@@ -55,12 +55,7 @@ public class Category extends RealmObject implements Parcelable {
     }
 
     public void setCategoryId(int categoryId) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
         this.categoryId = categoryId;
-        realm.commitTransaction();
-        realm.insertOrUpdate(this);
-
     }
 
 
