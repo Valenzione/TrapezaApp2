@@ -108,7 +108,7 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
                     dish.setDescription(String.valueOf(mDishDescription.getText()));
                     dish.setPrice(Integer.parseInt(String.valueOf(mDishPrice.getText())));
                     realm.commitTransaction();
-                    RealmClient.updateDish(dish);
+                    RealmClient.updateModel(dish);
                     saveDish(dish);
                     uploadImage(((BitmapDrawable) mDishImage.getDrawable()).getBitmap());
                     Log.d(TAG, "Dish saved");

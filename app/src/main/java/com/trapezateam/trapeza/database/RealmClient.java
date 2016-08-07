@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmObject;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -122,12 +123,8 @@ public class RealmClient {
         return realm.where(User.class).findAll();
     }
 
-    public static void updateDish(Dish dish) {
-        realm.insertOrUpdate(dish);
-    }
-
-    public static void updateCategory(Category category) {
-        realm.insertOrUpdate(category);
+    public static void updateModel(RealmObject ro) {
+        realm.insertOrUpdate(ro);
     }
 
     public static void deleteDish(Dish dish) {

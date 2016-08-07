@@ -46,16 +46,7 @@ public class StaffManagementFragment extends AdministratorActivityFragment {
     }
 
     private void requestStaff() {
-        final ProgressDialog dialog = new ProgressDialog(getActivity());
-        dialog.setMessage("Getting staff list");
-        dialog.setCancelable(false);
-        dialog.show();
-
         mStaffList.setAdapter(new StaffAdapter(getActivity(), RealmClient.getUsers()));
-
-        dialog.dismiss();
-
-
     }
 
     private class StaffAdapter extends RealmBaseAdapter implements ListAdapter {
@@ -65,7 +56,7 @@ public class StaffManagementFragment extends AdministratorActivityFragment {
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
+        public View getView(final int i, View view, ViewGroup viewGroup) {
             ViewHolder viewHolder;
 
             if (view == null) {
@@ -82,6 +73,12 @@ public class StaffManagementFragment extends AdministratorActivityFragment {
 
             User user = (User) getItem(i);
             viewHolder.mStaffName.setText(user.toString());
+            viewHolder.mModifyStaff.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    getAdministratorActivity().startUserConfigurationFragment((User) adapterData.get(i),true);
+                }
+            });
 
             return view;
         }

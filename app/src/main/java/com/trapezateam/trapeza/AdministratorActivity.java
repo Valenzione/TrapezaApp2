@@ -19,6 +19,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.trapezateam.trapeza.database.Category;
 import com.trapezateam.trapeza.database.Dish;
+import com.trapezateam.trapeza.database.User;
 
 public class AdministratorActivity extends AppCompatActivity {
 
@@ -31,7 +32,7 @@ public class AdministratorActivity extends AppCompatActivity {
     private static final int STAFF_IDENTIFIER = 4;
     private static final int ADD_USER_IDENTIFIER = 5;
 
-    private static final String[] FRAGMENT_TAGS = {"MENU", "STATISTICS", "ADD_DISH", "ADD_CATEGORY", "STAFF","ADD_USER"};
+    private static final String[] FRAGMENT_TAGS = {"MENU", "STATISTICS", "ADD_DISH", "ADD_CATEGORY", "STAFF", "ADD_USER"};
 
 
     Drawer.Result drawerResult;
@@ -83,6 +84,9 @@ public class AdministratorActivity extends AppCompatActivity {
             case STAFF_IDENTIFIER:
                 startStaffManagementFragment(newBackStack);
                 break;
+            case ADD_USER_IDENTIFIER:
+                startUserCreationFragment(newBackStack);
+                break;
             default:
                 startMenuFragment(newBackStack);
                 break;
@@ -92,7 +96,6 @@ public class AdministratorActivity extends AppCompatActivity {
     public void startStatisticsFragment(boolean newBackStack) {
         startFragment(new StatisticsFragment(), newBackStack);
     }
-
 
 
     public void startMenuFragment(boolean newBackStack) {
@@ -120,6 +123,19 @@ public class AdministratorActivity extends AppCompatActivity {
         startFragment(new StaffManagementFragment(), newBackStack);
     }
 
+    public void startUserCreationFragment(boolean newBackStack) {
+        startFragment(new UserCreationFragment(), newBackStack);
+    }
+
+    public void startUserConfigurationFragment(User user, boolean newBackStack) {
+        UserConfigurationFragment fragment = new UserConfigurationFragment();
+        Bundle arguments = new Bundle();
+        arguments.putParcelable(UserConfigurationFragment.KEY_USER, user);
+        fragment.setArguments(arguments);
+        startFragment(fragment, newBackStack);
+    }
+
+
     private void startFragment(AdministratorActivityFragment fragment, boolean newBackStack) {
         if (newBackStack) {
             clearFragmentBackStack();
@@ -146,9 +162,9 @@ public class AdministratorActivity extends AppCompatActivity {
             return;
         }
 
-        if(mCurrentFragment.getClass() == MenuFragment.class) {
+        if (mCurrentFragment.getClass() == MenuFragment.class) {
             MenuFragment fragment = (MenuFragment) mCurrentFragment;
-            if(fragment.onBackPressed()) {
+            if (fragment.onBackPressed()) {
                 return;
             }
         }

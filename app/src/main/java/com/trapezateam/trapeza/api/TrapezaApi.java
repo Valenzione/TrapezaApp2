@@ -33,8 +33,6 @@ public interface TrapezaApi {
                                               @Query("password") String password);
 
 
-
-
     @GET("/requests?func=dishesList")
     Call<List<DishResponse>> dishesList(@Query("company") int id, @Query("token") String token);
 
@@ -42,18 +40,33 @@ public interface TrapezaApi {
     Call<List<CategoryResponse>> categoriesList(@Query("company") int id, @Query("token") String token);
 
     @GET("/requests?func=userList")
-    Call<List<UserResponse>> usersList( @Query("company") int companyId,@Query("token") String token);
+    Call<List<UserResponse>> usersList(@Query("company") int companyId, @Query("token") String token);
 
     @GET("/requests?func=company.getData")
     Call<CompanyDataResponse> getData(@Query("company") int companyId, @Query("token") String token);
-
-
 
 
     @GET("/requests?func=user.get")
     Call<List<UserResponse>> userInfo(@Query("token") String token, @Query("userId") int id);
 
 
+    @POST("/requests?func=user.create")
+    Call<SaveCompleteResponse> addUser(@Query("login") String login, @Query("pass") String pass,
+                                       @Query("phone") String phone, @Query("name") String name,
+                                       @Query("surname") String surname, @Query("companyId") int companyId,
+                                       @Query("role") int role, @Query("token") String token);
+
+    @POST("/requests?func=user.update")
+    Call<StatusResponse> modifyUser(@Query("phone") String phone, @Query("name") String name,
+                                    @Query("surname") String surname, @Query("role") int role,
+                                    @Query("token") String token);
+
+    @POST("/requests?func=user.delete")
+    Call<StatusResponse> deleteUser(@Query("userId") int userId, @Query("token") String token);
+
+    @POST("/requests?func=user.resetPass")
+    Call<StatusResponse> resetPassword(@Query("oldPass") String oldPass, @Query("newPass") String newPass,
+                                       @Query("userId") int userID, @Query("token") String token);
 
 
     @GET("/requests?func=dish.get")
@@ -61,17 +74,16 @@ public interface TrapezaApi {
 
     @POST("/requests?func=dish.create")
     Call<SaveCompleteResponse> addDish(@Query("name") String name,
-                                          @Query("photo") Image photo, @Query("description") String description,
-                                          @Query("price") int price, @Query("categoryId") int father, @Query("token") String token, @Query("companyId") int companyId);
+                                       @Query("photo") Image photo, @Query("description") String description,
+                                       @Query("price") int price, @Query("categoryId") int father, @Query("token") String token, @Query("companyId") int companyId);
 
     @POST("/requests?func=dish.update")
     Call<StatusResponse> modifyDish(@Query("name") String name,
-                                                @Query("photo") Image photo, @Query("description") String description,
-                                                @Query("dish") int dishId, @Query("price") int price, @Query("token") String token);
+                                    @Query("photo") Image photo, @Query("description") String description,
+                                    @Query("dish") int dishId, @Query("price") int price, @Query("token") String token);
 
     @POST("/requests?func=dish.delete")
     Call<StatusResponse> deleteDish(@Query("dishId") int dishId, @Query("token") String token);
-
 
 
     @POST("/requests?func=category.create")

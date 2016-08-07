@@ -13,6 +13,7 @@ import com.trapezateam.trapeza.api.models.UploadResponse;
 import com.trapezateam.trapeza.api.models.UserResponse;
 import com.trapezateam.trapeza.database.Category;
 import com.trapezateam.trapeza.database.Dish;
+import com.trapezateam.trapeza.database.User;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -83,6 +84,15 @@ public class TrapezaRestClient {
     public static class UserMethods {
         public static void get(int id, Callback<List<UserResponse>> callback) {
             getApiInstance().userInfo(getToken(), id).enqueue(callback);
+        }
+
+        public static void create(User user, String password, Callback<SaveCompleteResponse> callback) {
+            getApiInstance().addUser(user.getEmail(),password,user.getPhone(),user.getFullName(),
+                    user.getSurname(),TrapezaApplication.getCompany(),user.getRole(),TrapezaRestClient.getToken()).enqueue(callback);
+        }
+
+        public static void update(User user, Callback<StatusResponse> callback) {
+            getApiInstance().modifyUser(user.getPhone(),user.getFullName(),user.getSurname(),user.getRole(),TrapezaRestClient.getToken()).enqueue(callback);
         }
 
         @Deprecated
