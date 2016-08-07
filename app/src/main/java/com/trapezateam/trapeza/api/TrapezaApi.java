@@ -67,7 +67,7 @@ public interface TrapezaApi {
     @POST("/requests?func=dish.update")
     Call<StatusResponse> modifyDish(@Query("name") String name,
                                                 @Query("photo") Image photo, @Query("description") String description,
-                                                @Query("dishId") int dishId, @Query("categoryId") int categoryId, @Query("token") String token);
+                                                @Query("dish") int dishId, @Query("price") int price, @Query("token") String token);
 
     @POST("/requests?func=dish.delete")
     Call<StatusResponse> deleteDish(@Query("dishId") int dishId, @Query("token") String token);

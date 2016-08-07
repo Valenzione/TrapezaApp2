@@ -1,5 +1,7 @@
 package com.trapezateam.trapeza.api;
 
+import android.graphics.Bitmap;
+
 import com.trapezateam.trapeza.TrapezaApplication;
 import com.trapezateam.trapeza.api.models.CategoryResponse;
 import com.trapezateam.trapeza.api.models.AuthenticationResponse;
@@ -7,12 +9,16 @@ import com.trapezateam.trapeza.api.models.CompanyDataResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
 import com.trapezateam.trapeza.api.models.SaveCompleteResponse;
 import com.trapezateam.trapeza.api.models.StatusResponse;
+import com.trapezateam.trapeza.api.models.UploadResponse;
 import com.trapezateam.trapeza.api.models.UserResponse;
 import com.trapezateam.trapeza.database.Category;
 import com.trapezateam.trapeza.database.Dish;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -24,7 +30,10 @@ public class TrapezaRestClient {
 
     private static final String BASE_URL = "http://10.90.104.141:8080";
 
+    private static final String BASE_UPLOAD_URL = "http://10.90.104.141:3000";
+
     private static TrapezaApi mApi;
+    private static TrapezaUploadApi mUploadApi;
 
     private static String mToken;
 
@@ -38,6 +47,18 @@ public class TrapezaRestClient {
         }
         return mApi;
     }
+
+    private static TrapezaUploadApi getUploadApiInstance() {
+        if (mUploadApi == null) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_UPLOAD_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            mUploadApi = retrofit.create(TrapezaUploadApi.class);
+        }
+        return mUploadApi;
+    }
+
 
     public static void setToken(String token) {
         mToken = token;
@@ -79,7 +100,7 @@ public class TrapezaRestClient {
         }
 
         public static void update(Dish dish, Callback<StatusResponse> callback) {
-            getApiInstance().modifyDish(dish.getName(), null, dish.getDescription(), dish.getDishId(), dish.getCategoryId(), getToken()).enqueue(callback);
+            getApiInstance().modifyDish(dish.getName(), null, dish.getDescription(), dish.getDishId(), dish.getPrice(), getToken()).enqueue(callback);
         }
 
         public static void delete(Dish dish, Callback<StatusResponse> callback) {
@@ -111,6 +132,15 @@ public class TrapezaRestClient {
     public static class CompanyMethods {
         public static void getData(int companyId, Callback<CompanyDataResponse> callback) {
             getApiInstance().getData(companyId, getToken()).enqueue(callback);
+        }
+    }
+
+    public static class UploadMethods {
+        public static void uploadImage(Bitmap bitmap, Callback<UploadResponse> callback) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), byteArrayOutputStream.toByteArray());
+            getUploadApiInstance().upload(requestBody).enqueue(callback);
         }
     }
 }

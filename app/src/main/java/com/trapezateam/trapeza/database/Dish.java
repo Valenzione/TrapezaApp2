@@ -31,8 +31,6 @@ public class Dish extends RealmObject implements Parcelable {
     }
 
 
-  
-
     protected Dish(Parcel in) {
         dishId = in.readInt();
         name = in.readString();
@@ -95,7 +93,7 @@ public class Dish extends RealmObject implements Parcelable {
 
     @Override
     public String toString() {
-        return name + " " + description;
+        return name + " " + description + " in category " + categoryId + " with id " + dishId;
     }
 
     @Override

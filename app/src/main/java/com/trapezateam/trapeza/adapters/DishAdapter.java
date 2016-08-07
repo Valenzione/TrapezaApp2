@@ -62,7 +62,10 @@ public class DishAdapter
         }
 
         final Dish dish = getItem(i - 1);
-        button.setText(dish.getName() + System.lineSeparator() + dish.getPrice());
+
+        String dishText = dish.getName() + System.lineSeparator() + dish.getDescription() + System.lineSeparator() + dish.getPrice();
+        button.setText(dishText);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

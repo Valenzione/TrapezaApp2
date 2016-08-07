@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,6 +25,7 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.SaveCompleteResponse;
 import com.trapezateam.trapeza.api.models.StatusResponse;
+import com.trapezateam.trapeza.api.models.UploadResponse;
 import com.trapezateam.trapeza.database.Category;
 import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.RealmClient;
@@ -106,10 +108,30 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
                     dish.setDescription(String.valueOf(mDishDescription.getText()));
                     dish.setPrice(Integer.parseInt(String.valueOf(mDishPrice.getText())));
                     realm.commitTransaction();
+                    RealmClient.updateDish(dish);
                     saveDish(dish);
+                    uploadImage(((BitmapDrawable) mDishImage.getDrawable()).getBitmap());
                     Log.d(TAG, "Dish saved");
                     returnToMenu();
                 }
+            }
+        });
+    }
+
+    private void uploadImage(Bitmap bitmap) {
+        TrapezaRestClient.UploadMethods.uploadImage(bitmap, new Callback<UploadResponse>() {
+            @Override
+            public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
+                Log.d(TAG, "Succes " + response.isSuccessful());
+                if (response.body().isSuccess()) {
+                    Log.d(TAG, response.body().getPath());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UploadResponse> call, Throwable t) {
+                t.printStackTrace();
+                Log.d(TAG, t.toString());
             }
         });
     }
@@ -120,18 +142,26 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
 
 
     void saveDish(final Dish dish) {
-        final ProgressDialog dialog = new ProgressDialog(getAdministratorActivity());
-        dialog.setMessage("Saving dish");
-        dialog.setCancelable(false);
-        dialog.show();
         if (getArguments().containsKey(KEY_CATEGORY_ID)) {
             TrapezaRestClient.DishMethods.create(dish, new Callback<SaveCompleteResponse>() {
                 @Override
                 public void onResponse(Call<SaveCompleteResponse> call,
-                                       Response<SaveCompleteResponse> response) {
+                                       final Response<SaveCompleteResponse> response) {
                     Toast toast;
                     if (response.body().isSuccess()) {
                         toast = Toast.makeText(getAdministratorActivity(), "Блюдо успешно добавлено", Toast.LENGTH_SHORT);
+                        Realm.getDefaultInstance().executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                RealmResults<Dish> dishes = realm.where(Dish.class).equalTo("dishId", 0).findAll();
+
+                                if (dishes.size() != 0) {
+                                    Log.d(TAG, "Everything is ok. oldId is " + dishes.first().getDishId() + ". New id is " + response.body().getId());
+                                    Log.d(TAG, "Category id set is " + dishes.first().getCategoryId());
+                                    dishes.first().setDishId(response.body().getId());
+                                }
+                            }
+                        });
                     } else {
                         toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, блюдо не добавлено", Toast.LENGTH_SHORT);
                     }
@@ -173,8 +203,7 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
             });
 
         }
-        RealmClient.updateDish(dish);
-        dialog.dismiss();
+
     }
 
 
