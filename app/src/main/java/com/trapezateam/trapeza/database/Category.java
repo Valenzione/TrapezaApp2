@@ -19,10 +19,10 @@ public class Category extends RealmObject implements Parcelable {
     @PrimaryKey
     private int categoryId;
     private String name;
+    private String photoURL;
 
 
     public Category() {
-
     }
 
 
@@ -74,6 +74,7 @@ public class Category extends RealmObject implements Parcelable {
     public void setData(CategoryResponse categoryResponse) {
         categoryId = categoryResponse.getId();
         name = categoryResponse.getName();
+        photoURL = categoryResponse.getPhotoURL();
     }
 
     @Override
@@ -85,5 +86,13 @@ public class Category extends RealmObject implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(categoryId);
         parcel.writeString(name);
+    }
+
+    public String getPhotoURL() {
+        return photoURL;
+    }
+
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
     }
 }

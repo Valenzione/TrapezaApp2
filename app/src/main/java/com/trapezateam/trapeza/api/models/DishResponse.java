@@ -1,7 +1,6 @@
 package com.trapezateam.trapeza.api.models;
 
 import com.google.gson.annotations.SerializedName;
-import com.trapezateam.trapeza.database.Dish;
 
 /**
  * Created by ilgiz on 6/22/16.
@@ -21,7 +20,7 @@ public class DishResponse {
     private String mPrice;
 
     @SerializedName("r_photo")
-    private String mPhoto;
+    private String mPhotoURL;
 
     @SerializedName("r_description")
     private String mDescription;
@@ -65,12 +64,12 @@ public class DishResponse {
         mPrice = price;
     }
 
-    public String getPhoto() {
-        return mPhoto;
+    public String getPhotoURL() {
+        return mPhotoURL;
     }
 
-    public void setPhoto(String photo) {
-        mPhoto = photo;
+    public void setPhotoURL(String photo) {
+        mPhotoURL = photo;
     }
 
     public String getDescription() {
@@ -100,7 +99,7 @@ public class DishResponse {
                 ", mPriceId=" + mPriceId +
                 ", mName='" + mName + '\'' +
                 ", mPrice='" + mPrice + '\'' +
-                ", mPhoto='" + mPhoto + '\'' +
+                ", mPhotoURL='" + mPhotoURL + '\'' +
                 ", mDescription='" + mDescription + '\'' +
                 ", mFather=" + mFather +
                 ", mFatherName='" + mFatherName + '\'' +

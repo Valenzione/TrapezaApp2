@@ -14,6 +14,7 @@ public class User extends RealmObject {
     private String name;
     private String email;
     private int companyId;
+    private String photoURL;
 
 
     public String getEmail() {
@@ -61,5 +62,13 @@ public class User extends RealmObject {
         name=userResponse.getSurname()+" "+getName();
         email=userResponse.getEmail();
         companyId=getCompanyId();
+    }
+
+    public String getPhotoURL() {
+        return photoURL;
+    }
+
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
     }
 }

@@ -14,6 +14,9 @@ public class CategoryResponse {
     @SerializedName("r_name")
     private String mName;
 
+    @SerializedName("r_photo")
+    private String mPhotoURL;
+
     public String getName() {
         return mName;
     }
@@ -30,5 +33,9 @@ public class CategoryResponse {
                 "mId=" + mId +
                 ", mName='" + mName + '\'' +
                 '}';
+    }
+
+    public String getPhotoURL() {
+        return mPhotoURL;
     }
 }
