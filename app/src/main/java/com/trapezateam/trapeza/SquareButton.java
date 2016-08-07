@@ -1,16 +1,21 @@
 package com.trapezateam.trapeza;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.Button;
 
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.trapezateam.trapeza.database.Category;
 import com.trapezateam.trapeza.database.Dish;
 
 /**
  * Created by Yuriy on 7/5/2016.
  */
-public class SquareButton extends Button {
+public class SquareButton extends Button implements Target {
 
     public SquareButton(Context context) {
         super(context);
@@ -40,5 +45,22 @@ public class SquareButton extends Button {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         setMeasuredDimension(getMeasuredWidth(), getMeasuredWidth());
+    }
+
+    @Override
+    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+        Drawable drawable = new BitmapDrawable(getContext().getResources(), bitmap);
+//        setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+        setBackground(drawable);
+    }
+
+    @Override
+    public void onBitmapFailed(Drawable errorDrawable) {
+
+    }
+
+    @Override
+    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
     }
 }

@@ -11,5 +11,7 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
 
+    <color name="photo_color_filter">#AA000000</color>
+
 </resources>
 

@@ -3,8 +3,8 @@ package com.trapezateam.trapeza.api;
 import android.graphics.Bitmap;
 
 import com.trapezateam.trapeza.TrapezaApplication;
-import com.trapezateam.trapeza.api.models.CategoryResponse;
 import com.trapezateam.trapeza.api.models.AuthenticationResponse;
+import com.trapezateam.trapeza.api.models.CategoryResponse;
 import com.trapezateam.trapeza.api.models.CompanyDataResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
 import com.trapezateam.trapeza.api.models.SaveCompleteResponse;
@@ -28,47 +28,51 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class TrapezaRestClient {
 
-    private static final String BASE_URL = "http://10.90.104.141:8080";
+    private static final String SERVER_ADDRESS = "http://10.90.104.141";
+    private static final String API_BASE_URL = SERVER_ADDRESS + ":8080";
+    private static final String FILES_BASE_URL = SERVER_ADDRESS + ":3000";
 
-    private static final String BASE_UPLOAD_URL = "http://10.90.104.141:3000";
+    public static final String getFileUrl(String fileName) {
+        return FILES_BASE_URL + "/" + fileName;
+    }
 
-    private static TrapezaApi mApi;
-    private static TrapezaUploadApi mUploadApi;
+    private static TrapezaApi sApi;
+    private static TrapezaUploadApi sUploadApi;
 
-    private static String mToken;
+    private static String sToken;
 
     private static TrapezaApi getApiInstance() {
-        if (mApi == null) {
+        if (sApi == null) {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(API_BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-            mApi = retrofit.create(TrapezaApi.class);
+            sApi = retrofit.create(TrapezaApi.class);
         }
-        return mApi;
+        return sApi;
     }
 
     private static TrapezaUploadApi getUploadApiInstance() {
-        if (mUploadApi == null) {
+        if (sUploadApi == null) {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_UPLOAD_URL)
+                    .baseUrl(FILES_BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-            mUploadApi = retrofit.create(TrapezaUploadApi.class);
+            sUploadApi = retrofit.create(TrapezaUploadApi.class);
         }
-        return mUploadApi;
+        return sUploadApi;
     }
 
 
     public static void setToken(String token) {
-        mToken = token;
+        sToken = token;
     }
 
     public static String getToken() {
-        if (mToken == null) {
+        if (sToken == null) {
             throw new IllegalStateException("Token is not set yet");
         }
-        return mToken;
+        return sToken;
     }
 
     public static void authenticate(String login, String password,

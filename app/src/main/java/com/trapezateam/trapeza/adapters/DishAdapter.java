@@ -1,24 +1,31 @@
 package com.trapezateam.trapeza.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.picasso.Picasso;
 import com.trapezateam.trapeza.R;
 import com.trapezateam.trapeza.SquareButton;
+import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.database.Dish;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
+import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
 
 /**
  * Created by Yuriy on 7/22/2016.
  */
 public class DishAdapter
         extends RealmBaseAdapter<Dish> {
+
+    private static final String TAG = "DishAdapter";
 
     private DishEventsListener mDishEventsListener;
     private MenuAdapter mMenuAdapter;
@@ -30,9 +37,10 @@ public class DishAdapter
 
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
-        if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.square_button, viewGroup, false);
-        }
+        // too hard to code properly
+//        if (view == null) {
+        view = LayoutInflater.from(context).inflate(R.layout.square_button, viewGroup, false);
+//        }
         SquareButton button = (SquareButton) view;
 
         if (i == 0) {
@@ -45,7 +53,6 @@ public class DishAdapter
                     }
                 }
             });
-            button.setOnLongClickListener(null);
             return button;
         }
 
@@ -57,7 +64,6 @@ public class DishAdapter
                     mMenuAdapter.onAddDishClicked();
                 }
             });
-            button.setOnLongClickListener(null);
             return button;
         }
 
@@ -86,6 +92,17 @@ public class DishAdapter
                 return false;
             }
         });
+
+
+        Log.i(TAG, "Dish pic: " + dish.getPhotoUrl());
+
+        Picasso.with(context).setLoggingEnabled(true);
+        Picasso.with(context).load(TrapezaRestClient.getFileUrl(dish.getPhotoUrl()))
+                .resize(300, 300)
+                .centerCrop()
+                .transform(new ColorFilterTransformation(0x99000000))
+                .into(button);
+        Picasso.with(context).setLoggingEnabled(false);
 
         return button;
 

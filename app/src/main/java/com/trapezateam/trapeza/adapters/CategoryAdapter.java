@@ -32,9 +32,10 @@ public class CategoryAdapter
 
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
-        if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.square_button, viewGroup, false);
-        }
+//        Too hard to code properly :-)
+//        if (view == null) {
+        view = LayoutInflater.from(context).inflate(R.layout.square_button, viewGroup, false);
+//        }
 
         SquareButton button = (SquareButton) view;
 
@@ -66,7 +67,7 @@ public class CategoryAdapter
         button.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                if(mCategoryEventsListener != null) {
+                if (mCategoryEventsListener != null) {
                     return mCategoryEventsListener.onCategoryLongClicked(getItem(i), view);
                 }
                 return false;
