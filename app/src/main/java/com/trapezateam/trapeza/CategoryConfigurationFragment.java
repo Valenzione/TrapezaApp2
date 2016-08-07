@@ -135,9 +135,7 @@ public class CategoryConfigurationFragment extends AdministratorActivityFragment
                             @Override
                             public void execute(Realm realm) {
                                 RealmResults<Category> categories = realm.where(Category.class).equalTo("categoryId", 0).findAll();
-                                Log.d(TAG, String.valueOf(categories.size()));
                                 categories.first().setCategoryId(response.body().getId());
-                                Log.d(TAG, String.valueOf(categories.size()));
                             }
                         });
                     } else {

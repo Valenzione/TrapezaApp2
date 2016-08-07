@@ -36,9 +36,6 @@ public class RealmClient {
 
 
     public static void updateDatabase(int companyId) {
-
-
-
         TrapezaRestClient.CompanyMethods.getData(companyId, new Callback<CompanyDataResponse>() {
             @Override
             public void onResponse(Call<CompanyDataResponse> call, Response<CompanyDataResponse> response) {
@@ -46,38 +43,28 @@ public class RealmClient {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-
                         realm.deleteAll();
-
                         for (UserResponse userResponse : companyDataResponse.getUsers()) {
                             User user = realm.createObject(User.class);
                             user.setData(userResponse);
-
                         }
                         for (CategoryResponse categoryResponse : companyDataResponse.getCategories()) {
-                            Log.d(TAG,categoryResponse.toString());
                             Category category = realm.createObject(Category.class);
                             category.setData(categoryResponse);
-
                         }
                         for (DishResponse dishResponse : companyDataResponse.getDishes()) {
                             Dish dish = realm.createObject(Dish.class);
                             dish.setData(dishResponse);
-                            RealmResults<Category> categories = realm.where(Category.class).equalTo("categoryId", dish.getCategoryId()).findAll();
-                            Category c = realm.copyFromRealm(categories.first());
-                            c.addToDishes(dish);
                         }
-
                     }
                 });
             }
 
             @Override
             public void onFailure(Call<CompanyDataResponse> call, Throwable t) {
-                Log.e(TAG,"ERROR UPDATING DATABASE");
+                Log.e(TAG, "ERROR UPDATING DATABASE");
             }
         });
-
     }
 
     private static void addUser(UserResponse userResponse) {
@@ -98,98 +85,29 @@ public class RealmClient {
     private static void addDish(DishResponse d) {
         realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-
         Dish dish = realm.createObject(Dish.class);
         dish.setName(d.getName());
         dish.setDescription(d.getDescription());
         dish.setCategoryId(d.getFather());
         dish.setPrice(Integer.parseInt(d.getPrice()));
         dish.setDishId(d.getId());
-
-        RealmResults<Category> categories = realm.where(Category.class).equalTo("categoryId", d.getFather()).findAll();
-        Category c = realm.copyFromRealm(categories.first());
-        c.addToDishes(dish);
-
         realm.commitTransaction();
     }
 
     private static void addCategory(CategoryResponse c) {
         realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-
-        final Category category = realm.createObject(Category.class);
+        Category category = realm.createObject(Category.class);
         category.setName(c.getName());
         category.setCategoryId(c.getId());
-
         realm.commitTransaction();
     }
 
-    public static void addUser(String name, String email, int companyId) {
-        realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        final User u = realm.createObject(User.class);
-
-        u.setName(name);
-        u.setEmail(email);
-
-        int nextUserId = realm.where(User.class).findAll().size() + 1;
-        u.setId(nextUserId);
-        u.setCompanyId(companyId);
 
 
-        RealmResults<Company> companies = realm.where(Company.class).equalTo("companyId", companyId).findAll();
-        Company c = realm.copyFromRealm(companies.first());
-        c.addToStuff(u);
-
-        realm.commitTransaction();
-    }
-
-    public static void createCompany(String name) {
-        realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        final Company company = realm.createObject(Company.class);
-
-        company.setCompanyName(name);
-
-        int nextUserId = realm.where(Company.class).findAll().size() + 1;
-        company.setCompanyId(nextUserId);
-
-        realm.commitTransaction();
-    }
-
-    public static void addDish(String name, String description, int price, int categoryId) {
-        realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-
-        Dish dish = realm.createObject(Dish.class);
-        dish.setName(name);
-        dish.setDescription(description);
-        dish.setCategoryId(categoryId);
-        dish.setPrice(price);
-        int nextDishId = realm.where(Dish.class).findAll().size() + 1;
-        dish.setDishId(nextDishId);
-
-        RealmResults<Category> categories = realm.where(Category.class).equalTo("categoryId", categoryId).findAll();
-        categories.load();
-        Category c = realm.copyFromRealm(categories.first());
-        c.addToDishes(dish);
 
 
-        realm.commitTransaction();
-    }
 
-    public static void addCategory(String name) {
-        realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        final Category category = realm.createObject(Category.class);
-
-        category.setName(name);
-
-        int nextCategoryId = realm.where(Category.class).findAll().size() + 1;
-        category.setCategoryId(nextCategoryId);
-
-        realm.commitTransaction();
-    }
 
     public static RealmResults<Dish> getDishes() {
         realm = Realm.getDefaultInstance();
@@ -203,11 +121,6 @@ public class RealmClient {
     public static RealmResults<User> getUsers() {
         return realm.where(User.class).findAll();
     }
-
-    public static RealmResults<Company> getCompanies() {
-        return realm.where(Company.class).findAll();
-    }
-
 
     public static void updateDish(Dish dish) {
         realm.insertOrUpdate(dish);

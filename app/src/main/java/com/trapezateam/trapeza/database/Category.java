@@ -8,16 +8,17 @@ import com.trapezateam.trapeza.api.models.CategoryResponse;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.RealmResults;
 import io.realm.annotations.PrimaryKey;
 
 /**
+ * Created ${PACKAGE_NAME} in Trapeza
  * Created by Yuriy on 7/5/2016.
  */
 public class Category extends RealmObject implements Parcelable {
     @PrimaryKey
     private int categoryId;
     private String name;
-    private RealmList<Dish> dishes = new RealmList<>();
 
 
     public Category() {
@@ -55,36 +56,19 @@ public class Category extends RealmObject implements Parcelable {
     }
 
     public void setCategoryId(int categoryId) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
         this.categoryId = categoryId;
-        realm.commitTransaction();
-        realm.insertOrUpdate(this);
-
     }
 
 
-    public RealmList<Dish> getDishes() {
+    public RealmResults<Dish> getDishes() {
+        RealmResults<Dish> dishes = Realm.getDefaultInstance().where(Dish.class).equalTo("categoryId", this.categoryId).findAll();
         return dishes;
     }
 
-    public void setDishes(RealmList<Dish> dishes) {
-        this.dishes = dishes;
-        Realm realm = Realm.getDefaultInstance();
-        realm.insertOrUpdate(this);
-    }
-
-    public void addToDishes(Dish dish) {
-        if (!dishes.contains(dish)) {
-            dishes.add(dish);
-            Realm realm = Realm.getDefaultInstance();
-            realm.insertOrUpdate(this);
-        }
-    }
 
     @Override
     public String toString() {
-        return name + System.lineSeparator().toString() + String.valueOf(dishes.size());
+        return name + System.lineSeparator() + String.valueOf(getDishes().size());
     }
 
     public void setData(CategoryResponse categoryResponse) {
