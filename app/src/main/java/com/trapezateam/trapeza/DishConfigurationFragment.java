@@ -122,9 +122,9 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
         TrapezaRestClient.UploadMethods.uploadImage(bitmap, new Callback<UploadResponse>() {
             @Override
             public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
-                Log.d(TAG, "Succes " + response.isSuccessful());
+                Log.d(TAG, "Succes " + response.body().isSuccess());
                 if (response.body().isSuccess()) {
-                    Log.d(TAG, response.body().getPath());
+                    Log.d(TAG, "Path is: " + response.body().getPath() + " " + response.body().isSuccess());
                 }
             }
 

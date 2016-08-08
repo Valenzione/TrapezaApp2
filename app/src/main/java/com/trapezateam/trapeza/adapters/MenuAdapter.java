@@ -79,9 +79,6 @@ public class MenuAdapter extends BaseAdapter {
     }
 
     void switchToDishesOfCategory(Category category) {
-        Log.d("DishConfig", "Dishes in category " + category.getName() + " " + category.getDishes().size());
-        Log.d("DishCOnfig","Last dish is "+ RealmClient.getDishes().sort("dishId", Sort.DESCENDING).first().getName());
-        Log.d("DishCOnfig","First dish is "+ RealmClient.getDishes().sort("dishId", Sort.ASCENDING).first().getName());
         mDishAdapter.updateData(category.getDishes());
         mCurrentAdapter = mDishAdapter;
         notifyDataSetChanged();
