@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -44,6 +45,7 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
     Button mSaveDishButton;
     EditText mDishName, mDishDescription;
     EditText mDishPrice;
+    Drawable oldDrawable;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +60,8 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
             mDishDescription.setText(dish.getDescription());
             EditText mDishPrice = (EditText) view.findViewById(R.id.dish_price);
             mDishPrice.setText(String.valueOf(dish.getPrice()));
+            ImageView imageView = (ImageView) view.findViewById(R.id.dish_image);
+            oldDrawable = imageView.getDrawable();
         }
 
         return view;
@@ -101,10 +105,10 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
                     dish.setName(String.valueOf(mDishName.getText()));
                     dish.setDescription(String.valueOf(mDishDescription.getText()));
                     dish.setPrice(Integer.parseInt(String.valueOf(mDishPrice.getText())));
+                    if(oldDrawable != mDishImage.getDrawable()){dish.setPhotoUrl(uploadImage(((BitmapDrawable) mDishImage.getDrawable()).getBitmap()));}
                     realm.commitTransaction();
                     RealmClient.updateModel(dish);
                     saveDish(dish);
-                    uploadImage(((BitmapDrawable) mDishImage.getDrawable()).getBitmap());
                     Log.d(TAG, "Dish saved");
                     returnToMenu();
                 }
@@ -112,7 +116,8 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
         });
     }
 
-    private void uploadImage(Bitmap bitmap) {
+    private String uploadImage(Bitmap bitmap) {
+        final String[] photoUrl = new String[1];
         TrapezaRestClient.UploadMethods.uploadImage(bitmap, new Callback<UploadResponse>() {
             @Override
             public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
@@ -120,15 +125,20 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
                 Log.d(TAG, "Succes " + response.body().isSuccess());
                 if (response.body().isSuccess()) {
                     Log.d(TAG, "Path is: " + response.body().getPath() + " " + response.body().isSuccess());
+                    photoUrl[0] = response.body().getPath();
+                } else {
+                    photoUrl[0] = "succes:false";
                 }
             }
 
             @Override
             public void onFailure(Call<UploadResponse> call, Throwable t) {
+                photoUrl[0] = "error";
                 t.printStackTrace();
                 Log.d(TAG, t.toString());
             }
         });
+        return photoUrl[0];
     }
 
     private void returnToMenu() {
@@ -214,7 +224,7 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
             int width = src.getWidth();
             int height = src.getHeight();
             Bitmap ans;
-            if(width > height) {
+            if (width > height) {
                 int crop = (width - height) / 2;
                 ans = Bitmap.createBitmap(src, crop, 0, height, height);
             } else {

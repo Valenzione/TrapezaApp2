@@ -1,57 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical"
+    tools:context=".CategoryConfigurationFragment"
+    android:background="@color/primary_light">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/primary_light"
-        android:orientation="vertical"
-        tools:context=".CategoryConfigurationFragment">
+        android:id="@+id/category_image"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:src="@drawable/logo"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="285dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/category_name"
+        android:layout_alignStart="@+id/category_name"
+        android:layout_above="@+id/category_name" />
 
-        <ImageView
-            android:id="@+id/category_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/category_name"
-            android:layout_alignEnd="@+id/category_name"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/category_name"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="285dp"
-            android:minHeight="48dp"
-            android:minWidth="48dp"
-            android:src="@drawable/logo" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Название категории"
+        android:ems="10"
+        android:id="@+id/category_name"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
+        android:layout_above="@+id/save_category_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="327dp"
+        android:textColor="@color/abc_primary_text_material_light" />
 
-        <EditText
-            android:id="@+id/category_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/save_category_button"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="327dp"
-            android:layout_marginLeft="100dp"
-            android:layout_marginRight="100dp"
-            android:ems="10"
-            android:hint="Название категории"
-            android:inputType="textPersonName"
-            android:textColor="@color/abc_primary_text_material_light" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Сохранить изменения"
+        android:id="@+id/save_category_button"
+        android:background="@color/primary_dark"
+        android:textColor="@color/abc_primary_text_material_dark"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
 
-        <Button
-            android:id="@+id/save_category_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="0dp"
-            android:background="@color/primary_dark"
-            android:text="Сохранить изменения"
-            android:textColor="@color/abc_primary_text_material_dark" />
-
-    </RelativeLayout>
-</ScrollView>
+</RelativeLayout>

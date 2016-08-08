@@ -110,4 +110,8 @@ public interface TrapezaApi {
     Call<File> boughtMonth(@Query("token") String token);
 
 
+    //TODO _
+    @POST("/requests?func=buyDish")
+    Call<StatusResponse> buyDish(@Query("prices") int[] prices, @Query("payment") int payment, @Query("token") String token);
+
 }
