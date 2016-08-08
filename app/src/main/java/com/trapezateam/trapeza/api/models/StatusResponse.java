@@ -8,9 +8,15 @@ import com.google.gson.annotations.SerializedName;
 public class StatusResponse {
     @SerializedName("success")
     private boolean mSuccess;
+    @SerializedName("message")
+    private String mMessage;
 
     public boolean isSuccess() {
         return mSuccess;
+    }
+
+    public String getMessage() {
+        return mMessage;
     }
 
 

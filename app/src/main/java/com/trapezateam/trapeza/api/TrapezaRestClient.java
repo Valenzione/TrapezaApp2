@@ -165,7 +165,9 @@ public class TrapezaRestClient {
         public static void uploadImage(Bitmap bitmap, Callback<UploadResponse> callback) {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), byteArrayOutputStream.toByteArray());
+            RequestBody requestBody = RequestBody
+                    .create(MediaType.parse("image/*"),
+                            byteArrayOutputStream.toByteArray());
             getUploadApiInstance().upload(requestBody).enqueue(callback);
         }
     }

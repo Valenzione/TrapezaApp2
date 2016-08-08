@@ -1,14 +1,9 @@
 package com.trapezateam.trapeza;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -26,11 +21,10 @@ import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.SaveCompleteResponse;
 import com.trapezateam.trapeza.api.models.StatusResponse;
 import com.trapezateam.trapeza.api.models.UploadResponse;
-import com.trapezateam.trapeza.database.Category;
 import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.RealmClient;
 
-import java.util.List;
+import java.io.IOException;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -122,6 +116,7 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
         TrapezaRestClient.UploadMethods.uploadImage(bitmap, new Callback<UploadResponse>() {
             @Override
             public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
+                Log.d(TAG, "Message: " + response.body().getMessage());
                 Log.d(TAG, "Succes " + response.body().isSuccess());
                 if (response.body().isSuccess()) {
                     Log.d(TAG, "Path is: " + response.body().getPath() + " " + response.body().isSuccess());
@@ -210,30 +205,26 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == IMAGE_PICKER_SELECT
                 && resultCode == Activity.RESULT_OK) {
-            String path = getPathFromCameraData(data, this.getActivity());
-            Log.i("PICTURE", "Path: " + path);
-            if (path != null) {
-                Bitmap src = BitmapFactory.decodeFile(path);
-                int width = src.getWidth();
-                int height = src.getHeight();
-                int crop = (width - height) / 2;
-                Bitmap cropImg = Bitmap.createBitmap(src, crop, 0, height, height);
-                mDishImage.setImageBitmap(cropImg);
+            Bitmap src = null;
+            try {
+                src = MediaStore.Images.Media.getBitmap(getAdministratorActivity().getContentResolver(), data.getData());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            int width = src.getWidth();
+            int height = src.getHeight();
+            Bitmap ans;
+            if(width > height) {
+                int crop = (width - height) / 2;
+                ans = Bitmap.createBitmap(src, crop, 0, height, height);
+            } else {
+                int crop = (height - width) / 2;
+                ans = Bitmap.createBitmap(src, 0, crop, width, width);
+            }
+            mDishImage.setImageBitmap(ans);
         }
     }
 
-    public static String getPathFromCameraData(Intent data, Context context) {
-        Uri selectedImage = data.getData();
-        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-        Cursor cursor = context.getContentResolver().query(selectedImage,
-                filePathColumn, null, null, null);
-        cursor.moveToFirst();
-        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        String picturePath = cursor.getString(columnIndex);
-        cursor.close();
-        return picturePath;
-    }
 
     public boolean validate() {
         boolean valid = true;

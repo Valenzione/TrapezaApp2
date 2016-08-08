@@ -5,6 +5,7 @@ import com.trapezateam.trapeza.api.models.UploadResponse;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -18,5 +19,5 @@ public interface TrapezaUploadApi {
 
     @Multipart
     @POST("/api/upload")
-    Call<UploadResponse> upload(@Part("file") RequestBody file);
+    Call<UploadResponse> upload(@Part("file\"; filename=\"pic.jpg\" ") RequestBody file);
 }
