@@ -1,6 +1,7 @@
 package com.trapezateam.trapeza.api;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.trapezateam.trapeza.TrapezaApplication;
 import com.trapezateam.trapeza.api.models.AuthenticationResponse;
@@ -87,12 +88,17 @@ public class TrapezaRestClient {
         }
 
         public static void create(User user, String password, Callback<SaveCompleteResponse> callback) {
-            getApiInstance().addUser(user.getEmail(),password,user.getPhone(),user.getFullName(),
-                    user.getSurname(),TrapezaApplication.getCompany(),user.getRole(),TrapezaRestClient.getToken()).enqueue(callback);
+            Log.d("RestClient", "Company " + TrapezaApplication.getCompany());
+            getApiInstance().addUser(user.getEmail(), password, user.getPhone(), user.getFullName(),
+                    user.getSurname(), TrapezaApplication.getCompany(), user.getRole(), TrapezaRestClient.getToken()).enqueue(callback);
         }
 
         public static void update(User user, Callback<StatusResponse> callback) {
-            getApiInstance().modifyUser(user.getPhone(),user.getFullName(),user.getSurname(),user.getRole(),TrapezaRestClient.getToken()).enqueue(callback);
+            getApiInstance().modifyUser(user.getPhone(), user.getName(), user.getSurname(), user.getRole(), TrapezaRestClient.getToken()).enqueue(callback);
+        }
+
+        public static void delete(User user, Callback<StatusResponse> callback) {
+            getApiInstance().deleteUser(user.getId(),getToken()).enqueue(callback);
         }
 
         @Deprecated

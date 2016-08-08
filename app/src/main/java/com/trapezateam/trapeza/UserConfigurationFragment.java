@@ -61,7 +61,11 @@ public class UserConfigurationFragment extends AdministratorActivityFragment {
         mUserSurname.setText(bundledUser.getSurname());
         mUserName.setText(bundledUser.getName());
         mUserPhone.setText(bundledUser.getPhone());
-        mRoleChoice.check(bundledUser.getRole());
+        if (bundledUser.getRole() == 1) {
+            mRoleChoice.check(R.id.admin_radio_button);
+        } else {
+            mRoleChoice.check(R.id.cashier_radio_button);
+        }
 
 
         mSaveUserButton.setOnClickListener(new View.OnClickListener() {

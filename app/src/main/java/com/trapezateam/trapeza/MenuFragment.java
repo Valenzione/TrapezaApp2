@@ -143,7 +143,7 @@ public class MenuFragment extends AdministratorActivityFragment {
                 Toast toast;
                 if (response.body().isSuccess()) {
                     toast = Toast.makeText(getAdministratorActivity(), "Категория успешно удалена", Toast.LENGTH_SHORT);
-                    RealmClient.deleteCategory(category);
+                    RealmClient.deleteModel(category);
                     mMenuAdapter.notifyDataSetChanged();
                 } else {
                     toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, категория не удалена", Toast.LENGTH_SHORT);
@@ -169,7 +169,7 @@ public class MenuFragment extends AdministratorActivityFragment {
                 Toast toast;
                 if (response.body().isSuccess()) {
                     toast = Toast.makeText(getAdministratorActivity(), "Блюдо успешно удалено", Toast.LENGTH_SHORT);
-                    RealmClient.deleteDish(dish);
+                    RealmClient.deleteModel(dish);
                     mMenuAdapter.notifyDataSetChanged();
                 } else {
                     toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, блюдо не удалено", Toast.LENGTH_SHORT);

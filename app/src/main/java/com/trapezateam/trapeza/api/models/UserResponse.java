@@ -28,6 +28,9 @@ public class UserResponse {
     @SerializedName("photo")
     private String mPhotoUrl;
 
+    @SerializedName("phone")
+    private String phone;
+
     public int getRole() {
         return mRole;
     }
@@ -57,4 +60,7 @@ public class UserResponse {
     }
 
 
+    public String getPhone() {
+        return phone;
+    }
 }

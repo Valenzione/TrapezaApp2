@@ -67,7 +67,7 @@ public class UserCreationFragment extends AdministratorActivityFragment {
                     user.setSurname(String.valueOf(mUserSurname.getText()));
                     user.setEmail(String.valueOf(mUserEmail.getText()));
                     user.setPhone(String.valueOf(mUserPhone.getText()));
-                    user.setRole(mRoleChoice.getCheckedRadioButtonId());
+                    user.setRoleFromId(mRoleChoice.getCheckedRadioButtonId());
                     realm.commitTransaction();
                     RealmClient.updateModel(user);
                     saveUser(user);

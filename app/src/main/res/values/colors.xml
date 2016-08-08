@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Color pallete from http://www.materialpalette.com/indigo/pink-->
-    <color name="item_background">#e1d8b3</color>
+    <color name="item_background">#90d7ccc8</color>
     <color name="primary">#ffffff</color>
     <color name="primary_dark">#303F9F</color>
     <color name="primary_light">#90a4ae</color>

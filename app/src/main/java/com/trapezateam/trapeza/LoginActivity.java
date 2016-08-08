@@ -169,7 +169,8 @@ public class LoginActivity extends AppCompatActivity {
         TrapezaRestClient.UserMethods.get(userId, new Callback<List<UserResponse>>() {
             @Override
             public void onResponse(Call<List<UserResponse>> call, Response<List<UserResponse>> response) {
-                RealmClient.updateDatabase(response.body().get(0).getCompany());
+                TrapezaApplication.setCompany(response.body().get(0).getCompany());
+                RealmClient.updateDatabase(TrapezaApplication.getCompany());
                 startCorrectActivity(response.body().get(0).getRole());
             }
 
