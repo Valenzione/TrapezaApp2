@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import com.trapezateam.trapeza.api.models.CategoryResponse;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.annotations.PrimaryKey;
@@ -19,7 +18,7 @@ public class Category extends RealmObject implements Parcelable {
     @PrimaryKey
     private int categoryId;
     private String name;
-    private String photoURL;
+    private String photoUrl;
 
 
     public Category() {
@@ -74,7 +73,7 @@ public class Category extends RealmObject implements Parcelable {
     public void setData(CategoryResponse categoryResponse) {
         categoryId = categoryResponse.getId();
         name = categoryResponse.getName();
-        photoURL = categoryResponse.getPhotoURL();
+        photoUrl = categoryResponse.getPhotoURL();
     }
 
     @Override
@@ -88,11 +87,11 @@ public class Category extends RealmObject implements Parcelable {
         parcel.writeString(name);
     }
 
-    public String getPhotoURL() {
-        return photoURL;
+    public String getPhotoUrl() {
+        return photoUrl;
     }
 
-    public void setPhotoURL(String photoURL) {
-        this.photoURL = photoURL;
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

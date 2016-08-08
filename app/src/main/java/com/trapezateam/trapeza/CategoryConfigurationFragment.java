@@ -166,7 +166,7 @@ public class CategoryConfigurationFragment extends AdministratorActivityFragment
             }
             int width = src.getWidth();
             int height = src.getHeight();
-            int crop = (width - height) / 2;
+            int crop = Math.abs(width - height) / 2;
             Bitmap cropImg = Bitmap.createBitmap(src, crop, 0, height, height);
             mCategoryImage.setImageBitmap(cropImg);
         }

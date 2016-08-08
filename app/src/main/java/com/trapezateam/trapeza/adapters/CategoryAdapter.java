@@ -3,16 +3,20 @@ package com.trapezateam.trapeza.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.picasso.Picasso;
 import com.trapezateam.trapeza.R;
 import com.trapezateam.trapeza.SquareButton;
+import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.database.Category;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
+import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
 
 /**
  * Created by Yuriy on 7/22/2016.
@@ -52,15 +56,17 @@ public class CategoryAdapter
         }
 
 
-        button.setText(getItem(i).getName());
+        final Category category = getItem(i);
+
+        button.setText(category.getName());
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mCategoryEventsListener != null) {
-                    mCategoryEventsListener.onCategoryClicked(getItem(i), view);
+                    mCategoryEventsListener.onCategoryClicked(category, view);
                 }
                 if (mMenuAdapter != null) {
-                    mMenuAdapter.onCategoryClicked(getItem(i));
+                    mMenuAdapter.onCategoryClicked(category);
                 }
             }
         });
@@ -68,12 +74,19 @@ public class CategoryAdapter
             @Override
             public boolean onLongClick(View view) {
                 if (mCategoryEventsListener != null) {
-                    return mCategoryEventsListener.onCategoryLongClicked(getItem(i), view);
+                    return mCategoryEventsListener.onCategoryLongClicked(category, view);
                 }
                 return false;
             }
         });
 
+
+        Picasso.with(context).load(TrapezaRestClient.getFileUrl(category.getPhotoUrl()))
+                .resize(300, 300)
+                .centerCrop()
+                .transform(new ColorFilterTransformation(
+                        ContextCompat.getColor(context, R.color.photo_color_filter)))
+                .into(button);
 
         return button;
     }

@@ -97,19 +97,13 @@ public class DishAdapter
 
         Log.i(TAG, "Dish pic: " + dish.getPhotoUrl());
 
-        Picasso.with(context).setLoggingEnabled(true);
         Picasso.with(context).load(TrapezaRestClient.getFileUrl(dish.getPhotoUrl()))
                 .resize(300, 300)
                 .centerCrop()
                 .transform(new ColorFilterTransformation(
                         ContextCompat.getColor(context, R.color.photo_color_filter)))
                 .into(button);
-        Picasso.with(context).setLoggingEnabled(false);
-
-        button.setPadding(10, 10, 10, 10);
-
         return button;
-
     }
 
 
