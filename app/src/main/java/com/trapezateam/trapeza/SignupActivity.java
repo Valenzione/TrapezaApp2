@@ -133,6 +133,8 @@ public class SignupActivity extends AppCompatActivity {
                 t.printStackTrace();
             }
         });
+
+        progressDialog.dismiss();
     }
 
 

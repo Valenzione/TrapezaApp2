@@ -79,11 +79,6 @@ public class LoginActivity extends AppCompatActivity {
     public void login() {
 
 
-        if (!validate()) {
-            onLoginFailed("Credentials validation failed");
-            return;
-        }
-
         mLoginButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
@@ -187,43 +182,4 @@ public class LoginActivity extends AppCompatActivity {
         mLoginButton.setEnabled(true);
     }
 
-    public boolean validate() {
-        boolean valid = true;
-
-//        String email = mEmailText.getText().toString();
-//        String password = mPasswordText.getText().toString();
-//
-//        //TODO replace with appropriate logic to validate emails ater release
-////        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-////            mEmailText.setError("enter a valid email address");
-////            YoYo.with(Techniques.Shake)
-////                    .duration(500)
-////                    .playOn(findViewById(R.id.input_email));
-////            valid = false;
-////        } else {
-////            mEmailText.setError(null);
-////        }
-//
-//        if (email.isEmpty()) {
-//            mEmailText.setError("enter a valid email address");
-//            YoYo.with(Techniques.Shake)
-//                    .duration(500)
-//                    .playOn(findViewById(R.id.input_email));
-//            valid = false;
-//        } else {
-//            mEmailText.setError(null);
-//        }
-//
-//        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-//            mPasswordText.setError("between 4 and 10 alphanumeric characters");
-//            YoYo.with(Techniques.Shake)
-//                    .duration(500)
-//                    .playOn(findViewById(R.id.input_password));
-//            valid = false;
-//        } else {
-//            mPasswordText.setError(null);
-//        }
-
-        return valid;
-    }
 }
