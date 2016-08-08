@@ -20,6 +20,9 @@ public class User extends RealmObject implements Parcelable {
     private int companyId;
     private String photoURL;
     private int role;
+    private String surname;
+    private String phone;
+
 
     public User(Parcel in) {
         id = in.readInt();
@@ -44,16 +47,13 @@ public class User extends RealmObject implements Parcelable {
         }
     };
 
-    public User(){
+    public User() {
 
     }
+
     public String getSurname() {
         return surname;
     }
-
-    private String surname;
-    private String phone;
-
 
     public String getEmail() {
         return email;
@@ -65,7 +65,7 @@ public class User extends RealmObject implements Parcelable {
 
 
     public String getFullName() {
-        return surname +" "+ name;
+        return surname + " " + name;
     }
 
     public String getName() {
@@ -95,7 +95,9 @@ public class User extends RealmObject implements Parcelable {
     }
 
     public String toString() {
-        String out = this.getFullName() + System.lineSeparator() + this.getEmail();
+        String out = this.getFullName() + System.lineSeparator()
+                + "Email: " + this.getEmail() + System.lineSeparator()
+                + "Role: " + this.getRole();
         return out;
     }
 
@@ -105,7 +107,8 @@ public class User extends RealmObject implements Parcelable {
         surname = userResponse.getSurname();
         email = userResponse.getEmail();
         companyId = getCompanyId();
-        role=userResponse.getRole();
+        role = userResponse.getRole();
+        phone=userResponse.getPhone();
     }
 
     public String getPhotoURL() {
@@ -137,7 +140,7 @@ public class User extends RealmObject implements Parcelable {
     }
 
     public void setRoleFromId(int resourceId) {
-        switch (resourceId){
+        switch (resourceId) {
             case R.id.cashier_radio_button:
                 this.role = 0;
                 break;

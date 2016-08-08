@@ -127,17 +127,14 @@ public class RealmClient {
         realm.insertOrUpdate(ro);
     }
 
-    public static void deleteDish(Dish dish) {
+    public static void deleteModel(RealmObject realmObject) {
         realm.beginTransaction();
-        dish.deleteFromRealm();
+        realmObject.deleteFromRealm();
         realm.commitTransaction();
     }
 
-    public static void deleteCategory(Category category) {
-        realm.beginTransaction();
-        category.deleteFromRealm();
-        realm.commitTransaction();
-    }
+
+
 
 
 }

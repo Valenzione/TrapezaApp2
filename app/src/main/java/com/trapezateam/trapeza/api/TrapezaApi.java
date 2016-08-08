@@ -10,6 +10,7 @@ import com.trapezateam.trapeza.api.models.SaveCompleteResponse;
 import com.trapezateam.trapeza.api.models.StatusResponse;
 import com.trapezateam.trapeza.api.models.UserResponse;
 
+import java.io.File;
 import java.util.List;
 
 import retrofit2.Call;
@@ -97,5 +98,12 @@ public interface TrapezaApi {
 
     @GET("/requests?func=category.get")
     Call<CategoryResponse> getCategory(@Query("categoryId") int id, @Query("token") String token);
+
+
+    @GET("/requests?func=boughtMonth")
+    Call<File> boughtMonth(@Query("token") String token);
+
+
+
 
 }
