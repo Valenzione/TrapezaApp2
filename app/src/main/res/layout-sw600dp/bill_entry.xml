@@ -1,81 +1,97 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="64dp"
-    android:orientation="horizontal"
-    android:background="@color/item_background">
+    android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/bill_entry_delete"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:onClick="onClickDeleteItem"
-        android:background="@android:drawable/btn_dialog"
-        android:layout_gravity="center"
-        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
 
-    <TextView
-        android:id="@+id/bill_entry_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="fill"
-        android:text="Keka"
-        android:layout_gravity="center"
-        android:background="@null"
-        android:layout_weight="0.90"
-        android:textColor="@color/abc_primary_text_material_light" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/item_background"
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="12 \u20BD"
-        android:id="@+id/bill_entry_price"
-        android:gravity="center"
-        android:maxWidth="200dp"
-        android:background="@null"
-        android:layout_gravity="center"
-        android:textColor="@color/abc_primary_text_material_light" />
+        <ImageButton
+            android:id="@+id/bill_entry_delete"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:background="@android:drawable/btn_dialog"
+            android:onClick="onClickDeleteItem" />
 
-    <ImageButton
-        android:id="@+id/bill_entry_decrement"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:onClick="onClickRemovePayCheckItem"
-        android:background="@drawable/ic_remove"
-        android:layout_gravity="center" />
+        <TextView
+            android:id="@+id/bill_entry_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.90"
+            android:background="@null"
+            android:gravity="fill"
+            android:text="Keka"
+            android:textColor="@color/abc_primary_text_material_light" />
 
-    <EditText
-        android:id="@+id/bill_entry_quantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/bill_entry_decrement"
-        android:minWidth="40dp"
-        android:maxWidth="150dp"
-        android:gravity="right"
-        android:inputType="number"
-        android:layout_gravity="center"
-        android:textColor="@color/abc_primary_text_material_light" />
+        <TextView
+            android:id="@+id/bill_entry_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:gravity="center"
+            android:maxWidth="200dp"
+            android:text="12 \u20BD"
+            android:textColor="@color/abc_primary_text_material_light" />
 
-    <ImageButton
-        android:id="@+id/bill_entry_increment"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_alignParentRight="true"
-        android:layout_toLeftOf="@+id/bill_entry_quantity"
-        android:onClick="onClickAddPayCheckItem"
-        android:background="@drawable/ic_add"
-        android:layout_gravity="center" />
+        <ImageButton
+            android:id="@+id/bill_entry_decrement"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_remove"
+            android:onClick="onClickRemovePayCheckItem" />
 
-    <TextView
-        android:layout_width="82dp"
-        android:layout_height="wrap_content"
-        android:text="12 \u20BD"
-        android:id="@+id/bill_entry_total_price"
-        android:gravity="right"
-        android:paddingEnd="5dp"
-        android:minWidth="128dp"
-        android:maxWidth="300dp"
-        android:background="@null"
-        android:layout_gravity="center"
-        android:paddingRight="5dp"
-        android:textColor="@color/abc_primary_text_material_light" />
+        <EditText
+            android:id="@+id/bill_entry_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_toLeftOf="@+id/bill_entry_decrement"
+            android:gravity="right"
+            android:inputType="number"
+            android:maxWidth="150dp"
+            android:minWidth="40dp"
+            android:textColor="@color/abc_primary_text_material_light" />
+
+        <ImageButton
+            android:id="@+id/bill_entry_increment"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:layout_toLeftOf="@+id/bill_entry_quantity"
+            android:background="@drawable/ic_add"
+            android:onClick="onClickAddPayCheckItem" />
+
+        <TextView
+            android:id="@+id/bill_entry_total_price"
+            android:layout_width="82dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:gravity="right"
+            android:maxWidth="300dp"
+            android:minWidth="128dp"
+            android:paddingEnd="5dp"
+            android:paddingRight="5dp"
+            android:text="12 \u20BD"
+            android:textColor="@color/abc_primary_text_material_light" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
+
 </LinearLayout>

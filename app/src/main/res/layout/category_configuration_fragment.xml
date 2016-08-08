@@ -1,57 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    tools:context=".CategoryConfigurationFragment">
+    android:fitsSystemWindows="true">
 
-    <RelativeLayout
-        android:orientation="vertical"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="1"
-        android:background="@color/primary_light">
+        android:orientation="horizontal"
+        tools:context=".CategoryConfigurationFragment">
 
-        <ImageView
-            android:layout_width="146dp"
-            android:layout_height="146dp"
-            android:id="@+id/category_image"
-            android:minHeight="48dp"
-            android:minWidth="48dp"
-            android:src="@drawable/logo"
-            android:layout_marginTop="37dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/primary_light"
+            android:orientation="vertical"
+            android:weightSum="1">
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/category_name"
-            android:layout_weight="0.13"
-            android:hint="Название категории"
-            android:layout_below="@+id/category_image"
-            android:layout_marginTop="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:textColor="@color/abc_primary_text_material_light"/>
+            <ImageView
+                android:id="@+id/category_image"
+                android:layout_width="146dp"
+                android:layout_height="146dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="37dp"
+                android:minHeight="48dp"
+                android:minWidth="48dp"
+                android:src="@drawable/logo" />
 
-        <Button
-            android:layout_width="206dp"
-            android:layout_height="wrap_content"
-            android:text="Сохранить изменения"
-            android:id="@+id/save_category_button"
-            android:background="@color/primary_dark"
-            android:textColor="@color/abc_primary_text_material_dark"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true" />
+            <EditText
+                android:id="@+id/category_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/category_image"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_weight="0.13"
+                android:ems="10"
+                android:hint="Название категории"
+                android:inputType="textPersonName"
+                android:textColor="@color/abc_primary_text_material_light" />
 
-    </RelativeLayout>
+            <Button
+                android:id="@+id/save_category_button"
+                android:layout_width="206dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:background="@color/primary_dark"
+                android:text="Сохранить изменения"
+                android:textColor="@color/abc_primary_text_material_dark" />
 
-</LinearLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+</ScrollView>

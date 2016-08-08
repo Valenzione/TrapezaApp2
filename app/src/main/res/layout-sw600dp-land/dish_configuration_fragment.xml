@@ -1,84 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".CategoryConfigurationFragment"
-    android:weightSum="1">
+    android:fitsSystemWindows="true">
 
-    <RelativeLayout
-        android:orientation="horizontal"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         android:weightSum="1"
-        android:background="@color/primary_light"
-        android:paddingStart="25dp"
-        android:layout_weight="1">
+        tools:context=".CategoryConfigurationFragment">
 
-        <ImageView
-            android:layout_width="384dp"
-            android:layout_height="384dp"
-            android:id="@+id/dish_image"
-            android:minHeight="48dp"
-            android:minWidth="48dp"
-            android:src="@drawable/logo"
-            android:layout_weight="0.49"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="41dp"
-            android:layout_marginStart="41dp" />
-
-        <LinearLayout
-            android:orientation="vertical"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/dish_image"
-            android:layout_toEndOf="@+id/dish_image"
-            android:layout_alignBottom="@+id/dish_image"
-            android:layout_alignTop="@+id/dish_image">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/primary_light"
+            android:orientation="horizontal"
+            android:paddingStart="25dp"
+            android:weightSum="1">
 
-            <Space
+            <ImageView
+                android:id="@+id/dish_image"
+                android:layout_width="384dp"
+                android:layout_height="384dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="41dp"
+                android:layout_marginStart="41dp"
+                android:layout_weight="0.49"
+                android:minHeight="48dp"
+                android:minWidth="48dp"
+                android:src="@drawable/logo" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp" />
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@+id/dish_image"
+                android:layout_alignTop="@+id/dish_image"
+                android:layout_toEndOf="@+id/dish_image"
+                android:layout_toRightOf="@+id/dish_image"
+                android:orientation="vertical">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/dish_name"
-                android:hint="Название блюда"
-                android:layout_marginBottom="10dp"
-                android:textColor="@color/abc_primary_text_material_light" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/dish_description"
-                android:hint="Описание блюда"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:textColor="@color/abc_primary_text_material_light" />
+                <EditText
+                    android:id="@+id/dish_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:hint="Название блюда"
+                    android:textColor="@color/abc_primary_text_material_light" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberSigned"
-                android:ems="10"
-                android:id="@+id/dish_price"
-                android:hint="Цена блюда"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/abc_primary_text_material_light" />
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/dish_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:hint="Описание блюда"
+                    android:textColor="@color/abc_primary_text_material_light" />
 
-    </RelativeLayout>
+                <EditText
+                    android:id="@+id/dish_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:ems="10"
+                    android:hint="Цена блюда"
+                    android:inputType="numberSigned"
+                    android:textColor="@color/abc_primary_text_material_light" />
+            </LinearLayout>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Сохранить изменения"
-        android:id="@+id/save_dish_button"
-        android:background="@color/primary_dark"
-        android:textColor="@color/abc_primary_text_material_dark" />
+        </RelativeLayout>
 
-</LinearLayout>
+        <Button
+            android:id="@+id/save_dish_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary_dark"
+            android:text="Сохранить изменения"
+            android:textColor="@color/abc_primary_text_material_dark" />
+
+    </LinearLayout>
+</ScrollView>
