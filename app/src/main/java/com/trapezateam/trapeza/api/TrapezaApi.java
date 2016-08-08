@@ -43,8 +43,14 @@ public interface TrapezaApi {
     @GET("/requests?func=userList")
     Call<List<UserResponse>> usersList(@Query("company") int companyId, @Query("token") String token);
 
+
     @GET("/requests?func=company.getData")
     Call<CompanyDataResponse> getData(@Query("company") int companyId, @Query("token") String token);
+
+    @POST("/api/register")
+    Call<SaveCompleteResponse> addCompany(@Query("name") String name, @Query("phone") String phone, @Query("addr") String addres,
+                                          @Query("login") String login, @Query("pass") String pass, @Query("userPhone") String userPhone,
+                                          @Query("userName") String userName, @Query("userSurname") String userSurname);
 
 
     @GET("/requests?func=user.get")
@@ -102,8 +108,6 @@ public interface TrapezaApi {
 
     @GET("/requests?func=boughtMonth")
     Call<File> boughtMonth(@Query("token") String token);
-
-
 
 
 }

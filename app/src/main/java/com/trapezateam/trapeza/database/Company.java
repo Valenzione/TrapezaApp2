@@ -11,18 +11,12 @@ public class Company extends RealmObject {
     @PrimaryKey
     private int companyId;
     private String companyName;
-    private RealmList<User> stuff;
+    private String phone;
+    private String address;
 
     public Company() {
     }
 
-    public RealmList<User> getStuff() {
-        return stuff;
-    }
-
-    public void setStuff(RealmList<User> stuff) {
-        this.stuff = stuff;
-    }
 
     public String getCompanyName() {
         return companyName;
@@ -40,10 +34,20 @@ public class Company extends RealmObject {
         this.companyId = companyId;
     }
 
-    public void addToStuff(User u) {
-        if (!stuff.contains(u)) {
-            stuff.add(u);
-        }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
     }
 }

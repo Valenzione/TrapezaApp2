@@ -68,47 +68,6 @@ public class RealmClient {
         });
     }
 
-    private static void addUser(UserResponse userResponse) {
-        realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        final User u = realm.createObject(User.class);
-
-        u.setName(userResponse.getSurname() + " " + userResponse.getName());
-        u.setEmail("noEmailInDataBase@for.now");
-        int nextUserId = realm.where(User.class).findAll().size() + 1;
-        u.setId(nextUserId);
-        u.setCompanyId(userResponse.getCompany());
-
-        realm.commitTransaction();
-    }
-
-
-    private static void addDish(DishResponse d) {
-        realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        Dish dish = realm.createObject(Dish.class);
-        dish.setName(d.getName());
-        dish.setDescription(d.getDescription());
-        dish.setCategoryId(d.getFather());
-        dish.setPrice(Integer.parseInt(d.getPrice()));
-        dish.setDishId(d.getId());
-        realm.commitTransaction();
-    }
-
-    private static void addCategory(CategoryResponse c) {
-        realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        Category category = realm.createObject(Category.class);
-        category.setName(c.getName());
-        category.setCategoryId(c.getId());
-        realm.commitTransaction();
-    }
-
-
-
-
-
-
 
     public static RealmResults<Dish> getDishes() {
         realm = Realm.getDefaultInstance();
@@ -133,8 +92,32 @@ public class RealmClient {
         realm.commitTransaction();
     }
 
+    public static void emptyDatabase(){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.deleteAll();
+            }
+        });
+    }
+    public static User createUser(String name, String surname, String email, String phone) {
+        realm.beginTransaction();
+        User user = realm.createObject(User.class);
+        user.setName(name);
+        user.setSurname(surname);
+        user.setEmail(email);
+        user.setPhone(phone);
+        realm.commitTransaction();
+        return user;
+    }
 
-
-
-
+    public static Company createCompany(String companyName, String companyAddress, String companyPhone) {
+        realm.beginTransaction();
+        Company company = realm.createObject(Company.class);
+        company.setCompanyName(companyName);
+        company.setAddress(companyAddress);
+        company.setPhone(companyPhone);
+        realm.commitTransaction();
+        return company;
+    }
 }

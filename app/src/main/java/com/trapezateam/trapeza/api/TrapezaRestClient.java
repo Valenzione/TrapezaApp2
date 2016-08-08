@@ -13,6 +13,7 @@ import com.trapezateam.trapeza.api.models.StatusResponse;
 import com.trapezateam.trapeza.api.models.UploadResponse;
 import com.trapezateam.trapeza.api.models.UserResponse;
 import com.trapezateam.trapeza.database.Category;
+import com.trapezateam.trapeza.database.Company;
 import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.User;
 
@@ -152,6 +153,11 @@ public class TrapezaRestClient {
     public static class CompanyMethods {
         public static void getData(int companyId, Callback<CompanyDataResponse> callback) {
             getApiInstance().getData(companyId, getToken()).enqueue(callback);
+        }
+
+        public static void create(Company company, User user,String login, String pass, Callback<SaveCompleteResponse> callback) {
+            getApiInstance().addCompany(company.getCompanyName(),company.getPhone(),company.getAddress(),
+                    login, pass,user.getPhone(),user.getName(),user.getSurname()).enqueue(callback);
         }
     }
 

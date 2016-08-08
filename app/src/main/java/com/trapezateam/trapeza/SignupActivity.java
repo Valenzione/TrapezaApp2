@@ -11,9 +11,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.trapezateam.trapeza.api.TrapezaRestClient;
+import com.trapezateam.trapeza.api.models.SaveCompleteResponse;
+import com.trapezateam.trapeza.database.Company;
+import com.trapezateam.trapeza.database.RealmClient;
+import com.trapezateam.trapeza.database.User;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.realm.Realm;
+import io.realm.RealmResults;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
@@ -28,7 +37,20 @@ public class SignupActivity extends AppCompatActivity {
     Button mSignupButton;
     @Bind(R.id.link_login)
     TextView mLoginLink;
-    
+    @Bind(R.id.input_login)
+    TextView mLogin;
+    @Bind(R.id.input_surname)
+    TextView mSurname;
+    @Bind(R.id.input_comapny_phone)
+    TextView mCompanyPhone;
+    @Bind(R.id.input_company_adress)
+    TextView mCompanyAddress;
+    @Bind(R.id.input_company_name)
+    TextView mCompanyName;
+    @Bind(R.id.input_phone)
+    TextView mPhone;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,21 +90,49 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.show();
 
         String name = mNameText.getText().toString();
+        String surname = mSurname.getText().toString();
         String email = mEmailText.getText().toString();
+        String phone = mPhone.getText().toString();
         String password = mPasswordText.getText().toString();
+        String companyName = mCompanyName.getText().toString();
+        String companyPhone = mCompanyPhone.getText().toString();
+        String companyAddress = mCompanyAddress.getText().toString();
+        String login = mLogin.getText().toString();
 
-        // TODO: Implement your own signup logic here.
+        RealmClient.emptyDatabase();
+        User user = RealmClient.createUser(name, surname, email, phone);
+        Company company = RealmClient.createCompany(companyName, companyAddress, companyPhone);
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+        TrapezaRestClient.CompanyMethods.create(company, user, login, password, new Callback<SaveCompleteResponse>() {
+            @Override
+            public void onResponse(Call<SaveCompleteResponse> call, final Response<SaveCompleteResponse> response) {
+                Toast toast;
+                if (response.body().isSuccess()) {
+                    toast = Toast.makeText(SignupActivity.this, "Компания успешно создана", Toast.LENGTH_SHORT);
+                    Realm.getDefaultInstance().executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmResults<User> users = realm.where(User.class).equalTo("id", 0).findAll();
+
+                            if (users.size() != 0) {
+                                Log.d(TAG, "Everything is ok. oldId is " + users.first().getId() + ". New id is " + response.body().getId());
+                                users.first().setId(response.body().getId());
+                            }
+                        }
+                    });
+                } else {
+                    toast = Toast.makeText(SignupActivity.this, "Произошла ошибка, компания не создана", Toast.LENGTH_SHORT);
+                }
+                toast.show();
+            }
+
+            @Override
+            public void onFailure(Call<SaveCompleteResponse> call, Throwable t) {
+                Toast.makeText(SignupActivity.this, "Error saving company " + t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+                t.printStackTrace();
+            }
+        });
     }
 
 
