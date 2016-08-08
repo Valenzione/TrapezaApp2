@@ -1,16 +1,13 @@
 package com.trapezateam.trapeza;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +20,8 @@ import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.SaveCompleteResponse;
 import com.trapezateam.trapeza.api.models.StatusResponse;
 import com.trapezateam.trapeza.database.Category;
-import com.trapezateam.trapeza.database.RealmClient;
 
-import java.util.List;
+import java.io.IOException;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -160,16 +156,19 @@ public class CategoryConfigurationFragment extends AdministratorActivityFragment
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == IMAGE_PICKER_SELECT
                 && resultCode == Activity.RESULT_OK) {
-            String path = getPathFromCameraData(data, this.getAdministratorActivity());
-            Log.i("PICTURE", "Path: " + path);
-            if (path != null) {
-                Bitmap src = BitmapFactory.decodeFile(path);
-                int width = src.getWidth();
-                int height = src.getHeight();
-                int crop = (width - height) / 2;
-                Bitmap cropImg = Bitmap.createBitmap(src, crop, 0, height, height);
-                mCategoryImage.setImageBitmap(cropImg);
+            Bitmap src = null;
+            try {
+                src = MediaStore.Images.Media.getBitmap(
+                        getAdministratorActivity().getContentResolver(),
+                        data.getData());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            int width = src.getWidth();
+            int height = src.getHeight();
+            int crop = (width - height) / 2;
+            Bitmap cropImg = Bitmap.createBitmap(src, crop, 0, height, height);
+            mCategoryImage.setImageBitmap(cropImg);
         }
     }
 

@@ -72,8 +72,8 @@ public class LoginActivity extends AppCompatActivity {
             TrapezaRestClient.setToken(DebugConfig.DEFAULT_TOKEN);
             onLoginSuccess(DebugConfig.DEFAULT_TOKEN, 0);
         }
-        mEmailText.setText("admin");
-        mPasswordText.setText("admin");
+        mEmailText.setText("try");
+        mPasswordText.setText("try");
     }
 
     public void login() {
@@ -189,11 +189,21 @@ public class LoginActivity extends AppCompatActivity {
     public boolean validate() {
         boolean valid = true;
 
-        String email = mEmailText.getText().toString();
-        String password = mPasswordText.getText().toString();
-
-        //TODO replace with appropriate logic to validate emails ater release
-//        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+//        String email = mEmailText.getText().toString();
+//        String password = mPasswordText.getText().toString();
+//
+//        //TODO replace with appropriate logic to validate emails ater release
+////        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+////            mEmailText.setError("enter a valid email address");
+////            YoYo.with(Techniques.Shake)
+////                    .duration(500)
+////                    .playOn(findViewById(R.id.input_email));
+////            valid = false;
+////        } else {
+////            mEmailText.setError(null);
+////        }
+//
+//        if (email.isEmpty()) {
 //            mEmailText.setError("enter a valid email address");
 //            YoYo.with(Techniques.Shake)
 //                    .duration(500)
@@ -202,26 +212,16 @@ public class LoginActivity extends AppCompatActivity {
 //        } else {
 //            mEmailText.setError(null);
 //        }
-
-        if (email.isEmpty()) {
-            mEmailText.setError("enter a valid email address");
-            YoYo.with(Techniques.Shake)
-                    .duration(500)
-                    .playOn(findViewById(R.id.input_email));
-            valid = false;
-        } else {
-            mEmailText.setError(null);
-        }
-
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            mPasswordText.setError("between 4 and 10 alphanumeric characters");
-            YoYo.with(Techniques.Shake)
-                    .duration(500)
-                    .playOn(findViewById(R.id.input_password));
-            valid = false;
-        } else {
-            mPasswordText.setError(null);
-        }
+//
+//        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
+//            mPasswordText.setError("between 4 and 10 alphanumeric characters");
+//            YoYo.with(Techniques.Shake)
+//                    .duration(500)
+//                    .playOn(findViewById(R.id.input_password));
+//            valid = false;
+//        } else {
+//            mPasswordText.setError(null);
+//        }
 
         return valid;
     }

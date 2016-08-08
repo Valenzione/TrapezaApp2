@@ -37,7 +37,7 @@ public class CategoryAdapter
         view = LayoutInflater.from(context).inflate(R.layout.square_button, viewGroup, false);
 //        }
 
-        SquareButton button = (SquareButton) view;
+        SquareButton button = (SquareButton) view.findViewById(R.id.squareButton);
 
         if (mShowAddButton && i == getCount() - 1) {
             button.setText("+");
