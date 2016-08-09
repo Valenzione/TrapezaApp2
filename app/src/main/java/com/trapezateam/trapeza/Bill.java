@@ -135,7 +135,11 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
         return mDiscount;
     }
 
+    /**
+     * Resets this Bill to default state: no elements and 0% discount
+     */
     public void clear() {
+        mDiscount = 0;
         int cnt = getItemCount();
         mEntries.clear();
         notifyItemRangeRemoved(0, cnt);

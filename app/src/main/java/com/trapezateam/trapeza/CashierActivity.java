@@ -94,6 +94,8 @@ public class CashierActivity extends Activity {
                 onDiscountButtonClicked();
             }
         });
+
+        mBill.clear();
     }
 
     void onPaymentComplete(int paymentType) {
@@ -202,8 +204,6 @@ public class CashierActivity extends Activity {
 
     public void onClickCancelOrder(View view) {
         mBill.clear();
-        String priceText = "Оплата " + String.valueOf(mBill.getTotalPrice()) + " руб";
-        mPayButton.setText(priceText);
     }
 
     @Override
@@ -232,13 +232,15 @@ public class CashierActivity extends Activity {
     void openSaleDialog(int value) {
         LayoutInflater inflater = (LayoutInflater)
                 getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final NumberPicker numberPicker = (NumberPicker) inflater.inflate(R.layout.number_picker_dialog_layout, null);
+        View v  =  inflater.inflate(R.layout.number_picker_dialog_layout, null);
+        final NumberPicker numberPicker = (NumberPicker) v.findViewById(R.id.picker);
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(100);
         numberPicker.setValue(value);
-        AlertDialog d = new AlertDialog.Builder(this)
-                .setTitle("Text Size:")
-                .setView(numberPicker)
+        v.setBackgroundColor(0xFF000000);
+        new AlertDialog.Builder(this)
+                .setTitle("Скидка")
+                .setView(v)
                 .setPositiveButton("Готово",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
@@ -250,8 +252,7 @@ public class CashierActivity extends Activity {
                             public void onClick(DialogInterface dialog, int whichButton) {
                             }
                         })
-                .create();
-        d.show();
+                .show();
     }
 
     void onDiscountButtonClicked() {
