@@ -3,6 +3,7 @@ package com.trapezateam.trapeza.api;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.trapezateam.trapeza.StatisticsFragment;
 import com.trapezateam.trapeza.TrapezaApplication;
 import com.trapezateam.trapeza.api.models.AuthenticationResponse;
 import com.trapezateam.trapeza.api.models.CategoryResponse;
@@ -195,6 +196,14 @@ public class TrapezaRestClient {
     public static class StatisticsMethods {
         public static void boughtDay(Callback<StatisticsResponse> callback) {
             getApiInstance().boughtDay(getToken()).enqueue(callback);
+        }
+
+        public static void boughtMonth(Callback<StatisticsResponse> callback) {
+            getApiInstance().boughtMonth(getToken()).enqueue(callback);
+        }
+
+        public static void boughtWeek(Callback<StatisticsResponse> callback) {
+            getApiInstance().boughtWeek(getToken()).enqueue(callback);
         }
     }
 
