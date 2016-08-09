@@ -105,8 +105,11 @@ public interface TrapezaApi {
     Call<CategoryResponse> getCategory(@Query("categoryId") int id, @Query("token") String token);
 
 
+    @GET("/requests?func=boughtWeek")
+    Call<StatisticsResponse> boughtWeek(@Query("token") String token);
+
     @GET("/requests?func=boughtMonth")
-    Call<File> boughtMonth(@Query("token") String token);
+    Call<StatisticsResponse> boughtMonth(@Query("token") String token);
 
     @GET("/requests?func=boughtDay")
     Call<StatisticsResponse> boughtDay(@Query("token") String token);
@@ -123,5 +126,6 @@ public interface TrapezaApi {
                                  @Query("sale") double sale,
                                  @Query("token") String token);
 
-
+    @POST("/requests?func=user.logout")
+    Call<StatusResponse> logout(@Query("token") String token);
 }

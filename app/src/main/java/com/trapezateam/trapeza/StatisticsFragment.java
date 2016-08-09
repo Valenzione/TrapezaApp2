@@ -25,7 +25,10 @@ public class StatisticsFragment extends AdministratorActivityFragment {
 
     @Bind(R.id.daily_sales)
     Button mDailySales;
-
+    @Bind(R.id.monthly_sales)
+    Button mMonthlySales;
+    @Bind(R.id.weekly_sales)
+    Button mWeeklySales;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,11 +48,30 @@ public class StatisticsFragment extends AdministratorActivityFragment {
                 onDailySalesClicked();
             }
         });
+        mMonthlySales.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onMonthlySalesClicked();
+            }
+        });
+        mWeeklySales.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onWeeklySalesClicked();
+            }
+        });
     }
 
+    private void onMonthlySalesClicked() {
+        TrapezaRestClient.StatisticsMethods.boughtMonth(new StatisticsCallback());
+    }
 
     private void onDailySalesClicked() {
         TrapezaRestClient.StatisticsMethods.boughtDay(new StatisticsCallback());
+    }
+
+    private void onWeeklySalesClicked(){
+        TrapezaRestClient.StatisticsMethods.boughtWeek(new StatisticsCallback());
     }
 
     class StatisticsCallback implements Callback<StatisticsResponse> {

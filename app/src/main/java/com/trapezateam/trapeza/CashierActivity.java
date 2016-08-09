@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -257,6 +258,36 @@ public class CashierActivity extends Activity {
 
     void onDiscountButtonClicked() {
         openSaleDialog(mBill.getDiscount());
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CashierActivity.this);
+        builder.setPositiveButton("Остаться", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        builder.setNegativeButton("Закончить смену", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                TrapezaRestClient.logout(new Callback<StatusResponse>() {
+                    @Override
+                    public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(Call<StatusResponse> call, Throwable t) {
+                        Toast.makeText(CashierActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
+
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 }
