@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
 public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parcelable {
 
     protected Bill(Parcel in) {
-        in.readList(mEntires, null);
+        in.readList(mEntries, null);
     }
 
     public static final Creator<Bill> CREATOR = new Creator<Bill>() {
@@ -51,7 +51,7 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeList(mEntires);
+        parcel.writeList(mEntries);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -77,16 +77,17 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
         }
     }
 
-    private List<BillEntry> mEntires;
+    private List<BillEntry> mEntries;
+    private int mDiscount;
 
     public Bill() {
-        mEntires = new ArrayList<>();
+        mEntries = new ArrayList<>();
     }
 
     public void addEntry(Dish entry) {
         int index = -1;
-        for (int i = 0; i < mEntires.size(); i++) {
-            if (mEntires.get(i).getDish().equals(entry)) {
+        for (int i = 0; i < mEntries.size(); i++) {
+            if (mEntries.get(i).getDish().equals(entry)) {
                 index = i;
                 break;
             }
@@ -95,38 +96,59 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
             incrementQuantity(index);
             Log.d("CashierAc", "AlreadyThere");
         } else {
-            mEntires.add(new BillEntry(entry, 1));
+            mEntries.add(new BillEntry(entry, 1));
             notifyItemInserted(getItemCount() - 1);
         }
     }
 
     public void removeEntry(int position) {
-        mEntires.remove(position);
+        mEntries.remove(position);
         notifyItemRemoved(position);
     }
 
-    public int getTotalPrice() {
+    /**
+     *
+     * @return price after discount
+     */
+    public double getTotalPrice() {
         int price = 0;
-        for (BillEntry e : mEntires) {
+        for (BillEntry e : mEntries) {
             price += e.getPrice();
         }
-        return price;
+        return Math.ceil(price * getDiscountFraction());
+    }
+
+    /**
+     *
+     * @return the part of the price the customer has to pay for
+     */
+    public double getDiscountFraction() {
+        return (1D - ((double) mDiscount / 100));
+    }
+
+    public void setDiscount(int discount) {
+        mDiscount = discount;
+        notifyDataSetChanged();
+    }
+
+    public int getDiscount() {
+        return mDiscount;
     }
 
     public void clear() {
         int cnt = getItemCount();
-        mEntires.clear();
+        mEntries.clear();
         notifyItemRangeRemoved(0, cnt);
     }
 
     public void incrementQuantity(int position) {
-        BillEntry e = mEntires.get(position);
+        BillEntry e = mEntries.get(position);
         e.incrementQuantity();
         notifyItemChanged(position);
     }
 
     public void decrementQuantity(int position) {
-        BillEntry e = mEntires.get(position);
+        BillEntry e = mEntries.get(position);
         e.decrementQuantity();
         if (e.isEmpty()) {
             removeEntry(position);
@@ -145,7 +167,7 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        BillEntry e = mEntires.get(position);
+        BillEntry e = mEntries.get(position);
         holder.mName.setText(e.getDish().getName() + System.getProperty("line.separator") + e.getDish().getDescription());
         holder.mDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,13 +197,13 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
 
     @Override
     public int getItemCount() {
-        return mEntires.size();
+        return mEntries.size();
     }
 
     @Override
     public String toString() {
         String out = "";
-        for (BillEntry e : mEntires) {
+        for (BillEntry e : mEntries) {
             out += e.getDish().getName() + " " + e.getPrice() + "\n";
         }
         return out;
@@ -189,7 +211,7 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
 
     JSONArray getPriceIdQuantityPairs() {
         JSONArray ans = new JSONArray();
-        for(BillEntry e : mEntires) {
+        for(BillEntry e : mEntries) {
             JSONObject obj = new JSONObject();
             try {
                 obj.put("id", e.getDish().getPriceId());

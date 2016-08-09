@@ -3,16 +3,19 @@ package com.trapezateam.trapeza;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.trapezateam.trapeza.adapters.CategoryAdapter;
@@ -41,6 +44,9 @@ public class CashierActivity extends Activity {
 
     @Bind(R.id.pay_button)
     Button mPayButton;
+
+    @Bind(R.id.discount_button)
+    Button mDiscountButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,16 +87,22 @@ public class CashierActivity extends Activity {
         billRecyclerView.setAdapter(mBill);
         mMenu = (GridView) findViewById(R.id.gvMenu);
         requestMenu();
+
+        mDiscountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onDiscountButtonClicked();
+            }
+        });
     }
 
-
     void onPaymentComplete(int paymentType) {
-        Toast.makeText(CashierActivity.this, "Произошла оплата", Toast.LENGTH_SHORT).show();
-        TrapezaRestClient.PaymentMethods.buyDish(mBill.getPriceIdQuantityPairs(), paymentType, 1,
+        TrapezaRestClient.PaymentMethods.buyDish(mBill.getPriceIdQuantityPairs(), paymentType,
+                mBill.getDiscountFraction(),
                 new Callback<StatusResponse>() {
                     @Override
                     public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
-                        if(!response.body().isSuccess()) {
+                        if (!response.body().isSuccess()) {
                             onFailure(call, new Throwable(response.body().getMessage()));
                             return;
                         }
@@ -118,9 +130,10 @@ public class CashierActivity extends Activity {
             @Override
             public void onChanged() {
                 Log.i(TAG, "bill changed to " + mBill.getTotalPrice());
-                String priceText = "Оплата " + String.valueOf(mBill.getTotalPrice()) + " руб";
+                String priceText = "Оплата " + mBill.getTotalPrice() + " руб";
                 mPayButton.setText(priceText);
-
+                String discountText = "Скидка " + mBill.getDiscount() + "%";
+                mDiscountButton.setText(discountText);
             }
 
             @Override
@@ -214,6 +227,35 @@ public class CashierActivity extends Activity {
 
         String priceText = "Оплата " + String.valueOf(mBill.getTotalPrice()) + " руб";
         mPayButton.setText(priceText);
+    }
+
+    void openSaleDialog(int value) {
+        LayoutInflater inflater = (LayoutInflater)
+                getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final NumberPicker numberPicker = (NumberPicker) inflater.inflate(R.layout.number_picker_dialog_layout, null);
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(100);
+        numberPicker.setValue(value);
+        AlertDialog d = new AlertDialog.Builder(this)
+                .setTitle("Text Size:")
+                .setView(numberPicker)
+                .setPositiveButton("Готово",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                mBill.setDiscount(numberPicker.getValue());
+                            }
+                        })
+                .setNegativeButton("Отмена",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            }
+                        })
+                .create();
+        d.show();
+    }
+
+    void onDiscountButtonClicked() {
+        openSaleDialog(mBill.getDiscount());
     }
 
 }
