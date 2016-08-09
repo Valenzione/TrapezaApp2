@@ -28,6 +28,7 @@ public class Category extends RealmObject implements Parcelable {
     protected Category(Parcel in) {
         categoryId = in.readInt();
         name = in.readString();
+        photoUrl = in.readString();
     }
 
     public static final Creator<Category> CREATOR = new Creator<Category>() {
@@ -85,6 +86,7 @@ public class Category extends RealmObject implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(categoryId);
         parcel.writeString(name);
+        parcel.writeString(photoUrl);
     }
 
     public String getPhotoUrl() {

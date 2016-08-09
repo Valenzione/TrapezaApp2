@@ -1,14 +1,10 @@
 package com.trapezateam.trapeza;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -20,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.SaveCompleteResponse;
 import com.trapezateam.trapeza.api.models.StatusResponse;
@@ -78,6 +75,9 @@ public class CategoryConfigurationFragment extends AdministratorActivityFragment
             if (getArguments().containsKey(KEY_CATEGORY)) {
                 editCategory = (Category) getArguments().get(KEY_CATEGORY);
                 mCategoryName.setText(editCategory.getName());
+                Picasso.with(getActivity()).setLoggingEnabled(true);
+                Picasso.with(getActivity()).load(TrapezaRestClient.getFileUrl(editCategory.getPhotoUrl())).into(mCategoryImage);
+                Picasso.with(getActivity()).setLoggingEnabled(false);
             }
         }
 
@@ -204,8 +204,15 @@ public class CategoryConfigurationFragment extends AdministratorActivityFragment
             }
             int width = src.getWidth();
             int height = src.getHeight();
-            int crop = Math.abs(width - height) / 2;
-            Bitmap cropImg = Bitmap.createBitmap(src, crop, 0, height, height);
+            Bitmap cropImg;
+            if (width > height) {
+                int crop = (width - height) / 2;
+                cropImg = Bitmap.createBitmap(src, crop, 0, height, height);
+            } else {
+                int crop = (height - width) / 2;
+                cropImg = Bitmap.createBitmap(src, 0, crop, width, width);
+            }
+
             mCategoryImage.setImageBitmap(cropImg);
         }
     }

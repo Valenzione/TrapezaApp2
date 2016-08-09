@@ -72,8 +72,8 @@ public class LoginActivity extends AppCompatActivity {
             TrapezaRestClient.setToken(DebugConfig.DEFAULT_TOKEN);
             onLoginSuccess(DebugConfig.DEFAULT_TOKEN, 0);
         }
-        mEmailText.setText("cashier");
-        mPasswordText.setText("cashier");
+        mEmailText.setText("admin");
+        mPasswordText.setText("admin");
     }
 
     public void login() {

@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.squareup.picasso.Picasso;
 import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.SaveCompleteResponse;
 import com.trapezateam.trapeza.api.models.StatusResponse;
@@ -63,6 +64,10 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
             mDishPrice.setText(String.valueOf(dish.getPrice()));
             ImageView imageView = (ImageView) view.findViewById(R.id.dish_image);
             oldDrawable = imageView.getDrawable();
+
+            Picasso.with(getActivity()).setLoggingEnabled(true);
+            Picasso.with(getActivity()).load(TrapezaRestClient.getFileUrl(dish.getPhotoUrl())).into(imageView);
+            Picasso.with(getActivity()).setLoggingEnabled(false);
         }
 
         return view;
