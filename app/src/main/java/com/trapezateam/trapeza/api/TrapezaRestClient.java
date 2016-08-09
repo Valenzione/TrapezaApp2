@@ -88,6 +88,11 @@ public class TrapezaRestClient {
         getApiInstance().authenticate(login, password).enqueue(callback);
     }
 
+    public static void logout(Callback<StatusResponse> callback) {
+        getApiInstance().logout(getToken()).enqueue(callback);
+    }
+
+
     public static class UserMethods {
         public static void get(int id, Callback<List<UserResponse>> callback) {
             getApiInstance().userInfo(getToken(), id).enqueue(callback);

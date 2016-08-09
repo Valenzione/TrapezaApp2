@@ -123,5 +123,6 @@ public interface TrapezaApi {
                                  @Query("sale") double sale,
                                  @Query("token") String token);
 
-
+    @POST("/requests?func=user.logout")
+    Call<StatusResponse> logout(@Query("token") String token);
 }
