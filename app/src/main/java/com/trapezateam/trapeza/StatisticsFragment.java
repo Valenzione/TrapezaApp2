@@ -71,7 +71,7 @@ public class StatisticsFragment extends AdministratorActivityFragment {
     }
 
     private void onWeeklySalesClicked(){
-        TrapezaRestClient.StatisticsMethods.boughtWeek(new StatisticsResponse());
+        TrapezaRestClient.StatisticsMethods.boughtWeek(new StatisticsCallback());
     }
 
     class StatisticsCallback implements Callback<StatisticsResponse> {
