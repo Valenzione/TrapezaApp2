@@ -5,9 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +23,7 @@ import android.widget.Toast;
 import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.SaveCompleteResponse;
 import com.trapezateam.trapeza.api.models.StatusResponse;
+import com.trapezateam.trapeza.api.models.UploadResponse;
 import com.trapezateam.trapeza.database.Category;
 
 import java.io.IOException;
@@ -34,12 +39,15 @@ public class CategoryConfigurationFragment extends AdministratorActivityFragment
     private static final String TAG = "CategoryConfig";
     public static final String KEY_CATEGORY = "category";
     private static int IMAGE_PICKER_SELECT = 1;
+    private static String imagePath;
+
 
     private ImageView mCategoryImage;
     private EditText mCategoryName;
     private Button mSaveCategory;
+    Drawable oldDrawable;
 
-    private Category editCategory;
+    private Category editCategory, category;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,13 +73,6 @@ public class CategoryConfigurationFragment extends AdministratorActivityFragment
 
         mCategoryName = (EditText) view.findViewById(R.id.category_name);
         mSaveCategory = (Button) view.findViewById(R.id.save_category_button);
-        mSaveCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveCategory(String.valueOf(mCategoryName.getText()));
-                returnToMenu();
-            }
-        });
 
         if (getArguments() != null) {
             if (getArguments().containsKey(KEY_CATEGORY)) {
@@ -80,76 +81,113 @@ public class CategoryConfigurationFragment extends AdministratorActivityFragment
             }
         }
 
+        mSaveCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Realm realm = Realm.getDefaultInstance();
+                realm.beginTransaction();
+                if (getArguments() != null) {
+                    category = (Category) getArguments().get(KEY_CATEGORY);
+                } else {
+                    category = realm.createObject(Category.class);
+                }
+                category.setName(String.valueOf(mCategoryName.getText()));
+                Realm.getDefaultInstance().commitTransaction();
+                saveCategory(category, ((BitmapDrawable) mCategoryImage.getDrawable()).getBitmap());
+                returnToMenu();
+
+            }
+        });
+
+
     }
 
     private void returnToMenu() {
         getAdministratorActivity().startMenuFragment(true);
     }
 
-    private void saveCategory(String categoryName) {
-        final Category category;
-        final Realm realm = Realm.getDefaultInstance();
-        if (getArguments() != null) {
-            realm.beginTransaction();
-            category = (Category) getArguments().get(KEY_CATEGORY);
-            category.setName(categoryName);
-            TrapezaRestClient.CategoryMethods.update(category, new Callback<StatusResponse>() {
-                @Override
-                public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
-                    Toast toast;
-                    if (response.body().isSuccess()) {
-                        toast = Toast.makeText(getAdministratorActivity(), "Категория успешно изменена", Toast.LENGTH_SHORT);
-                    } else {
-                        toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, категория не изменена", Toast.LENGTH_SHORT);
-                    }
-                    toast.show();
-                }
+    private void uploadImage(Bitmap bitmap) {
 
-                @Override
-                public void onFailure(Call<StatusResponse> call, Throwable t) {
-                    Toast.makeText(getAdministratorActivity(), "Error updating category " + t.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                    t.printStackTrace();
 
-                }
-            });
-            realm.commitTransaction();
-        } else {
+    }
 
-            realm.beginTransaction();
-            category = realm.createObject(Category.class);
-            category.setName(categoryName);
-            realm.commitTransaction();
+    private void saveCategory(final Category category, Bitmap bitmap) {
 
-            TrapezaRestClient.CategoryMethods.create(category, new Callback<SaveCompleteResponse>() {
-                @Override
-                public void onResponse(Call<SaveCompleteResponse> call, final Response<SaveCompleteResponse> response) {
-                    Toast toast;
-                    if (response.body().isSuccess()) {
-                        toast = Toast.makeText(getAdministratorActivity(), "Категория успешно добавлена", Toast.LENGTH_SHORT);
-                        realm.executeTransaction(new Realm.Transaction() {
+        TrapezaRestClient.UploadMethods.uploadImage(bitmap, new Callback<UploadResponse>() {
+            @Override
+            public void onResponse(Call<UploadResponse> call, final Response<UploadResponse> response) {
+                Log.d(TAG, "Message: " + response.body().getMessage());
+                Log.d(TAG, "Succes " + response.body().isSuccess());
+                if (response.body().isSuccess()) {
+                    Realm.getDefaultInstance().beginTransaction();
+                    category.setPhotoUrl(response.body().getPath());
+                    Realm.getDefaultInstance().commitTransaction();
+
+                    if (getArguments() != null) {
+                        TrapezaRestClient.CategoryMethods.update(category, new Callback<StatusResponse>() {
                             @Override
-                            public void execute(Realm realm) {
-                                RealmResults<Category> categories = realm.where(Category.class).equalTo("categoryId", 0).findAll();
-                                categories.first().setCategoryId(response.body().getId());
+                            public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
+                                Toast toast;
+                                if (response.body().isSuccess()) {
+                                    toast = Toast.makeText(getAdministratorActivity(), "Категория успешно изменена", Toast.LENGTH_SHORT);
+                                } else {
+                                    toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, категория не изменена", Toast.LENGTH_SHORT);
+                                }
+                                toast.show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<StatusResponse> call, Throwable t) {
+                                Toast.makeText(getAdministratorActivity(), "Error updating category " + t.getMessage(),
+                                        Toast.LENGTH_LONG).show();
+                                t.printStackTrace();
+
                             }
                         });
+
                     } else {
-                        toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, категория не добавлена", Toast.LENGTH_SHORT);
+
+
+                        TrapezaRestClient.CategoryMethods.create(category, new Callback<SaveCompleteResponse>() {
+                            @Override
+                            public void onResponse(Call<SaveCompleteResponse> call, final Response<SaveCompleteResponse> response) {
+                                Toast toast;
+                                if (response.body().isSuccess()) {
+                                    toast = Toast.makeText(getAdministratorActivity(), "Категория успешно добавлена", Toast.LENGTH_SHORT);
+                                    Realm.getDefaultInstance().executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            RealmResults<Category> categories = realm.where(Category.class).equalTo("categoryId", 0).findAll();
+                                            categories.first().setCategoryId(response.body().getId());
+                                        }
+                                    });
+                                } else {
+                                    toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, категория не добавлена", Toast.LENGTH_SHORT);
+
+                                }
+                                toast.show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<SaveCompleteResponse> call, Throwable t) {
+                                Toast.makeText(getAdministratorActivity(), "Error saving category " + t.getMessage(),
+                                        Toast.LENGTH_LONG).show();
+                                t.printStackTrace();
+                            }
+                        });
 
                     }
-                    toast.show();
                 }
+            }
 
-                @Override
-                public void onFailure(Call<SaveCompleteResponse> call, Throwable t) {
-                    Toast.makeText(getAdministratorActivity(), "Error saving category " + t.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                    t.printStackTrace();
-                }
-            });
+            @Override
+            public void onFailure(Call<UploadResponse> call, Throwable t) {
+                t.printStackTrace();
+                Log.d(TAG, t.toString());
+            }
+        });
 
-        }
+
     }
 
 
@@ -171,4 +209,6 @@ public class CategoryConfigurationFragment extends AdministratorActivityFragment
             mCategoryImage.setImageBitmap(cropImg);
         }
     }
+
+
 }

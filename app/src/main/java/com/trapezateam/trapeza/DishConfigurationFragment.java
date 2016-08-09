@@ -106,13 +106,9 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
                     dish.setName(String.valueOf(mDishName.getText()));
                     dish.setDescription(String.valueOf(mDishDescription.getText()));
                     dish.setPrice(Integer.parseInt(String.valueOf(mDishPrice.getText())));
-                    if (oldDrawable != mDishImage.getDrawable() || mDishImage.getDrawable() != null) {
-                        uploadImage(((BitmapDrawable) mDishImage.getDrawable()).getBitmap());
-                    }
-                    dish.setPhotoUrl(imagePath);
                     realm.commitTransaction();
                     RealmClient.updateModel(dish);
-                    saveDish(dish);
+                    saveDish(dish, ((BitmapDrawable) mDishImage.getDrawable()).getBitmap());
                     Log.d(TAG, "Dish saved");
                     returnToMenu();
                 }
@@ -120,98 +116,94 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
         });
     }
 
-    private void uploadImage(Bitmap bitmap) {
-        TrapezaRestClient.UploadMethods.uploadImage(bitmap, new Callback<UploadResponse>() {
-            @Override
-            public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
-                Log.d(TAG, "Message: " + response.body().getMessage());
-                Log.d(TAG, "Succes " + response.body().isSuccess());
-                if (response.body().isSuccess()) {
-                    imagePath = response.body().getPath();
-                    Log.d(TAG, "Path is: " + imagePath );
-                } else {
-                    imagePath = "succes:false";
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UploadResponse> call, Throwable t) {
-                imagePath = "error";
-                t.printStackTrace();
-                Log.d(TAG, t.toString());
-            }
-        });
-
-    }
 
     private void returnToMenu() {
         getAdministratorActivity().startMenuFragment(true);
     }
 
 
-    void saveDish(final Dish dish) {
-        if (getArguments().containsKey(KEY_CATEGORY_ID)) {
-            TrapezaRestClient.DishMethods.create(dish, new Callback<SaveCompleteResponse>() {
-                @Override
-                public void onResponse(Call<SaveCompleteResponse> call,
-                                       final Response<SaveCompleteResponse> response) {
-                    Toast toast;
-                    if (response.body().isSuccess()) {
-                        toast = Toast.makeText(getAdministratorActivity(), "Блюдо успешно добавлено", Toast.LENGTH_SHORT);
-                        Realm.getDefaultInstance().executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                RealmResults<Dish> dishes = realm.where(Dish.class).equalTo("dishId", 0).findAll();
+    void saveDish(final Dish dish, Bitmap bitmap) {
 
-                                if (dishes.size() != 0) {
-                                    Log.d(TAG, "Everything is ok. oldId is " + dishes.first().getDishId() + ". New id is " + response.body().getId());
-                                    Log.d(TAG, "Category id set is " + dishes.first().getCategoryId());
-                                    dishes.first().setDishId(response.body().getId());
+        TrapezaRestClient.UploadMethods.uploadImage(bitmap, new Callback<UploadResponse>() {
+            @Override
+            public void onResponse(Call<UploadResponse> call, final Response<UploadResponse> response) {
+                Log.d(TAG, "Message: " + response.body().getMessage());
+                Log.d(TAG, "Succes " + response.body().isSuccess());
+                if (response.body().isSuccess()) {
+                    Realm.getDefaultInstance().beginTransaction();
+                    dish.setPhotoUrl(response.body().getPath());
+                    Realm.getDefaultInstance().commitTransaction();
+
+                    if (getArguments().containsKey(KEY_CATEGORY_ID)) {
+                        TrapezaRestClient.DishMethods.create(dish, new Callback<SaveCompleteResponse>() {
+                            @Override
+                            public void onResponse(Call<SaveCompleteResponse> call,
+                                                   final Response<SaveCompleteResponse> response) {
+                                Toast toast;
+                                if (response.body().isSuccess()) {
+                                    toast = Toast.makeText(getAdministratorActivity(), "Блюдо успешно добавлено", Toast.LENGTH_SHORT);
+                                    Realm.getDefaultInstance().executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            RealmResults<Dish> dishes = realm.where(Dish.class).equalTo("dishId", 0).findAll();
+                                            if (dishes.size() != 0) {
+                                                dishes.first().setDishId(response.body().getId());
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, блюдо не добавлено", Toast.LENGTH_SHORT);
                                 }
+                                toast.show();
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<SaveCompleteResponse> call, Throwable t) {
+                                Toast.makeText(getAdministratorActivity(), "Error saving dish " + t.getMessage(),
+                                        Toast.LENGTH_LONG).show();
+                                t.printStackTrace();
+
+
                             }
                         });
                     } else {
-                        toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, блюдо не добавлено", Toast.LENGTH_SHORT);
+                        TrapezaRestClient.DishMethods.update(dish, new Callback<StatusResponse>() {
+                            @Override
+                            public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
+                                Toast toast;
+                                if (response.body().isSuccess()) {
+                                    toast = Toast.makeText(getAdministratorActivity(), "Блюдо успешно изменено", Toast.LENGTH_SHORT);
+                                } else {
+                                    toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, блюдо не изменено", Toast.LENGTH_SHORT);
+                                }
+                                toast.show();
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<StatusResponse> call, Throwable t) {
+                                Toast.makeText(getAdministratorActivity(), "Error updating dish " + t.getMessage(),
+                                        Toast.LENGTH_LONG).show();
+                                t.printStackTrace();
+
+                            }
+                        });
+
                     }
-                    toast.show();
 
+                } else {
+                    Toast.makeText(getAdministratorActivity(), "Произошла ошибка загрузки фото, блюдо не изменено", Toast.LENGTH_SHORT).show();
                 }
+            }
 
-                @Override
-                public void onFailure(Call<SaveCompleteResponse> call, Throwable t) {
-                    Toast.makeText(getAdministratorActivity(), "Error saving dish " + t.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                    t.printStackTrace();
-
-
-                }
-            });
-        } else {
-            //TODO check for price update
-            TrapezaRestClient.DishMethods.update(dish, new Callback<StatusResponse>() {
-                @Override
-                public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
-                    Toast toast;
-                    if (response.body().isSuccess()) {
-                        toast = Toast.makeText(getAdministratorActivity(), "Блюдо успешно изменено", Toast.LENGTH_SHORT);
-                    } else {
-                        toast = Toast.makeText(getAdministratorActivity(), "Произошла ошибка, блюдо не изменено", Toast.LENGTH_SHORT);
-                    }
-                    toast.show();
-
-                }
-
-                @Override
-                public void onFailure(Call<StatusResponse> call, Throwable t) {
-                    Toast.makeText(getAdministratorActivity(), "Error updating dish " + t.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                    t.printStackTrace();
-
-                }
-            });
-
-        }
-
+            @Override
+            public void onFailure(Call<UploadResponse> call, Throwable t) {
+                Toast.makeText(getAdministratorActivity(), "Произошла ошибка загрузки фото, блюдо не изменено", Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
+                Log.d(TAG, t.toString());
+            }
+        });
     }
 
 

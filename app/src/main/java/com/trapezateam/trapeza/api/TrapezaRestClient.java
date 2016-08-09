@@ -18,11 +18,14 @@ import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.User;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -169,6 +172,16 @@ public class TrapezaRestClient {
                     .create(MediaType.parse("image/*"),
                             byteArrayOutputStream.toByteArray());
             getUploadApiInstance().upload(requestBody).enqueue(callback);
+        }
+
+        public static String uploadImage(Bitmap bitmap) throws IOException {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            RequestBody requestBody = RequestBody
+                    .create(MediaType.parse("image/*"),
+                            byteArrayOutputStream.toByteArray());
+            Response<UploadResponse> call = getUploadApiInstance().upload(requestBody).execute();
+            return call.body().getPath();
         }
     }
 }
