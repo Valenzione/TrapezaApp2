@@ -95,8 +95,8 @@ public class User extends RealmObject implements Parcelable {
     }
 
     public String toString() {
-        String out = this.getFullName() + System.lineSeparator()
-                + "Email: " + this.getEmail() + "; Phone: " + this.getPhone();
+        String out = this.getFullName() + System.lineSeparator() +
+                "Phone: " + this.getPhone();
         return out;
     }
 
