@@ -114,6 +114,9 @@ public interface TrapezaApi {
     @GET("/requests?func=boughtDay")
     Call<StatisticsResponse> boughtDay(@Query("token") String token);
 
+    @GET("/requests?func=boughtInterval")
+    Call<StatisticsResponse> boughtInterval(@Query("from") String from, @Query("to") String to);
+
     /**
      * @param prices      JSON array [{"id":49, "num":10}]
      * @param paymentType <code>0</code> - pays in cash. <code>1</code> - pays by card
@@ -128,4 +131,5 @@ public interface TrapezaApi {
 
     @POST("/requests?func=user.logout")
     Call<StatusResponse> logout(@Query("token") String token);
+
 }
