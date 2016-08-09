@@ -40,6 +40,7 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
 
     public static final String KEY_DISH = "dish";
     public static final String KEY_CATEGORY_ID = "father";
+    static String imagePath;
 
     ImageView mDishImage;
     Button mSaveDishButton;
@@ -105,7 +106,10 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
                     dish.setName(String.valueOf(mDishName.getText()));
                     dish.setDescription(String.valueOf(mDishDescription.getText()));
                     dish.setPrice(Integer.parseInt(String.valueOf(mDishPrice.getText())));
-                    if(oldDrawable != mDishImage.getDrawable()){dish.setPhotoUrl(uploadImage(((BitmapDrawable) mDishImage.getDrawable()).getBitmap()));}
+                    if (oldDrawable != mDishImage.getDrawable() || mDishImage.getDrawable() != null) {
+                        uploadImage(((BitmapDrawable) mDishImage.getDrawable()).getBitmap());
+                    }
+                    dish.setPhotoUrl(imagePath);
                     realm.commitTransaction();
                     RealmClient.updateModel(dish);
                     saveDish(dish);
@@ -116,29 +120,28 @@ public class DishConfigurationFragment extends AdministratorActivityFragment {
         });
     }
 
-    private String uploadImage(Bitmap bitmap) {
-        final String[] photoUrl = new String[1];
+    private void uploadImage(Bitmap bitmap) {
         TrapezaRestClient.UploadMethods.uploadImage(bitmap, new Callback<UploadResponse>() {
             @Override
             public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
                 Log.d(TAG, "Message: " + response.body().getMessage());
                 Log.d(TAG, "Succes " + response.body().isSuccess());
                 if (response.body().isSuccess()) {
-                    Log.d(TAG, "Path is: " + response.body().getPath() + " " + response.body().isSuccess());
-                    photoUrl[0] = response.body().getPath();
+                    imagePath = response.body().getPath();
+                    Log.d(TAG, "Path is: " + imagePath );
                 } else {
-                    photoUrl[0] = "succes:false";
+                    imagePath = "succes:false";
                 }
             }
 
             @Override
             public void onFailure(Call<UploadResponse> call, Throwable t) {
-                photoUrl[0] = "error";
+                imagePath = "error";
                 t.printStackTrace();
                 Log.d(TAG, t.toString());
             }
         });
-        return photoUrl[0];
+
     }
 
     private void returnToMenu() {
