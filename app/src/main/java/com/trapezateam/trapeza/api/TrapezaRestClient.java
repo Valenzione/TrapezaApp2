@@ -9,6 +9,7 @@ import com.trapezateam.trapeza.api.models.CategoryResponse;
 import com.trapezateam.trapeza.api.models.CompanyDataResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
 import com.trapezateam.trapeza.api.models.SaveCompleteResponse;
+import com.trapezateam.trapeza.api.models.StatisticsResponse;
 import com.trapezateam.trapeza.api.models.StatusResponse;
 import com.trapezateam.trapeza.api.models.UploadResponse;
 import com.trapezateam.trapeza.api.models.UserResponse;
@@ -182,6 +183,12 @@ public class TrapezaRestClient {
                             byteArrayOutputStream.toByteArray());
             Response<UploadResponse> call = getUploadApiInstance().upload(requestBody).execute();
             return call.body().getPath();
+        }
+    }
+
+    public static class StatisticsMethods {
+        public static void boughtDay(Callback<StatisticsResponse> callback) {
+            getApiInstance().boughtDay(getToken()).enqueue(callback);
         }
     }
 }

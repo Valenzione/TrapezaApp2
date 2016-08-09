@@ -19,6 +19,7 @@ import com.trapezateam.trapeza.adapters.CategoryAdapter;
 import com.trapezateam.trapeza.adapters.DishAdapter;
 import com.trapezateam.trapeza.adapters.DishEventsListener;
 import com.trapezateam.trapeza.adapters.MenuAdapter;
+import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.RealmClient;
 
@@ -45,7 +46,6 @@ public class CashierActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_cashier);
 
-
         ButterKnife.bind(this);
         mPayButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,15 +54,13 @@ public class CashierActivity extends Activity {
                 builder.setPositiveButton("Наличный", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast t = Toast.makeText(CashierActivity.this, "Произошла оплата", Toast.LENGTH_SHORT);
-                        t.show();
+                        onPaymentComplete();
                     }
                 });
                 builder.setNegativeButton("Безналичный расчет", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast t = Toast.makeText(CashierActivity.this, "Произошла оплата", Toast.LENGTH_SHORT);
-                        t.show();
+                        onPaymentComplete();
                     }
                 });
                 AlertDialog alert = builder.create();
@@ -79,6 +77,10 @@ public class CashierActivity extends Activity {
         billRecyclerView.setAdapter(mBill);
         mMenu = (GridView) findViewById(R.id.gvMenu);
         requestMenu();
+    }
+
+    void onPaymentComplete() {
+        Toast.makeText(CashierActivity.this, "Произошла оплата", Toast.LENGTH_SHORT).show();
     }
 
     private void registerBillObserver() {
@@ -152,8 +154,6 @@ public class CashierActivity extends Activity {
         mMenu.setAdapter(ma);
 
         dialog.dismiss();
-
-
     }
 
 

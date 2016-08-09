@@ -1,12 +1,11 @@
 package com.trapezateam.trapeza.api;
 
-import android.media.Image;
-
 import com.trapezateam.trapeza.api.models.AuthenticationResponse;
 import com.trapezateam.trapeza.api.models.CategoryResponse;
 import com.trapezateam.trapeza.api.models.CompanyDataResponse;
 import com.trapezateam.trapeza.api.models.DishResponse;
 import com.trapezateam.trapeza.api.models.SaveCompleteResponse;
+import com.trapezateam.trapeza.api.models.StatisticsResponse;
 import com.trapezateam.trapeza.api.models.StatusResponse;
 import com.trapezateam.trapeza.api.models.UserResponse;
 
@@ -109,9 +108,19 @@ public interface TrapezaApi {
     @GET("/requests?func=boughtMonth")
     Call<File> boughtMonth(@Query("token") String token);
 
+    @GET("/requests?func=boughtDay")
+    Call<StatisticsResponse> boughtDay(@Query("token") String token);
 
-    //TODO _
+    /**
+     *
+     * @param prices
+     * @param payment <code>0</code> - pays in cash. <code>1</code> - pays by card
+     * @param token
+     * @return
+     */
     @POST("/requests?func=buyDish")
     Call<StatusResponse> buyDish(@Query("prices") int[] prices, @Query("payment") int payment, @Query("token") String token);
+
+
 
 }
