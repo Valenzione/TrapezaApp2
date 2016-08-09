@@ -93,9 +93,9 @@ public class TrapezaRestClient {
             getApiInstance().userInfo(getToken(), id).enqueue(callback);
         }
 
-        public static void create(User user, String password, Callback<SaveCompleteResponse> callback) {
+        public static void create(User user, String login, String password, Callback<SaveCompleteResponse> callback) {
             Log.d("RestClient", "Company " + TrapezaApplication.getCompany());
-            getApiInstance().addUser(user.getEmail(), password, user.getPhone(), user.getFullName(),
+            getApiInstance().addUser(login, password, user.getPhone(), user.getFullName(),
                     user.getSurname(), TrapezaApplication.getCompany(), user.getRole(), TrapezaRestClient.getToken()).enqueue(callback);
         }
 

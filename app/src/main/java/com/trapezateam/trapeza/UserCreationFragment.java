@@ -30,7 +30,7 @@ public class UserCreationFragment extends AdministratorActivityFragment {
 
 
     Button mSaveUserButton;
-    EditText mUserName, mUserPhone, mUserEmail, mUserSurname, mUserPass;
+    EditText mUserName, mUserPhone, mUserEmail, mUserSurname, mUserPass, mUserLogin;
     RadioGroup mRoleChoice;
 
     @Override
@@ -49,10 +49,10 @@ public class UserCreationFragment extends AdministratorActivityFragment {
         mUserName = (EditText) getView().findViewById(R.id.user_name);
         mUserSurname = (EditText) getView().findViewById(R.id.user_surname);
         mUserPhone = (EditText) getView().findViewById(R.id.user_phone);
-        mUserEmail = (EditText) getView().findViewById(R.id.user_email);
+        // mUserEmail = (EditText) getView().findViewById(R.id.user_email);
         mUserPass = (EditText) getView().findViewById(R.id.user_password);
         mRoleChoice = (RadioGroup) getView().findViewById(R.id.radio_group);
-
+        mUserLogin = (EditText) getView().findViewById(R.id.user_login);
 
 
         mSaveUserButton.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +65,7 @@ public class UserCreationFragment extends AdministratorActivityFragment {
                     user.setCompanyId(TrapezaApplication.getCompany());
                     user.setName(String.valueOf(mUserName.getText()));
                     user.setSurname(String.valueOf(mUserSurname.getText()));
-                    user.setEmail(String.valueOf(mUserEmail.getText()));
+                    //user.setEmail(String.valueOf(mUserEmail.getText()));
                     user.setPhone(String.valueOf(mUserPhone.getText()));
                     user.setRoleFromId(mRoleChoice.getCheckedRadioButtonId());
                     realm.commitTransaction();
@@ -86,7 +86,7 @@ public class UserCreationFragment extends AdministratorActivityFragment {
 
     void saveUser(final User user) {
 
-        TrapezaRestClient.UserMethods.create(user, String.valueOf(mUserPass.getText()), new Callback<SaveCompleteResponse>() {
+        TrapezaRestClient.UserMethods.create(user, String.valueOf(mUserLogin.getText()), String.valueOf(mUserPass.getText()), new Callback<SaveCompleteResponse>() {
             @Override
             public void onResponse(Call<SaveCompleteResponse> call,
                                    final Response<SaveCompleteResponse> response) {

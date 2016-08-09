@@ -96,8 +96,7 @@ public class User extends RealmObject implements Parcelable {
 
     public String toString() {
         String out = this.getFullName() + System.lineSeparator()
-                + "Email: " + this.getEmail() + System.lineSeparator()
-                + "Role: " + this.getRole();
+                + "Email: " + this.getEmail() + "; Phone: " + this.getPhone();
         return out;
     }
 
@@ -108,7 +107,7 @@ public class User extends RealmObject implements Parcelable {
         email = userResponse.getEmail();
         companyId = getCompanyId();
         role = userResponse.getRole();
-        phone=userResponse.getPhone();
+        phone = userResponse.getPhone();
     }
 
     public String getPhotoURL() {

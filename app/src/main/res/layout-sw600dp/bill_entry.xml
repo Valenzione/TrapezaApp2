@@ -19,7 +19,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center"
-            android:background="@android:drawable/btn_dialog"
+            android:background="@drawable/ic_delete_black_48dp"
             android:onClick="onClickDeleteItem" />
 
         <TextView
@@ -49,7 +49,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center"
-            android:background="@drawable/ic_remove"
+            android:background="@drawable/ic_remove_circle_black_48dp"
             android:onClick="onClickRemovePayCheckItem" />
 
         <EditText
@@ -61,7 +61,7 @@
             android:gravity="right"
             android:inputType="number"
             android:maxWidth="150dp"
-            android:minWidth="40dp"
+            android:minWidth="56dp"
             android:textColor="@color/abc_primary_text_material_light" />
 
         <ImageButton
@@ -71,7 +71,7 @@
             android:layout_alignParentRight="true"
             android:layout_gravity="center"
             android:layout_toLeftOf="@+id/bill_entry_quantity"
-            android:background="@drawable/ic_add"
+            android:background="@drawable/ic_add_circle_black_48dp"
             android:onClick="onClickAddPayCheckItem" />
 
         <TextView

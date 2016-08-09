@@ -19,7 +19,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center"
-            android:background="@android:drawable/btn_dialog"
+            android:background="@drawable/ic_delete_black_48dp"
             android:onClick="onClickDeleteItem" />
 
         <TextView

@@ -49,12 +49,12 @@ public class UserConfigurationFragment extends AdministratorActivityFragment {
         mUserName = (EditText) getView().findViewById(R.id.user_name);
         mUserSurname = (EditText) getView().findViewById(R.id.user_surname);
         mUserPhone = (EditText) getView().findViewById(R.id.user_phone);
-        mUserEmail = (EditText) getView().findViewById(R.id.user_email);
+        //mUserEmail = (EditText) getView().findViewById(R.id.user_email);
         mUserPass = (EditText) getView().findViewById(R.id.user_password);
         mRoleChoice = (RadioGroup) getView().findViewById(R.id.radio_group);
 
         mUserPass.setVisibility(View.INVISIBLE);
-        mUserEmail.setVisibility(View.INVISIBLE);
+        //mUserEmail.setVisibility(View.INVISIBLE);
 
         User bundledUser = (User) getArguments().get(KEY_USER);
         Log.d(TAG, bundledUser.toString());
