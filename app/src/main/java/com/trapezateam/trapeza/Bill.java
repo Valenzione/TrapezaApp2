@@ -2,6 +2,7 @@ package com.trapezateam.trapeza;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -71,8 +72,11 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
         @Bind(R.id.bill_entry_total_price)
         TextView mTotalPrice;
 
+        View mView;
+
         public ViewHolder(View v) {
             super(v);
+            mView = v;
             ButterKnife.bind(this, v);
         }
     }
@@ -190,6 +194,13 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
         holder.mIncrement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int p = holder.getLayoutPosition();
+                incrementQuantity(p);
+            }
+        });
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 int p = holder.getLayoutPosition();
                 incrementQuantity(p);
             }
