@@ -7,40 +7,94 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/primary_light">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <Space
+                android:layout_width="20px"
+                android:layout_height="20dp" />
+
             <Button
                 android:id="@+id/daily_sales"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.05"
-                android:text="daily_sales" />
+                android:text="Продажи за сегодня" />
+
+            <Space
+                android:layout_width="20px"
+                android:layout_height="20dp" />
 
             <Button
                 android:id="@+id/weekly_sales"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.05"
-                android:text="weekly_sales" />
+                android:text="Продажи за неделю" />
+
+            <Space
+                android:layout_width="20px"
+                android:layout_height="20dp" />
 
             <Button
                 android:id="@+id/monthly_sales"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.05"
-                android:text="monthly_sales" />
+                android:text="Продажи за месяц" />
 
-            <Button
-                android:id="@+id/sales_per_cashier"
+            <Space
+                android:layout_width="20px"
+                android:layout_height="20dp" />
+
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.05"
-                android:text="sales_per_cashier" />
+                android:layout_height="1dp"
+                android:background="@color/material_grey_900" />
+
+            <Space
+                android:layout_width="20px"
+                android:layout_height="10dp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/interval_sales"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Продаже в Интервале" />
+
+                <DatePicker
+                    android:id="@+id/datePicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <DatePicker
+                    android:id="@+id/datePicker2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="20px"
+                android:layout_height="20dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/material_grey_900" />
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

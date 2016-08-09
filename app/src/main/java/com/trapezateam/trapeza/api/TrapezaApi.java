@@ -115,7 +115,7 @@ public interface TrapezaApi {
     Call<StatisticsResponse> boughtDay(@Query("token") String token);
 
     @GET("/requests?func=boughtInterval")
-    Call<StatisticsResponse> boughtInterval(@Query("from") String from, @Query("to") String to);
+    Call<StatisticsResponse> boughtInterval(@Query("from") String from, @Query("until") String to, @Query("token") String token);
 
     /**
      * @param prices      JSON array [{"id":49, "num":10}]

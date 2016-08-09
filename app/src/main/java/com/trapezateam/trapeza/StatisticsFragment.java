@@ -1,16 +1,21 @@
 package com.trapezateam.trapeza;
 
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.StatisticsResponse;
+
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,6 +34,12 @@ public class StatisticsFragment extends AdministratorActivityFragment {
     Button mMonthlySales;
     @Bind(R.id.weekly_sales)
     Button mWeeklySales;
+    @Bind(R.id.interval_sales)
+    Button mIntervalSales;
+    @Bind(R.id.datePicker)
+    DatePicker mFirstDate;
+    @Bind(R.id.datePicker2)
+    DatePicker mSecondDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,6 +71,18 @@ public class StatisticsFragment extends AdministratorActivityFragment {
                 onWeeklySalesClicked();
             }
         });
+        mIntervalSales.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onIntervalSalesClicked();
+            }
+        });
+    }
+
+    private void onIntervalSalesClicked() {
+        String firstDate = getStringFromDatePicker(mFirstDate);
+        String secondDate = getStringFromDatePicker(mSecondDate);
+        TrapezaRestClient.StatisticsMethods.boughtInterval(firstDate, secondDate, new StatisticsCallback());
     }
 
     private void onMonthlySalesClicked() {
@@ -70,7 +93,7 @@ public class StatisticsFragment extends AdministratorActivityFragment {
         TrapezaRestClient.StatisticsMethods.boughtDay(new StatisticsCallback());
     }
 
-    private void onWeeklySalesClicked(){
+    private void onWeeklySalesClicked() {
         TrapezaRestClient.StatisticsMethods.boughtWeek(new StatisticsCallback());
     }
 
@@ -91,5 +114,13 @@ public class StatisticsFragment extends AdministratorActivityFragment {
             Toast.makeText(getActivity(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
+    public static String getStringFromDatePicker(DatePicker datePicker) {
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth();
+        int year = datePicker.getYear();
+        return ""+day+"/"+month+"/"+year;
+    }
+
 }
 

@@ -206,7 +206,7 @@ public class TrapezaRestClient {
         }
 
         public static void boughtInterval(String from, String to, Callback<StatisticsResponse> callback) {
-            getApiInstance().boughtInterval(from, to).enqueue(callback);
+            getApiInstance().boughtInterval(from, to, getToken()).enqueue(callback);
         }
     }
 
