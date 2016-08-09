@@ -99,7 +99,7 @@ public class TrapezaRestClient {
         }
 
         public static void delete(User user, Callback<StatusResponse> callback) {
-            getApiInstance().deleteUser(user.getId(),getToken()).enqueue(callback);
+            getApiInstance().deleteUser(user.getId(), getToken()).enqueue(callback);
         }
 
         @Deprecated
@@ -117,11 +117,11 @@ public class TrapezaRestClient {
         }
 
         public static void create(Dish dish, Callback<SaveCompleteResponse> callback) {
-            getApiInstance().addDish(dish.getName(), null, dish.getDescription(), dish.getPrice(), dish.getCategoryId(), getToken(), TrapezaApplication.getCompany()).enqueue(callback);
+            getApiInstance().addDish(dish.getName(), dish.getPhotoUrl(), dish.getDescription(), dish.getPrice(), dish.getCategoryId(), getToken(), TrapezaApplication.getCompany()).enqueue(callback);
         }
 
         public static void update(Dish dish, Callback<StatusResponse> callback) {
-            getApiInstance().modifyDish(dish.getName(), null, dish.getDescription(), dish.getDishId(), dish.getPrice(), getToken()).enqueue(callback);
+            getApiInstance().modifyDish(dish.getName(), dish.getPhotoUrl(), dish.getDescription(), dish.getDishId(), dish.getPrice(), getToken()).enqueue(callback);
         }
 
         public static void delete(Dish dish, Callback<StatusResponse> callback) {
@@ -133,7 +133,7 @@ public class TrapezaRestClient {
     public static class CategoryMethods {
 
         public static void create(Category category, Callback<SaveCompleteResponse> callback) {
-            getApiInstance().addCategory(category.getName(), "null", getToken()).enqueue(callback);
+            getApiInstance().addCategory(category.getName(), category.getPhotoUrl(), getToken()).enqueue(callback);
         }
 
         public static void delete(Category category, Callback<StatusResponse> callback) {
@@ -141,7 +141,7 @@ public class TrapezaRestClient {
         }
 
         public static void update(Category category, Callback<StatusResponse> callback) {
-            getApiInstance().modifyCategory(category.getCategoryId(), category.getName(), "null", getToken()).enqueue(callback);
+            getApiInstance().modifyCategory(category.getCategoryId(), category.getName(), category.getPhotoUrl(), getToken()).enqueue(callback);
         }
 
         @Deprecated
@@ -155,9 +155,9 @@ public class TrapezaRestClient {
             getApiInstance().getData(companyId, getToken()).enqueue(callback);
         }
 
-        public static void create(Company company, User user,String login, String pass, Callback<SaveCompleteResponse> callback) {
-            getApiInstance().addCompany(company.getCompanyName(),company.getPhone(),company.getAddress(),
-                    login, pass,user.getPhone(),user.getName(),user.getSurname()).enqueue(callback);
+        public static void create(Company company, User user, String login, String pass, Callback<SaveCompleteResponse> callback) {
+            getApiInstance().addCompany(company.getCompanyName(), company.getPhone(), company.getAddress(),
+                    login, pass, user.getPhone(), user.getName(), user.getSurname()).enqueue(callback);
         }
     }
 

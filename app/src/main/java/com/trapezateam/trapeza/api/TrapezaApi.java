@@ -81,12 +81,12 @@ public interface TrapezaApi {
 
     @POST("/requests?func=dish.create")
     Call<SaveCompleteResponse> addDish(@Query("name") String name,
-                                       @Query("photo") Image photo, @Query("description") String description,
+                                       @Query("photo") String photo, @Query("description") String description,
                                        @Query("price") int price, @Query("categoryId") int father, @Query("token") String token, @Query("companyId") int companyId);
 
     @POST("/requests?func=dish.update")
     Call<StatusResponse> modifyDish(@Query("name") String name,
-                                    @Query("photo") Image photo, @Query("description") String description,
+                                    @Query("photo") String photo, @Query("description") String description,
                                     @Query("dish") int dishId, @Query("price") int price, @Query("token") String token);
 
     @POST("/requests?func=dish.delete")
