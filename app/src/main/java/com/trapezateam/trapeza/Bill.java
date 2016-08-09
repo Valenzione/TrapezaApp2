@@ -13,6 +13,10 @@ import android.widget.TextView;
 
 import com.trapezateam.trapeza.database.Dish;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -181,6 +185,21 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
             out += e.getDish().getName() + " " + e.getPrice() + "\n";
         }
         return out;
+    }
+
+    JSONArray getPriceIdQuantityPairs() {
+        JSONArray ans = new JSONArray();
+        for(BillEntry e : mEntires) {
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("id", e.getDish().getPriceId());
+                obj.put("num", e.getQuantity());
+                ans.put(obj);
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return ans;
     }
 }
 

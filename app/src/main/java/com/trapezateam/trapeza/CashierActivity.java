@@ -20,11 +20,15 @@ import com.trapezateam.trapeza.adapters.DishAdapter;
 import com.trapezateam.trapeza.adapters.DishEventsListener;
 import com.trapezateam.trapeza.adapters.MenuAdapter;
 import com.trapezateam.trapeza.api.TrapezaRestClient;
+import com.trapezateam.trapeza.api.models.StatusResponse;
 import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.RealmClient;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class CashierActivity extends Activity {
@@ -54,13 +58,13 @@ public class CashierActivity extends Activity {
                 builder.setPositiveButton("Наличный", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        onPaymentComplete();
+                        onPaymentComplete(0);
                     }
                 });
                 builder.setNegativeButton("Безналичный расчет", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        onPaymentComplete();
+                        onPaymentComplete(1);
                     }
                 });
                 AlertDialog alert = builder.create();
@@ -79,8 +83,34 @@ public class CashierActivity extends Activity {
         requestMenu();
     }
 
-    void onPaymentComplete() {
+
+    void onPaymentComplete(int paymentType) {
         Toast.makeText(CashierActivity.this, "Произошла оплата", Toast.LENGTH_SHORT).show();
+        TrapezaRestClient.PaymentMethods.buyDish(mBill.getPriceIdQuantityPairs(), paymentType, 1,
+                new Callback<StatusResponse>() {
+                    @Override
+                    public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
+                        if(!response.body().isSuccess()) {
+                            onFailure(call, new Throwable(response.body().getMessage()));
+                            return;
+                        }
+                        Toast.makeText(CashierActivity.this, "Оплата сохранена на сервере",
+                                Toast.LENGTH_SHORT).show();
+                        onPaymentSaved();
+                    }
+
+                    @Override
+                    public void onFailure(Call<StatusResponse> call, Throwable t) {
+                        t.printStackTrace();
+                        Toast.makeText(CashierActivity.this, "Ошибка сохранения оплаты на сервере: "
+                                + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        onPaymentSaved();
+                    }
+                });
+    }
+
+    void onPaymentSaved() {
+        mBill.clear();
     }
 
     private void registerBillObserver() {

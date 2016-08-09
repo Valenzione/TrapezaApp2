@@ -112,15 +112,16 @@ public interface TrapezaApi {
     Call<StatisticsResponse> boughtDay(@Query("token") String token);
 
     /**
-     *
-     * @param prices
-     * @param payment <code>0</code> - pays in cash. <code>1</code> - pays by card
+     * @param prices      JSON array [{"id":49, "num":10}]
+     * @param paymentType <code>0</code> - pays in cash. <code>1</code> - pays by card
+     * @param sale
      * @param token
      * @return
      */
     @POST("/requests?func=buyDish")
-    Call<StatusResponse> buyDish(@Query("prices") int[] prices, @Query("payment") int payment, @Query("token") String token);
-
+    Call<StatusResponse> buyDish(@Query("prices") String prices, @Query("payment") int paymentType,
+                                 @Query("sale") double sale,
+                                 @Query("token") String token);
 
 
 }

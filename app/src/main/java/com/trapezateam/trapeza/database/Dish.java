@@ -19,6 +19,7 @@ public class Dish extends RealmObject implements Parcelable {
     private int categoryId;
     private int price;
     private String photoUrl;
+    private int priceId;
 
     public Dish() {
     }
@@ -30,6 +31,7 @@ public class Dish extends RealmObject implements Parcelable {
         categoryId = response.getFather();
         price = Integer.parseInt(response.getPrice());
         photoUrl = response.getPhotoURL();
+        priceId = response.getPriceId();
     }
 
 
@@ -39,6 +41,7 @@ public class Dish extends RealmObject implements Parcelable {
         description = in.readString();
         categoryId = in.readInt();
         price = in.readInt();
+        priceId = in.readInt();
     }
 
     public static final Creator<Dish> CREATOR = new Creator<Dish>() {
@@ -93,6 +96,14 @@ public class Dish extends RealmObject implements Parcelable {
         return price;
     }
 
+    public void setPriceId(int priceId) {
+        this.priceId = priceId;
+    }
+
+    public int getPriceId() {
+        return priceId;
+    }
+
     @Override
     public String toString() {
         return name + " " + description + " in category " + categoryId + " with id " + dishId;
@@ -119,6 +130,7 @@ public class Dish extends RealmObject implements Parcelable {
         parcel.writeString(description);
         parcel.writeInt(categoryId);
         parcel.writeInt(price);
+        parcel.writeInt(priceId);
     }
 
     public String getPhotoUrl() {

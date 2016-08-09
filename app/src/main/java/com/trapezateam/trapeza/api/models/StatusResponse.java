@@ -10,13 +10,15 @@ public class StatusResponse {
     private boolean mSuccess;
     @SerializedName("message")
     private String mMessage;
+    @SerializedName("err")
+    private String mError;
 
     public boolean isSuccess() {
         return mSuccess;
     }
 
     public String getMessage() {
-        return mMessage;
+        return mMessage != null ? mMessage : mError;
     }
 
 

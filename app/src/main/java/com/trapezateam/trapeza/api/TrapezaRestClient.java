@@ -18,13 +18,14 @@ import com.trapezateam.trapeza.database.Company;
 import com.trapezateam.trapeza.database.Dish;
 import com.trapezateam.trapeza.database.User;
 
+import org.json.JSONArray;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -189,6 +190,19 @@ public class TrapezaRestClient {
     public static class StatisticsMethods {
         public static void boughtDay(Callback<StatisticsResponse> callback) {
             getApiInstance().boughtDay(getToken()).enqueue(callback);
+        }
+    }
+
+    public static class PaymentMethods {
+        /**
+         * @param prices      prices ids of dishes bought
+         * @param paymentType <code>0</code> - pays in cash. <code>1</code> - pays by card
+         */
+        public static void buyDish(JSONArray prices,
+                                   int paymentType,
+                                   double sale,
+                                   Callback<StatusResponse> callback) {
+            getApiInstance().buyDish(prices.toString(), paymentType, sale, getToken()).enqueue(callback);
         }
     }
 }
