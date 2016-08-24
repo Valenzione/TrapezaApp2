@@ -1,6 +1,5 @@
 package com.trapezateam.trapeza;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -31,6 +30,7 @@ public class AdministratorActivity extends AppCompatActivity {
     private static final int ADD_CATEGORY_IDENTIFIER = 3;
     private static final int STAFF_IDENTIFIER = 4;
     private static final int ADD_USER_IDENTIFIER = 5;
+    private static final int LOG_OUT_IDENTIFIER = 6;
 
     private static final String[] FRAGMENT_TAGS = {"MENU", "STATISTICS", "ADD_DISH", "ADD_CATEGORY", "STAFF", "ADD_USER"};
 
@@ -58,13 +58,22 @@ public class AdministratorActivity extends AppCompatActivity {
                         new PrimaryDrawerItem().withName(R.string.drawer_item_statistics).withIcon(FontAwesome.Icon.faw_area_chart).withIdentifier(STATISTICS_IDENTIFIER),
                         new PrimaryDrawerItem().withName("Управление персоналом").withIcon(FontAwesome.Icon.faw_wheelchair).withIdentifier(STAFF_IDENTIFIER),
                         new DividerDrawerItem(),
-                        new SecondaryDrawerItem().withName("Добавить нового пользователя").withIcon(FontAwesome.Icon.faw_plus).withIdentifier(ADD_USER_IDENTIFIER)
-
+                        new SecondaryDrawerItem().withName("Добавить нового пользователя").withIcon(FontAwesome.Icon.faw_plus).withIdentifier(ADD_USER_IDENTIFIER),
+                        new SecondaryDrawerItem().withName("Закончить смену").withIcon(FontAwesome.Icon.faw_power_off).withIdentifier(LOG_OUT_IDENTIFIER)
                 )
+
+
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id, IDrawerItem drawerItem) {
                         if (drawerItem != null) {
+                            if (drawerItem.getIdentifier() == LOG_OUT_IDENTIFIER) {
+                                SharedPreferencesHelper helper = new SharedPreferencesHelper(AdministratorActivity.this);
+                                helper.removeToken();
+//                                android.os.Process.killProcess(android.os.Process.myPid());
+                                finish();
+                                return;
+                            }
                             startFragment(drawerItem.getIdentifier(), true);
                         }
                     }

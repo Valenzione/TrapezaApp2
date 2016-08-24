@@ -1,10 +1,8 @@
 package com.trapezateam.trapeza;
 
 import android.content.Intent;
-import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +12,6 @@ import android.widget.Toast;
 
 import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.StatisticsResponse;
-
-import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -117,9 +113,9 @@ public class StatisticsFragment extends AdministratorActivityFragment {
 
     public static String getStringFromDatePicker(DatePicker datePicker) {
         int day = datePicker.getDayOfMonth();
-        int month = datePicker.getMonth();
+        int month = datePicker.getMonth() + 1;
         int year = datePicker.getYear();
-        return ""+day+"/"+month+"/"+year;
+        return year + "-" + month + "-" + day;
     }
 
 }

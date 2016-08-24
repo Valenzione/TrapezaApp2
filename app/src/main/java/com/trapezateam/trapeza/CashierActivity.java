@@ -8,15 +8,18 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.trapezateam.trapeza.adapters.CategoryAdapter;
@@ -38,6 +41,9 @@ import retrofit2.Response;
 public class CashierActivity extends Activity {
 
     public static final String TAG = "CashierActivity";
+
+    private static final int PAYMENT_CASH = 0;
+    private static final int PAYMENT_CASHLESS = 1;
 
     Bill mBill;
 
@@ -61,17 +67,20 @@ public class CashierActivity extends Activity {
         mPayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(CashierActivity.this);
-                builder.setPositiveButton("Наличный", new DialogInterface.OnClickListener() {
+                if (mBill.getItemCount() == 0) {
+                    return;
+                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(CashierActivity.this, R.style.AppCompatAlertDialogStyle);
+                builder.setPositiveButton("Наличный расчёт", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        onPaymentComplete(0);
+                        showChangeDialog(mBill.getPriceAfterDiscounts());
                     }
                 });
-                builder.setNegativeButton("Безналичный расчет", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("Безналичный расчёт", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        onPaymentComplete(1);
+                        showPaymentConfirmationDialog(PAYMENT_CASHLESS, mBill.getPriceAfterDiscounts());
                     }
                 });
                 AlertDialog alert = builder.create();
@@ -99,7 +108,81 @@ public class CashierActivity extends Activity {
         mBill.clear();
     }
 
-    void onPaymentComplete(int paymentType) {
+    void showChangeDialog(final double totalPrice) {
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogLayout = inflater.inflate(R.layout.dialog_change, null);
+        EditText changeInput = (EditText) dialogLayout.findViewById(R.id.change_input);
+        final TextView changeOutput = (TextView) dialogLayout.findViewById(R.id.change_amount);
+        changeOutput.setText("Клиент должен ещё " + totalPrice + " руб.");
+        changeInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                double eps = 1e-3;
+                String text = editable.toString();
+                double given = 0;
+                Log.e(TAG, "Text is " + text);
+                if (text.equals("") || text.equals(".")) {
+                    given = 0;
+                } else {
+                    given = Double.parseDouble(text);
+                }
+                double difference = totalPrice - given;
+                if (Math.abs(difference) < eps) {
+                    changeOutput.setText("Готово!");
+                    return;
+                }
+                if (difference > 0) {
+                    changeOutput.setText("Клиент должен ещё " + difference + " руб.");
+                } else {
+                    changeOutput.setText("Сдача: " + -difference + " руб.");
+                }
+            }
+        });
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+        builder.setView(dialogLayout);
+        builder.setTitle("Сумма: " + totalPrice);
+        builder.setPositiveButton("Готово", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                showPaymentConfirmationDialog(PAYMENT_CASH, totalPrice);
+            }
+        });
+        builder.setNegativeButton("Отмена", null);
+        builder.show();
+    }
+
+    void showPaymentConfirmationDialog(final int paymentType, double price) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+        builder.setTitle("Подтверждение оплаты");
+        String message = "Оплата производится ";
+        if (paymentType == PAYMENT_CASH) {
+            message += "НАЛИЧКОЙ";
+        } else {
+            message += "КАРТОЧКОЙ";
+        }
+        message += ". Сумма " + price;
+        builder.setMessage(message);
+        builder.setPositiveButton("Правильно", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                savePaymentToServer(paymentType);
+            }
+        });
+        builder.setNegativeButton("Отмена", null);
+        builder.show();
+    }
+
+    void savePaymentToServer(int paymentType) {
         TrapezaRestClient.PaymentMethods.buyDish(mBill.getPriceIdQuantityPairs(), paymentType,
                 mBill.getDiscountFraction(),
                 new Callback<StatusResponse>() {
@@ -132,10 +215,15 @@ public class CashierActivity extends Activity {
         mBill.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
-                Log.i(TAG, "bill changed to " + mBill.getTotalPrice());
-                String priceText = "Оплата " + mBill.getTotalPrice() + " руб";
+                double totalPrice = mBill.getPriceAfterDiscounts();
+                double discount = mBill.getDiscount();
+                double discountMoney = mBill.getPriceWithoutDiscounts() - mBill.getPriceAfterDiscounts(); // how much money client does not pay
+                String priceText = "Оплата " + totalPrice + " руб";
                 mPayButton.setText(priceText);
-                String discountText = "Скидка " + mBill.getDiscount() + "%";
+                if (discountMoney == -0) {
+                    discountMoney = 0;
+                }
+                String discountText = "Скидка " + discount + "% (" + discountMoney + " .руб)";
                 mDiscountButton.setText(discountText);
             }
 
@@ -226,20 +314,20 @@ public class CashierActivity extends Activity {
 
         registerBillObserver();
 
-        String priceText = "Оплата " + String.valueOf(mBill.getTotalPrice()) + " руб";
+        String priceText = "Оплата " + String.valueOf(mBill.getPriceAfterDiscounts()) + " руб";
         mPayButton.setText(priceText);
     }
 
-    void openSaleDialog(int value) {
+    void openDiscountDialog(int value) {
         LayoutInflater inflater = (LayoutInflater)
                 getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v  =  inflater.inflate(R.layout.number_picker_dialog_layout, null);
+        View v = inflater.inflate(R.layout.number_picker_dialog_layout, null);
         final NumberPicker numberPicker = (NumberPicker) v.findViewById(R.id.picker);
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(100);
         numberPicker.setValue(value);
-        v.setBackgroundColor(0xFF000000);
-        new AlertDialog.Builder(this)
+        numberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
                 .setTitle("Скидка")
                 .setView(v)
                 .setPositiveButton("Готово",
@@ -257,12 +345,12 @@ public class CashierActivity extends Activity {
     }
 
     void onDiscountButtonClicked() {
-        openSaleDialog(mBill.getDiscount());
+        openDiscountDialog(mBill.getDiscount());
     }
 
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(CashierActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(CashierActivity.this, R.style.AppCompatAlertDialogStyle);
         builder.setPositiveButton("Остаться", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -271,23 +359,35 @@ public class CashierActivity extends Activity {
         builder.setNegativeButton("Закончить смену", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                TrapezaRestClient.logout(new Callback<StatusResponse>() {
-                    @Override
-                    public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
-                        finish();
-                    }
-
-                    @Override
-                    public void onFailure(Call<StatusResponse> call, Throwable t) {
-                        Toast.makeText(CashierActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                });
-
+                logOutAndFinish();
+            }
+        });
+        builder.setNeutralButton("Не заканчивать смену", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
             }
         });
         AlertDialog alert = builder.create();
         alert.show();
     }
 
+    void logOutAndFinish() {
+        SharedPreferencesHelper helper = new SharedPreferencesHelper(this);
+        helper.removeToken();
+        TrapezaRestClient.logout(new Callback<StatusResponse>() {
+            @Override
+            public void onResponse(Call<StatusResponse> call,
+                                   Response<StatusResponse> response) {
+                Toast.makeText(CashierActivity.this, "Смена успешно закрыта", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<StatusResponse> call, Throwable t) {
+                Toast.makeText(CashierActivity.this, "Ошибка закрытия смены: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+    }
 }

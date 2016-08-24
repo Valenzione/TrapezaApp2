@@ -30,7 +30,7 @@ public class UserConfigurationFragment extends AdministratorActivityFragment {
 
 
     Button mSaveUserButton;
-    EditText mUserName, mUserPhone, mUserEmail, mUserSurname, mUserPass;
+    EditText mUserName, mUserPhone, mUserLogin, mUserSurname, mUserPass;
     RadioGroup mRoleChoice;
 
     @Override
@@ -49,12 +49,12 @@ public class UserConfigurationFragment extends AdministratorActivityFragment {
         mUserName = (EditText) getView().findViewById(R.id.user_name);
         mUserSurname = (EditText) getView().findViewById(R.id.user_surname);
         mUserPhone = (EditText) getView().findViewById(R.id.user_phone);
-        //mUserEmail = (EditText) getView().findViewById(R.id.user_email);
+        mUserLogin = (EditText) getView().findViewById(R.id.user_login);
         mUserPass = (EditText) getView().findViewById(R.id.user_password);
         mRoleChoice = (RadioGroup) getView().findViewById(R.id.radio_group);
 
-        mUserPass.setVisibility(View.INVISIBLE);
-        //mUserEmail.setVisibility(View.INVISIBLE);
+        mUserPass.setVisibility(View.GONE);
+        mUserLogin.setVisibility(View.GONE);
 
         User bundledUser = (User) getArguments().get(KEY_USER);
         Log.d(TAG, bundledUser.toString());

@@ -4,7 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -13,21 +15,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.trapezateam.trapeza.api.TrapezaRestClient;
 import com.trapezateam.trapeza.api.models.AuthenticationResponse;
+import com.trapezateam.trapeza.api.models.UserResponse;
+import com.trapezateam.trapeza.database.RealmClient;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
-import com.trapezateam.trapeza.api.models.UserResponse;
-import com.trapezateam.trapeza.database.RealmClient;
-
-import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -42,6 +44,11 @@ public class LoginActivity extends AppCompatActivity {
     Button mLoginButton;
     @Bind(R.id.link_signup)
     TextView mSignupLink;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,13 +74,21 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        SharedPreferencesHelper helper = new SharedPreferencesHelper(this);
+        if (helper.hasSavedProfile()) {
+            TrapezaRestClient.setToken(helper.getToken());
+            onLoginSuccess(helper.getToken(), helper.getUserId());
+            return;
+        }
+
 
         if (DebugConfig.USE_DEFAULT_TOKEN) {
             TrapezaRestClient.setToken(DebugConfig.DEFAULT_TOKEN);
             onLoginSuccess(DebugConfig.DEFAULT_TOKEN, 0);
         }
-        mEmailText.setText("admin");
-        mPasswordText.setText("admin");
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     public void login() {
@@ -109,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
                 t.printStackTrace();
 
-                android.os.Handler h = new android.os.Handler();
+                Handler h = new Handler();
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -121,19 +136,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                this.finish();
-            }
-        }
     }
 
     @Override
@@ -156,22 +158,31 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onLoginSuccess(String token, int userId) {
-        int role = 0;
+    public void onLoginSuccess(final String token, final int userId) {
         mLoginButton.setEnabled(true);
         TrapezaRestClient.setToken(token);
         Log.i(TAG, "Token " + token);
+        final SharedPreferencesHelper helper = new SharedPreferencesHelper(this);
         TrapezaRestClient.UserMethods.get(userId, new Callback<List<UserResponse>>() {
             @Override
             public void onResponse(Call<List<UserResponse>> call, Response<List<UserResponse>> response) {
+                if (response.body().size() == 0) {
+                    onFailure(call, new Throwable("Response body has no rows"));
+                    return;
+                }
                 TrapezaApplication.setCompany(response.body().get(0).getCompany());
                 RealmClient.updateDatabase(TrapezaApplication.getCompany());
-                startCorrectActivity(response.body().get(0).getRole());
+                int role = response.body().get(0).getRole();
+                helper.saveRole(role);
+                helper.saveToken(token);
+                helper.saveUserId(userId);
+                startCorrectActivity(role);
             }
 
             @Override
             public void onFailure(Call<List<UserResponse>> call, Throwable t) {
                 Log.i(TAG, "Error Getting User Info. Error " + t.getMessage());
+                helper.removeToken();
             }
 
         });
@@ -182,4 +193,43 @@ public class LoginActivity extends AppCompatActivity {
         mLoginButton.setEnabled(true);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Login Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.trapezateam.trapeza/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Login Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.trapezateam.trapeza/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
 }

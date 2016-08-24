@@ -2,7 +2,6 @@ package com.trapezateam.trapeza;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -111,30 +110,44 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
     }
 
     /**
-     *
      * @return price after discount
      */
-    public double getTotalPrice() {
+    public double getPriceAfterDiscounts() {
+        return Math.ceil(getPriceWithoutDiscounts() * getDiscountFraction());
+    }
+
+    public double getPriceWithoutDiscounts() {
         int price = 0;
         for (BillEntry e : mEntries) {
             price += e.getPrice();
         }
-        return Math.ceil(price * getDiscountFraction());
+        return price;
     }
 
     /**
-     *
      * @return the part of the price the customer has to pay for
      */
     public double getDiscountFraction() {
         return (1D - ((double) mDiscount / 100));
     }
 
+    /**
+     * Sets discount in percents. If a client needs to pay one quarter of the original price,
+     * then the discount is <code>25%</code>
+     *
+     * @param discount price discount in percents <code>0 <= discount <= 100</code>
+     */
     public void setDiscount(int discount) {
         mDiscount = discount;
         notifyDataSetChanged();
     }
 
+    /**
+     * Gets discount in percents. If a client needs to pay one quarter of the original price,
+     * then the discount is <code>25%</code>
+     *
+     * @return discount in percents
+     */
     public int getDiscount() {
         return mDiscount;
     }
@@ -226,7 +239,7 @@ public class Bill extends RecyclerView.Adapter<Bill.ViewHolder> implements Parce
 
     JSONArray getPriceIdQuantityPairs() {
         JSONArray ans = new JSONArray();
-        for(BillEntry e : mEntries) {
+        for (BillEntry e : mEntries) {
             JSONObject obj = new JSONObject();
             try {
                 obj.put("id", e.getDish().getPriceId());

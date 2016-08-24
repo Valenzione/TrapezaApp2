@@ -2,7 +2,7 @@
 <resources>
     <!-- Color pallete from http://www.materialpalette.com/indigo/pink-->
     <color name="item_background">#90d7ccc8</color>
-    <color name="primary">#ffffff</color>
+    <color name="primary">#90a4ae</color>
     <color name="primary_dark">#303F9F</color>
     <color name="primary_light">#90a4ae</color>
     <color name="accent">#FF4081</color>

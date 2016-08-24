@@ -77,7 +77,7 @@ public class SignupActivity extends AppCompatActivity {
         Log.d(TAG, "Signup");
 
         if (!validate()) {
-            onSignupFailed();
+            onValidationFailed();
             return;
         }
 
@@ -120,6 +120,7 @@ public class SignupActivity extends AppCompatActivity {
                             }
                         }
                     });
+                    onSignupSuccess();
                 } else {
                     toast = Toast.makeText(SignupActivity.this, "Произошла ошибка, компания не создана", Toast.LENGTH_SHORT);
                 }
@@ -128,7 +129,7 @@ public class SignupActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<SaveCompleteResponse> call, Throwable t) {
-                Toast.makeText(SignupActivity.this, "Error saving company " + t.getMessage(),
+                Toast.makeText(SignupActivity.this, "Ошибка сохранения компании " + t.getMessage(),
                         Toast.LENGTH_LONG).show();
                 t.printStackTrace();
             }
@@ -144,8 +145,8 @@ public class SignupActivity extends AppCompatActivity {
         finish();
     }
 
-    public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+    public void onValidationFailed() {
+        Toast.makeText(getBaseContext(), "В некоторые поля введены неверные данные", Toast.LENGTH_LONG).show();
         mSignupButton.setEnabled(true);
     }
 
